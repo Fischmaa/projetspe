@@ -1,6 +1,6 @@
-ENSIMAG - Projet de spé 2016
+ENSIMAG - Projet de spé 2016 - kaggle challenge
 
-###Bikesharing problem###
+###1er problème : Bikesharing problem###
 
 Soumission d'une solution au problème kaggle : Bike Sharing Demand
 
