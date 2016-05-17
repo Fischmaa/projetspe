@@ -1,0 +1,177 @@
+##############################################################################
+###                            PRISE EN MAIN 			           ###
+##############################################################################
+
+train <- read.csv("train.csv")
+# Mettre les données du .csv dans un tableau train en R
+
+str(train)
+# Affichage résumé de toutes les valeurs (types, etc.)
+# RQ : Par défaut, les string sont importés comme factor;
+# On peut demander à importer comme texte brut avec :
+# train <- read.csv("train.csv", stringsAsFactors=FALSE)
+
+
+table(train$Survived)
+# Compte le nombre de variables par niveau et affiche le résultat
+# Pour obtenir la proportion, on peut utiliser prop.table()
+
+# EXEMPLE DE SUBMIT OU TOUT LE MONDE EST SUPPOSE MORT :
+test$Survived <- rep(0, 418)
+submit <- data.frame(PassengerId = test$PassengerId, Survived = test$Survived)
+write.csv(submit, file = "theyallperish.csv", row.names = FALSE)
+
+##############################################################################
+###                            RECHERCHE A LA MAIN		           ###
+##############################################################################
+
+# On regarde la répartition mort/survivant selon le sexe;
+# RQ : le '1' à la fin de la commande permet de considérer chaque groupe (male/female)
+# comme un groupe à par entière (ie somme des lignes = 1) != '2' (somme des cases = 1):
+prop.table(table(train$Sex, train$Survived),1)
+#                 0         1
+#  female 0.2579618 0.7420382
+#  male   0.8110919 0.1889081
+
+prop.table(table(train$Sex, train$Survived))
+#                  0          1
+#  female 0.09090909 0.26150393
+#  male   0.52525253 0.12233446
+
+# On change le submit, si l'individu est une femme il survit, sinon il meurt :
+test$Survived[test$Sex == 'female'] <- 1
+test$Survived <- 0
+
+# Désormais, on prend en compte l'age des individus avec un boolean :
+train$Child <- 0
+train$Child[train$Age < 18] <- 1
+
+# On fait un aggregate sur les données Enfants/Sexe :
+aggregate(Survived ~ Child + Sex, data=train, FUN=sum)
+# Avec la fonction sum et notre codage en 0 et 1, on a bien le nombre de survivants
+# dans chaque classe :
+#  Child    Sex Survived
+#     0  female      195
+#     1  female       38
+#     0    male       86
+#     1    male       23
+
+# Pour connaitre le nombre d'individus dans chaque groupe, on utilise la fonction length:
+aggregate(Survived ~ Child + Sex, data=train, FUN=length)
+#  Child    Sex Survived
+#     0  female      259
+#     1  female       55
+#     0    male      519
+#     1    male       58
+# Si on veut une proportion, il faut déclarer une fonction dans FUN :
+aggregate(Survived ~ Child + Sex, data=train, FUN=function(x) {sum(x)/length(x)})
+
+# On va explorer une autre piste : la classe et le prix payé; pour 
+# celà, on crée une colonne dans train :
+train$Fare2 <- '30+'
+train$Fare2[train$Fare < 30 & train$Fare >= 20] <- '20-30'
+train$Fare2[train$Fare < 20 & train$Fare >= 10] <- '10-20'
+train$Fare2[train$Fare < 10] <- '<10'
+
+# On regarde le résultat :
+aggregate(Survived ~ Fare2 + Pclass + Sex, data=train, FUN=function(x) {sum(x)/length(x)})
+
+# L'interprétation des données indique que rien n'a changé en particulier pour les hommes,
+# mais que pour les femmes de 3è classe avec un ticket 20/+, le taux de survivant fond
+# on met à jour notre modèle :
+test$Survived <- 0
+test$Survived[test$Sex == 'female'] <- 1
+test$Survived[test$Sex == 'female' & test$Pclass == 3 & test$Fare >= 20] <- 0
+
+##############################################################################
+###                            AUTOMATISATION 			           ###
+###			    (http://goo.gl/6hazbr)			   ###
+##############################################################################
+
+# Appel de la librairie contenant les fonctions qu'on a besoin d'appeler
+library(rpart)
+
+# Utilisation de rpart = Recursive Partitioning and Regression Trees :
+fit <- rpart(Survived ~ Pclass + Sex + Age + SibSp + Parch + Fare + Embarked, data=train, method="class")
+
+# Les lignes suivantes permettent un affichage graphique plus élégant qu'un simple plot(fit) :
+install.packages('rattle')
+install.packages('rpart.plot')
+install.packages('RColorBrewer')
+library(rattle)
+library(rpart.plot)
+library(RColorBrewer)
+fancyRpartPlot(fit)
+
+# Réalisation de la prédiction (sur test) en utilisant le découpage de fit,
+# avec le type class car on est sur des variables binaires et non pas dans N :
+Prediction <- predict(fit, test, type = "class")
+submit <- data.frame(PassengerId = test$PassengerId, Survived = Prediction)
+write.csv(submit, file = "myfirstdtree.csv", row.names = FALSE)
+
+
+##############################################################################
+### 	FEATURE (Ajout d'infos par raisonnement humain sur les données     ###
+###		 extraction, etc.)			          	   ###
+##############################################################################
+
+# On va essayer d'isoler les titres des passagers dans les noms; pour commencer on va
+# mettre à jour les tables test et train en les fusionnant en un seul tableau :
+test$Survived <- NA
+combi <- rbind(train, test)
+
+# On demande à R de ne plus considérer les chaines comme des factors mais comme des strings :
+combi$Name <- as.character(combi$Name)
+
+# Dans notre cas, on peut isoler le prénom "," le titre "." le nom de famille, soit :
+strsplit(combi$Name[1], split='[,.]')
+# ex, pour obtenir le titre du 1er passager :
+strsplit(combi$Name[1], split='[,.]')[[1]][2]
+
+# Application d'une boucle :
+combi$Title <- sapply(combi$Name, FUN=function(x) {strsplit(x, split='[,.]')[[1]][2]})
+# Supprimer les espaces :
+combi$Title <- sub(' ', '', combi$Title)
+
+# Fusion de plusieurs catégories :
+combi$Title[combi$Title %in% c('Mme', 'Mlle')] <- 'Mlle'
+combi$Title[combi$Title %in% c('Capt', 'Don', 'Major', 'Sir')] <- 'Sir'
+combi$Title[combi$Title %in% c('Dona', 'Lady', 'the Countess', 'Jonkheer')] <- 'Lady'
+# Mise en forme "factor" :
+combi$Title <- factor(combi$Title)
+
+# On considère la taille des familles :
+combi$FamilySize <- combi$SibSp + combi$Parch + 1
+combi$Surname <- sapply(combi$Name, FUN=function(x) {strsplit(x, split='[,.]')[[1]][1]})
+combi$FamilyID <- paste(as.character(combi$FamilySize), combi$Surname, sep="")
+# On copie la table
+famIDs <- data.frame(table(combi$FamilyID))
+# On regarde ceux avec un nombre d'individu <= 2 :
+famIDs <- famIDs[famIDs$Freq <= 2,]
+# Mise sous forme de factor "<=2" et "les autres" :
+combi$FamilyID[combi$FamilyID %in% famIDs$Var1] <- 'Small'
+combi$FamilyID <- factor(combi$FamilyID)
+
+# Splitter la table :
+train <- combi[1:891,]
+test <- combi[892:1309,]
+
+# Faire le fit de la prédiction :
+fit <- rpart(Survived ~ Pclass + Sex + Age + SibSp + Parch + Fare + Embarked + Title + FamilySize + FamilyID, data=train, method="class")
+
+
+##############################################################################
+### 				RANDOM FOREST			      	   ###
+### 			    (http://goo.gl/Umdh7R)			   ###
+##############################################################################
+
+# Exemple de bagging sur 10 entiers :
+sample(1:10, replace = TRUE)
+
+# RQ : Le random forest de R ne va pas remplacer automatiquement les valeurs N/A par
+# les valeurs moyennes comme ça pouvait etre le cas avec les méthodes précendentes;
+# il faut donc remplacer manuellement (ie. avec fonction) ces valeurs 
+
+(...)
+
+
