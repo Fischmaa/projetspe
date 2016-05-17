@@ -1,7 +1,7 @@
 ##Charte d'équipe##
 #Equipe composé de : #
-*Baillet Valérian
-*Beaupère Matthias
-*Fischman Adrien
-*Meuret Thibault
+* Baillet Valérian
+* Beaupère Matthias
+* Fischman Adrien
+* Meuret Thibault
 
