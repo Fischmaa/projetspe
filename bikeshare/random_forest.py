@@ -36,5 +36,3 @@ daytab = daytab.drop_duplicates().reset_index()["datetime"]
 testloc = tabtest
 
 
-
-
