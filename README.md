@@ -2,9 +2,9 @@ ENSIMAG - Projet de spé 2016 - kaggle challenge
 
 Nous avons décider de résoudres différents projets kaggle afin de comprendre le principe de prédiction sur un échantillon de donnée quand on possède un jeu de données d'entrainement. Cette étude s'inscrit dans le cursus de l'ENSIMAG en constituant une application pour les cours d'option de fouille de donnée et de système intelligents.
 
-###1er problème : Bikesharing problem###
+#1er problème : Bikesharing problem#
 
-Soumission d'une solution au problème kaggle : Bike Sharing Demand
+**Objectif :** Soumission d'une solution au problème kaggle : Bike Sharing Demand
 
 [Lien vers le challenge] (https://www.kaggle.com/c/bike-sharing-demand)
 
@@ -35,9 +35,15 @@ On possède une jeu de données pour chaque heure de la journée  :
 
 ##Introduction##
 
-Nous effectué les prédictions demandées avec différents algorithmes. Nous allons détailler les différentes méthode employées puis nous comparerons le résultats.
+Nous effectué les prédictions demandées avec différents algorithmes. Nous allons détailler les différentes méthode employées puis nous comparerons les résultats.
 
 ##Regression linéaire##
+
+Pour une première approche de prédiction on utilise un algorithme de regression linéaire.
+
+#R#
+
+#Python#
 
 
 
