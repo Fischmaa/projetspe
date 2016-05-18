@@ -1,10 +1,11 @@
 #!/usr/bin/python3.3
 # -*-coding:Utf-8 -*
 
-from pandas import Series,DataFrame
+import csv
+from sklearn import linear_model
 
 # On lit les données
-train = pandas.read_csv("data/train.csv");
-
+with open('data/train.csv', 'r') as file:
+        training = csv.reader(file)
 
 
