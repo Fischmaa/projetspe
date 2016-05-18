@@ -1,0 +1,221 @@
+###########################################################################
+###			1er essai (en fonction du jour)			###
+###########################################################################
+
+train <- read.csv("~/Bureau/kaggle/train.csv")
+train$date<-wday(ymd_hms(train$datetime), label=TRUE)
+train$date<-as.integer(train$date)
+# supprimer la date pour avoir une matrice de corrélation et essayer de voir le lien entre les 
+# différentes variables !
+train<-train[,-c(1)]
+cor(train)
+# On va essayer de faire une regression linéaire :
+mylm<-lm(count~.,data=train)
+stepAIC(mylm)
+# On obtient :
+# (Intercept)         temp        atemp     humidity    windspeed       casual   registered  
+#  -4.816e-13    7.518e-15   -1.698e-14    3.528e-15   -2.835e-15    1.000e+00    1.000e+00  
+# RQ : ça craint ... On va plutot faire en fonction de l'heure et regarder si on est en WE ou pas
+
+
+###########################################################################
+###		2e essai (en fonction de l'heure) : 2 modèles		###
+###########################################################################
+
+library(MASS)
+library(lubridate) 
+
+train <- read.csv("~/Bureau/kaggle/train.csv")
+train$hour  <- hour(ymd_hms(train$datetime))
+train$day <- wday(ymd_hms(train$datetime), label=TRUE)
+train$day<-as.integer(train$day)
+train<-train[,-c(1)]
+train<-train[,-c(9)]
+train<-train[,-c(9)]
+weekend_train<-subset(train,day==6 | day==7)
+semaine_train<-subset(train,day<6)
+
+# On fait un modèle pour la semaine :
+
+mylm_semaine<-lm(count~.,data=semaine_train)
+stepAIC(mylm_semaine)
+#Coefficients:
+#(Intercept)       season      weather         temp        atemp     humidity  
+#     5.8248      22.0184      -7.3750      -5.5177      11.1996      -1.9762  
+#  windspeed         hour          day  
+#     0.7709       7.8518       2.1974  
+
+
+mylm_we<-lm(count~.,data=weekend_train)
+stepAIC(mylm_we)
+#Coefficients:
+#(Intercept)       season      holiday      weather         temp        atemp  
+#     64.358       20.180      -50.868        9.958        5.918        2.024  
+#   humidity         hour  
+#     -2.853        6.788  
+
+
+test <- read.csv("~/Bureau/kaggle/test.csv")
+test$hour  <- hour(ymd_hms(test$datetime))
+test$day <- wday(ymd_hms(test$datetime), label=TRUE)
+test$day<-as.integer(test$day)
+
+# On pré-remplit le résultat final !
+submission <- data.frame(datetime=test$datetime, count=NA)
+# On remplit en regardant si on est en semaine ou pas :
+for (i in 1:nrow(test)){
+	if (test[i,11]<6) {
+		submission[i,2] = max((5.8248+22.0184*test[i,2]-7.3750*test[i,5]-5.5177*test[i,6]+11.1996*test[i,7]-1.9762*test[i,8]+0.7709*test[i,9]+7.8518*test[i,10]+2.1974*test[i,11]),0)
+	} else {
+		submission[i,2] = max((64.358+20.18*test[i,2]-50.868*test[i,3]+9.958*test[i,5]+5.918*test[i,6]+2.024*test[i,7]-2.853*test[i,8]+6.788*test[i,10]),0)
+	}
+}
+
+# RQ IMPORTANT : on a considéré les variables comme continues alors qu'elles ne le sont
+# pas ; on va désormais utiliser des factor.
+
+###########################################################################
+###		    3e essai : idem avec des factor     		###
+###########################################################################
+library(MASS)
+library(lubridate) 
+
+train <- read.csv("~/Bureau/kaggle/train.csv")
+train$hour  <- hour(ymd_hms(train$datetime))
+train$day <- wday(ymd_hms(train$datetime), label=TRUE)
+train$day<-as.integer(train$day)
+train<-train[,-c(1)]
+train<-train[,-c(9)]
+train<-train[,-c(9)]
+train$season<-as.factor(train$season)
+train$holiday<-as.factor(train$holiday)
+train$workingday<-as.factor(train$workingday)
+train$weather<-as.factor(train$weather)
+train$hour<-as.factor(train$hour)
+train$day<-as.factor(train$day)
+weekend_train<-subset(train,as.day==6|day==7)
+semaine_train<-subset(train,day==1|day==2|day==3|day==4|day==5)
+
+
+mylm_semaine<-lm(count~.,data=semaine_train)
+stepAIC(mylm_semaine)
+
+#Coefficients SEMAINE:
+#(Intercept)      season2      season3      season4     weather2     weather3  
+#   -50.0786      36.6715      25.1435      65.4588      -7.5642     -66.2426  
+#   weather4        atemp     humidity    windspeed        hour1        hour2  
+#  -162.7082       5.6239      -0.8513      -0.3689     -14.2564     -23.7641  
+#      hour3        hour4        hour5        hour6        hour7        hour8  
+#   -31.4254     -29.8396     -12.7936      53.2585     204.1481     350.2259  
+#      hour9       hour10       hour11       hour12       hour13       hour14  
+#   170.3309     100.8405     120.1680     157.8629     149.1133     130.1037  
+#     hour15       hour16       hour17       hour18       hour19       hour20  
+#   141.0937     216.4165     407.9490     384.3493     261.1313     175.9108  
+#     hour21       hour22       hour23         day2         day3         day4  
+#   118.6451      74.7748      29.7653       3.9519       7.3319      11.4758  
+#       day5  
+#    13.1366
+
+mylm_we<-lm(count~.,data=weekend_train)
+stepAIC(mylm_we)
+
+#Coefficients WE:
+#(Intercept)      season2      season3      season4     holiday1     weather2  
+#      3.280       37.554        5.952       64.561      -56.696       -2.438  
+#   weather3         temp     humidity    windspeed        hour1        hour2  
+#    -52.653        7.609       -1.180       -1.484      -20.878      -33.024  
+#      hour3        hour4        hour5        hour6        hour7        hour8  
+#    -48.523      -52.569      -39.744        3.264       94.678      228.199  
+#      hour9       hour10       hour11       hour12       hour13       hour14  
+#    151.200      126.615      164.506      206.085      208.754      193.470  
+#     hour15       hour16       hour17       hour18       hour19       hour20  
+#    202.987      235.425      310.524      255.343      177.771      107.417  
+#     hour21       hour22       hour23  
+#     75.212       64.078       41.828  
+
+test <- read.csv("~/Bureau/kaggle/test.csv")
+test$hour  <- hour(ymd_hms(test$datetime))
+test$day <- wday(ymd_hms(test$datetime), label=TRUE)
+test$day <- as.integer(test$day)
+
+# On pré-remplit le résultat final !
+submission <- data.frame(datetime=test$datetime, count=NA)
+
+# On remplit avec une boucle :
+for (i in 1:nrow(test)){
+	if (test$day[i]!=6 & test$day[i]!=7) {
+		submission[i,2] = max(0,-50.0786
+					+as.integer(test$season[i]==2)*36.6715
+					+as.integer(test$season[i]==3)*25.1435
+					+as.integer(test$season[i]==4)*65.4588
+					+as.integer(test$weather[i]==2)*-7.5642
+					+as.integer(test$weather[i]==3)*-66.2426
+					+as.integer(test$weather[i]==4)*-162.7082
+					+test$atemp[i]*5.6239
+					+test$humidity[i]*-0.8513
+					+test$windspeed[i]*-0.3689
+					+as.integer(test$hour[i]==1)*-14.2564
+					+as.integer(test$hour[i]==2)*-23.7641
+					+as.integer(test$hour[i]==3)*-31.4254
+					+as.integer(test$hour[i]==4)*-29.8396
+					+as.integer(test$hour[i]==5)*-12.7936
+					+as.integer(test$hour[i]==6)*53.2585
+					+as.integer(test$hour[i]==7)*204.1481
+					+as.integer(test$hour[i]==8)*350.2259
+					+as.integer(test$hour[i]==9)*170.3309
+					+as.integer(test$hour[i]==10)*100.8405
+					+as.integer(test$hour[i]==11)*120.1680
+					+as.integer(test$hour[i]==12)*157.8629
+					+as.integer(test$hour[i]==13)*149.1133
+					+as.integer(test$hour[i]==14)*130.1037
+					+as.integer(test$hour[i]==15)*141.0937
+					+as.integer(test$hour[i]==16)*216.4165
+					+as.integer(test$hour[i]==17)*407.9490
+					+as.integer(test$hour[i]==18)*384.3493
+					+as.integer(test$hour[i]==19)*261.1313
+					+as.integer(test$hour[i]==20)*175.9108
+					+as.integer(test$hour[i]==21)*118.6451
+					+as.integer(test$hour[i]==22)*74.7748
+					+as.integer(test$hour[i]==23)*29.7653
+					+as.integer(test$day[i]==2)*3.9519
+					+as.integer(test$day[i]==3)*7.3319
+					+as.integer(test$day[i]==4)*11.4758
+					+as.integer(test$day[i]==5)*13.1366)
+	} else {
+		submission[i,2] = max(0,3.280
+					+as.integer(test$season[i]==2)*37.554
+					+as.integer(test$season[i]==3)*5.952
+					+as.integer(test$season[i]==4)*64.561
+					+as.integer(test$holiday[i]==1)*-56.696
+					+as.integer(test$weather[i]==2)*-2.438
+					+as.integer(test$weather[i]==3)*-53.653
+					+test$temp[i]*7.609
+					+test$humidity[i]*-1.180
+					+test$windspeed[i]*-1.484
+					+as.integer(test$hour[i]==1)*-20.878
+					+as.integer(test$hour[i]==2)*-33.024
+					+as.integer(test$hour[i]==3)*-48.523
+					+as.integer(test$hour[i]==4)*-52.569
+					+as.integer(test$hour[i]==5)*-39.744
+					+as.integer(test$hour[i]==6)*3.264
+					+as.integer(test$hour[i]==7)*94.678
+					+as.integer(test$hour[i]==8)*228.199
+					+as.integer(test$hour[i]==9)*151.200
+					+as.integer(test$hour[i]==10)*126.615
+					+as.integer(test$hour[i]==11)*164.506
+					+as.integer(test$hour[i]==12)*206.085
+					+as.integer(test$hour[i]==13)*208.754
+					+as.integer(test$hour[i]==14)*193.470
+					+as.integer(test$hour[i]==15)*202.987
+					+as.integer(test$hour[i]==16)*235.425
+					+as.integer(test$hour[i]==17)*310.524
+					+as.integer(test$hour[i]==18)*255.343
+					+as.integer(test$hour[i]==19)*177.771
+					+as.integer(test$hour[i]==20)*107.417
+					+as.integer(test$hour[i]==21)*75.212
+					+as.integer(test$hour[i]==22)*64.078
+					+as.integer(test$hour[i]==23)*41.828)
+	}
+}
+
+
