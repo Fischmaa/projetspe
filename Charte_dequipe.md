@@ -8,7 +8,7 @@
 
 ### Organisation de l'équipe ###
 
-Nous avons décidé de travailler avec des horaires variables. C'est à dire que chaque membre de l'équipe choisi ses plages horaires pour travailler. Cela permet de responsabiliser chaque personne de l'équipe. Cependant, une petite réunion est mise en place tous les matins à 10h15 pour que chaque personnes explique l'avancé de son travail et ses objetifs pour la journée. La présence lors de cette réunion est obligatoire. Cela permet de faire un point sur les éventuels soucis qui peuvent empêcher l'équipe à court ou long terme. Nous avons décidé que les personnes du groupe n'avait pas de rôle attitré pour toute la durée du projet, le but étant que tous les membres puisse découvrir, approfondir et appliquer les connaissances apportées par le projet.
+Nous avons décidé de travailler avec des horaires variables. C'est à dire que chaque membre de l'équipe choisit ses plages horaires pour travailler. Cela permet de responsabiliser chaque personne de l'équipe. Cependant, une petite réunion est mise en place tous les matins à 10h15 pour que chaque personnes explique l'avancé de son travail et ses objetifs pour la journée. La présence lors de cette réunion est obligatoire. Cela permet de faire un point sur les éventuels soucis qui peuvent empêcher l'équipe à court ou long terme. Nous avons décidé que les personnes du groupe n'avait pas de rôle attitré pour toute la durée du projet, le but étant que tous les membres puisse découvrir, approfondir et appliquer les connaissances apportées par le projet.
 
 
 ### Communication au sein de l'équipe ###
