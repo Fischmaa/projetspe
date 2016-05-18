@@ -41,9 +41,9 @@ Nous effectué les prédictions demandées avec différents algorithmes. Nous al
 
 Pour une première approche de prédiction on utilise un algorithme de regression linéaire.
 
-#R#
+###R###
 
-#Python#
+###Python###
 
 
 
