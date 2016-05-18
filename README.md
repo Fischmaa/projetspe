@@ -45,7 +45,7 @@ Pour une première approche de prédiction on utilise un algorithme de regressio
 
 ### R
 
-```python
+```R
 train <- read.csv("~/Bureau/kaggle/train.csv")
 train$date<-wday(ymd_hms(train$datetime), label=TRUE)
 train$date<-as.integer(train$date)
