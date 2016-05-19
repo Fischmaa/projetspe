@@ -2,7 +2,7 @@
 # -*-coding:utf-8-*
 
 import pandas as pa
-from sklearn.ensemble import RandomForestClassifier as rf
+from sklearn.linear_model import LinearRegression as lr
 import matplotlib.pyplot as plt
 import random
 
@@ -20,7 +20,7 @@ x_test = tabtest.drop(['datetime'],1)
 y_train = tabtrain['count']
 
 
-model = rf(10, verbose=1)
+model = lr()
 
 model.fit(x_train, y_train)
 
