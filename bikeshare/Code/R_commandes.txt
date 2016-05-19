@@ -1,72 +1,27 @@
-ENSIMAG - Projet de spé 2016 - kaggle challenge
-
-# Objectif du projet
-
-Nous avons décider de résoudres différents projets kaggle afin de comprendre le principe de prédiction sur un échantillon de donnée quand on possède un jeu de données d'entrainement. Cette étude s'inscrit dans le cursus de l'ENSIMAG en constituant une application pour les cours d'option de fouille de donnée et de système intelligents.
-
-# 1er problème : Bikesharing problem
-
-**Objectif :** Soumission d'une solution au problème kaggle : Bike Sharing Demand
-
-[Lien vers le challenge](https://www.kaggle.com/c/bike-sharing-demand)
-
-**Résumé du problème :** On possède les données de circulation des vélos du type des *velib* parisiens entre différentes stations ainsi que les données météo associées. On cherche à prédire dans quelles quantitée sont loués les vélos, dans le système de location de vélo de la ville de Washigton.
-
-**Données disponible :** Données sur deux ans. Les 19 premiers jours de chaque mois constituent les `training set`, il s'agit des données permettant de calibrer le classificateur. Le reste du mois correspond aux données pour tester le classificateur.
-
-On possède une jeu de données contenant des informations différentes selon le types de données :
-
-*Entrainement (train.csv) et Test (test.csv)*
-
-* Jour et heure
-* Saison
-* Vacances, semaine ou weekend
-* Temps qu'il fait
-* Températures : ressentie et réelle
-* Humidité
-* Vitesse du vent
-
-*Entrainement uniquement*
-
-* Nombre de vélos loués par des inscrits
-* Nombre de vélos loués par des non-inscrits
-* Nombre de vélos loués au total
+# AFFICHAGE :
+# par(mfrow = c(1,2))
+# plot(train$hour,train$count, col=color)
+# plot(submission$hour,submission$count, col=color)
 
 
 
+###########################################################################
+###			1er essai (en fonction du jour)			###
+###########################################################################
 
-## Introduction
-
-Nous avons mis en place différents modèles prédictifs, en abordant le problème de manière différente à chaque itération. Nous allons détailler les différents raisonnements suivis, puis nous comparerons les résultats.
-
-## Regression linéaire
-
-Pour une première approche de prédiction on utilise un algorithme de regression linéaire.
-
-### R
-
-#### Régression linéaire avec données continues
-
-La toute première solution envisagée était d'effectuer une régression linéaire directement sur les données du problème.
-
-```R
-# Utilisation de librairies pour la gestion de la date et du stepAIC
 library(MASS)
 library(lubridate)
  
-# Lecture des données
-train <- read.csv("./sources/train.csv")
-
-# Traduction de la date en jour, sous forme d'entier entre 1 et 7 :  
+train <- read.csv("~/Bureau/kaggle/train.csv")
 train$date<-wday(ymd_hms(train$datetime), label=TRUE)
 train$date<-as.integer(train$date)
 
-# Supprime la date "String" pour avoir une matrice de corrélation et essayer de voir le lien entre les 
-# différentes variables
+# supprimer la date pour avoir une matrice de corrélation et essayer de voir le lien entre les 
+# différentes variables !
 train<-train[,-c(1)]
 cor(train)
 
-# Regression linéaire (on retire les variables registred et casual)
+# On va essayer de faire une regression linéaire :
 train<-train[,-c(9)]
 train<-train[,-c(9)]
 mylm<-lm(count~.,data=train)
@@ -86,47 +41,38 @@ test$day<-as.integer(test$day)
 # On pré-remplit le résultat final !
 submission <- data.frame(datetime=test$datetime, count=NA)
 
-# On applique le modèle
 for (i in 1:nrow(test)){
 	submission[i,2] = max(125.3005+test$season[i]*22.6820+test$weather[i]*5.8493+test$temp[i]*1.6584+test$atemp[i]*5.8229+test$humidity[i]*-3.0411+test$windspeed[i]*0.7966+test$day[i]*1.9603,0)
 }
 
-# Ecriture du fichier à soumettre 
+submission$hour  <- hour(ymd_hms(submission$datetime))
+submission$day <- wday(ymd_hms(submission$datetime), label=TRUE)
+submission$day <- as.integer(submission$day)
+
+color  <- rep(c("#FD6C9E","#A91101","#7FDD4C","#884DA7","#F0C300","#74D0F1","#FF7F00"), c(24,24,24,24,24,24,24))
+plot(submission$hour,submission$count, col=color)
+
+
 write.csv(submission, file = "./Résultats/linear_model.csv", row.names=FALSE)
 
-```
+###########################################################################
+###		2e essai (en fonction de l'heure) : 2 modèles		###
+###########################################################################
 
-Nous avons alors soumis le résultat à Kaggle et obtenu le score suivant :
-
-![Modèle 1](http://nsa38.casimages.com/img/2016/05/19/160519095057129443.png)
-
-#### Régression linéaire avec 2 modèles - semaine vs. week-end
-
-Le résultat était loin d'être satisfaisant : après avoir exploré les forums de discussion de Kaggle nous avons vu qu'il était possible de descendre à un score proche 0,7. Nous avons essayé d'identifier ce qui pourrait expliquer le problème de convergence de notre modèle; après étude graphique des données, nous nous sommes rendus compte qu'il fallait trouver un modèle différent pour la semaine et pour le week-end. Nous avons donc découpé le jeu de données selon la valeur de day et avons effectué une regression linéaire pour chaque ensemble.
-
-![WE vs. semaine (par *Beata Strubel*)](http://nsa37.casimages.com/img/2016/05/19/160519102759976692.png)
-
-```R
-# Librairies : dates et stepAIC
 library(MASS)
 library(lubridate) 
 
-# Lecture de données
 train <- read.csv("./sources/train.csv")
-
-# Traduction de la date et retrait de la date "String"
 train$hour  <- hour(ymd_hms(train$datetime))
 train$day <- wday(ymd_hms(train$datetime), label=TRUE)
 train$day<-as.integer(train$day)
 train<-train[,-c(1)]
 train<-train[,-c(9)]
 train<-train[,-c(9)]
-
-# Découpage des données en deux ensembles
 weekend_train<-subset(train,day==6 | day==7)
 semaine_train<-subset(train,day<6)
 
-# SEMAINE
+# On fait un modèle pour la semaine :
 
 mylm_semaine<-lm(count~.,data=semaine_train)
 stepAIC(mylm_semaine)
@@ -136,7 +82,6 @@ stepAIC(mylm_semaine)
 #  windspeed         hour          day  
 #     0.7709       7.8518       2.1974  
 
-# WEEK-END
 
 mylm_we<-lm(count~.,data=weekend_train)
 stepAIC(mylm_we)
@@ -146,35 +91,40 @@ stepAIC(mylm_we)
 #   humidity         hour  
 #     -2.853        6.788  
 
-# Chargement des données de test :
+
 test <- read.csv("./sources/test.csv")
 test$hour  <- hour(ymd_hms(test$datetime))
 test$day <- wday(ymd_hms(test$datetime), label=TRUE)
 test$day<-as.integer(test$day)
 
-# On pré-remplit le résultat final
+# On pré-remplit le résultat final !
 submission <- data.frame(datetime=test$datetime, count=NA)
 
-# Application du modèle selon qu'on soit en semaine ou en w-e
+# On remplit en regardant si on est en semaine ou pas :
 for (i in 1:nrow(test)){
 	if (test[i,11]<6) {
-		submission[i,2] = max((5.8248+22.0184*test$season[i]-7.3750*test$weather[i]-5.5177*test$temp[i]+11.1996*test$atemp[i]-1.9762*test$humidity[i]+0.7709*test$windspeed[i]+7.8518*test$hour[i]+2.1974*test$day[i]),0)
+		submission[i,2] = max((5.8248+22.0184*test[i,2]-7.3750*test[i,5]-5.5177*test[i,6]+11.1996*test[i,7]-1.9762*test[i,8]+0.7709*test[i,9]+7.8518*test[i,10]+2.1974*test[i,11]),0)
 	} else {
-		submission[i,2] = max((64.358+20.18*test$season[i]-50.868*test$holiday[i]+9.958*test$weather[i]+5.918*test$temp[i]+2.024*test$atemp[i]-2.853*test$humidity[i]+6.788*test$hour[i]),0)
+		submission[i,2] = max((64.358+20.18*test[i,2]-50.868*test[i,3]+9.958*test[i,5]+5.918*test[i,6]+2.024*test[i,7]-2.853*test[i,8]+6.788*test[i,10]),0)
 	}
 }
 
+# RQ IMPORTANT : on a considéré les variables comme continues alors qu'elles ne le sont
+# pas ; on va désormais utiliser des factor.
+
+submission$hour  <- hour(ymd_hms(submission$datetime))
+submission$day <- wday(ymd_hms(submission$datetime), label=TRUE)
+submission$day<-as.integer(submission$day)
+
+color  <- rep(c("black","red"), c(120,48))
+plot(submission$hour,submission$count, col=color)
+
+
 write.csv(submission, file = "./Résultats/linear_double_model.csv", row.names=FALSE)
-```
-Nous avons alors soumis le résultat à Kaggle et obtenu le score suivant :
 
-![Modèle 2](http://nsa37.casimages.com/img/2016/05/19/160519100724814761.png)
-
-#### Régression linéaire avec données discrètes et découpage du problème
-
-Le résultat ne nous semblant pas satisfaisant, nous avons relu les différentes données et observé que ces dernières n'étaient pas continues mais bien discrètes; en R, il nous fallait utiliser des `factor`. Nous avons donc recommencé le processus en utilisant cette commande sur les données discrètes : day, hour, humidity, etc.
-
-```R
+###########################################################################
+###		    3e essai : idem avec des factor     		###
+###########################################################################
 library(MASS)
 library(lubridate) 
 
@@ -185,15 +135,12 @@ train$day<-as.integer(train$day)
 train<-train[,-c(1)]
 train<-train[,-c(9)]
 train<-train[,-c(9)]
-
-# Utilisation des données discrètes
 train$season<-as.factor(train$season)
 train$holiday<-as.factor(train$holiday)
 train$workingday<-as.factor(train$workingday)
 train$weather<-as.factor(train$weather)
 train$hour<-as.factor(train$hour)
 train$day<-as.factor(train$day)
-
 weekend_train<-subset(train,day==6|day==7)
 semaine_train<-subset(train,day==1|day==2|day==3|day==4|day==5)
 
@@ -319,18 +266,19 @@ for (i in 1:nrow(test)){
 	}
 }
 
+submission$hour  <- hour(ymd_hms(submission$datetime))
+#submission$day <- wday(ymd_hms(submission$datetime), label=TRUE)
+#submission$day<-as.integer(submission$day)
+
 write.csv(submission, file = "./Résultats/linear_factor_model.csv", row.names=FALSE)
-```
-Nous avons alors soumis le résultat à Kaggle et obtenu le score suivant :
-
-![Modèle 3](http://nsa38.casimages.com/img/2016/05/19/160519101030615704.png)
 
 
-#### Régression linéaire avec données discrètes, découpage du problème et modélisation de Poisson
+###########################################################################
+###		    4e essai : en découpant la journée     		###
+###		CCl : Erreur d'apprentissage importante  		###
+###########################################################################
 
-Malgré la bonne représentation des données, nous n'arrivions pas à attendre cette erreur de 0,7. Nous nous sommes demandé d'où venait le problème et avons réalisé que le choix de famille de modèle pour la régression linéaire n'était pas bon. En effet, notre problème est un problème de *comptage*. Or, pour un problème de comptage avec un temps d'attente aléatoire (représenté par une loi exponentielle), le modèle le plus adapté est celui de Poisson et non Binomial (valeur par défaut lors de l'utilisation de la commande lm en R). Nous avons donc décidé d'utiliser la commande `glm` avec l'option `family=poisson`.
 
-```R
 library(MASS)
 library(lubridate) 
 
@@ -341,14 +289,283 @@ train$day<-as.integer(train$day)
 train<-train[,-c(1)]
 train<-train[,-c(9)]
 train<-train[,-c(9)]
+train$season<-as.factor(train$season)
+train$holiday<-as.factor(train$holiday)
+train$workingday<-as.factor(train$workingday)
+train$weather<-as.factor(train$weather)
+train$day<-as.factor(train$day)
 
+weekend_train_nuit<-subset(train,(day==6|day==7)&(hour>20|hour<=6))
+weekend_train_matin<-subset(train,(day==6|day==7)&(hour>6&hour<=13))
+weekend_train_soir<-subset(train,(day==6|day==7)&(hour>13&hour<=20))
+
+semaine_train_nuit<-subset(train,(day==1|day==2|day==3|day==4|day==5)&(hour>20|hour<=6))
+semaine_train_matin<-subset(train,(day==1|day==2|day==3|day==4|day==5)&(hour>6&hour<=13))
+semaine_train_soir<-subset(train,(day==1|day==2|day==3|day==4|day==5)&(hour>13&hour<=20))
+
+###########
+# SEMAINE
+###########
+
+mylm_semaine_nuit<-lm(count~.,data=semaine_train_nuit)
+stepAIC(mylm_semaine_nuit)
+#Coefficients:
+#(Intercept)      season2      season3      season4     holiday1     weather2  
+#   -13.8409       6.0953       6.3105      19.1657       8.7921      -3.3397  
+#   weather3        atemp     humidity         hour         day2         day3  
+#   -19.0152       2.7784      -0.4623       4.5188      -7.4481      -3.1083  
+#       day4         day5  
+#     2.3750       4.4461 
+
+mylm_semaine_matin<-lm(count~.,data=semaine_train_matin)
+stepAIC(mylm_semaine_matin)
+#Coefficients:
+#(Intercept)      season2      season3      season4     weather2     weather3  
+#    250.943       59.419       52.674       88.921      -15.114     -125.344  
+#       temp        atemp         hour         day2         day3         day4  
+#     -9.145       12.445      -17.116        3.313       10.157       20.335  
+#       day5  
+#     23.143 
+
+mylm_semaine_soir<-lm(count~.,data=semaine_train_soir)
+stepAIC(mylm_semaine_soir)
+#Coefficients:
+#(Intercept)      season2      season3      season4     weather2     weather3  
+#   -285.796       60.505       46.348      112.515       -6.552      -66.431  
+#   weather4        atemp     humidity         hour  
+#     69.252        9.940       -1.729       23.127  
+
+###########
+# W-E
+###########
+
+mylm_we_nuit<-lm(count~.,data=weekend_train_nuit)
+stepAIC(mylm_we_nuit)
+#Coefficients:
+#(Intercept)      season2      season3      season4     holiday1  workingday1  
+#   -0.09419      9.45253     -0.94323     21.40716    -26.30732     -4.95703  
+#   weather2     weather3         temp     humidity    windspeed         hour  
+#   -3.75726    -11.73601      3.99479     -0.57854     -0.97302      4.79994  
+
+mylm_we_matin<-lm(count~.,data=weekend_train_matin)
+stepAIC(mylm_we_matin)
+#Coefficients:
+#(Intercept)      season2      season3      season4     holiday1     weather2  
+#    36.0131      37.7298      -7.0378      76.2489     -67.6562     -12.2489  
+#   weather3         temp     humidity    windspeed         hour  
+#   -99.3812       8.1844      -0.8987      -1.9680      11.9391  
+
+mylm_we_soir<-lm(count~.,data=weekend_train_soir)
+stepAIC(mylm_we_soir)
+#Coefficients:
+#(Intercept)      season2      season3      season4     holiday1     weather2  
+#    225.476       80.134       43.465      124.535      -96.134        3.905  
+#   weather3         temp     humidity         hour  
+#    -42.401       10.952       -2.018       -5.963  
+
+
+###########
+## SIMU  ##
+###########
+
+test <- read.csv("./sources/test.csv")
+test$hour  <- hour(ymd_hms(test$datetime))
+test$day <- wday(ymd_hms(test$datetime), label=TRUE)
+test$day <- as.integer(test$day)
+
+# On pré-remplit le résultat final !
+submission <- data.frame(datetime=test$datetime, count=NA)
+
+# On remplit avec une boucle :
+for (i in 1:nrow(test)){
+	if (test$day[i]!=6 & test$day[i]!=7) {
+		if (test$hour[i]<=6 | test$hour[i]>20){
+			submission[i,2] = max(0,-13.8409
+						+as.integer(test$season[i]==2)*6.0953
+						+as.integer(test$season[i]==3)*6.3105
+						+as.integer(test$season[i]==4)*19.1657
+						+as.integer(test$holiday[i]==1)*8.7921
+						+as.integer(test$weather[i]==2)*-3.3397
+						+as.integer(test$weather[i]==3)*-19.0152
+						+test$atemp[i]*2.7784
+						+test$humidity[i]*-0.4623
+						+test$hour[i]*4.5188
+						+as.integer(test$day[i]==2)*-7.4481
+						+as.integer(test$day[i]==3)*-3.1083
+						+as.integer(test$day[i]==4)*2.3750
+						+as.integer(test$day[i]==5)*4.4461)
+		} else if(test$hour[i]>6 & test$hour[i]<=13){
+			submission[i,2] = max(0,250.943
+						+as.integer(test$season[i]==2)*59.419
+						+as.integer(test$season[i]==3)*52.674
+						+as.integer(test$season[i]==4)*88.921
+						+as.integer(test$weather[i]==2)*-15.114
+						+as.integer(test$weather[i]==3)*-125.344
+						+test$temp[i]*-9.145
+						+test$atemp[i]*12.445
+						+test$hour[i]*-17.116
+						+as.integer(test$day[i]==2)*3.313
+						+as.integer(test$day[i]==3)*10.157
+						+as.integer(test$day[i]==4)*20.335
+						+as.integer(test$day[i]==5)*23.143)
+		} else {
+			submission[i,2] = max(0,-285.796
+						+as.integer(test$season[i]==2)*60.505
+						+as.integer(test$season[i]==3)*46.348
+						+as.integer(test$season[i]==4)*112.515
+						+as.integer(test$weather[i]==2)*-6.552
+						+as.integer(test$weather[i]==3)*-66.431
+						+as.integer(test$weather[i]==4)*69.252
+						+test$atemp[i]*9.940
+						+test$humidity[i]*-1.729
+						+test$hour[i]*23.127)
+		}
+	} else {
+		if (test$hour[i]<=6 | test$hour[i]>20){
+			submission[i,2] = max(0,-0.09419
+						+as.integer(test$season[i]==2)*9.45253
+						+as.integer(test$season[i]==3)*-0.94323
+						+as.integer(test$season[i]==4)*21.40716
+						+as.integer(test$holiday[i]==1)*-26.30732
+						+as.integer(test$workingday[i]==1)*-4.95703
+						+as.integer(test$weather[i]==2)*-3.75726
+						+as.integer(test$weather[i]==3)*-11.73601
+						+test$temp[i]*33.99479
+						+test$humidity[i]*-0.57854
+						+test$windspeed[i]*-0.97302
+						+test$hour[i]*4.79994)
+		} else if(test$hour[i]>6 & test$hour[i]<=13){
+			submission[i,2] = max(0,36.0131
+						+as.integer(test$season[i]==2)*37.7298
+						+as.integer(test$season[i]==3)*-7.0378
+						+as.integer(test$season[i]==4)*76.2489
+						+as.integer(test$holiday[i]==1)*-67.6562
+						+as.integer(test$weather[i]==2)*-12.2489
+						+as.integer(test$weather[i]==3)*-99.3812
+						+test$temp[i]*8.1844
+						+test$humidity[i]*-0.8987
+						+test$windspeed[i]*-1.9680
+						+test$hour[i]*11.9391)
+		} else {
+			submission[i,2] = max(0,225.476
+						+as.integer(test$season[i]==2)*80.134
+						+as.integer(test$season[i]==3)*43.465
+						+as.integer(test$season[i]==4)*124.535
+						+as.integer(test$holiday[i]==1)*-96.134
+						+as.integer(test$weather[i]==2)*3.905
+						+as.integer(test$weather[i]==3)*-42.401
+						+test$temp[i]*10.952
+						+test$humidity[i]*-2.018
+						+test$hour[i]*-5.963)
+		}
+	}
+}
+
+submission$hour  <- hour(ymd_hms(submission$datetime))
+submission$day <- wday(ymd_hms(submission$datetime), label=TRUE)
+submission$day <- as.integer(submission$day)
+
+write.csv(submission, file = "./Résultats/linear_corrected_decoupagejournee_factor_model.csv", row.names=FALSE)
+
+
+
+########################################################################################
+###				    RANDOM FOREST				     ###
+########################################################################################
+
+library(ggplot2)
+library(lubridate)
+library(randomForest)
+
+set.seed(1)
+
+train <- read.csv("./sources/train.csv")
+test <- read.csv("./sources/test.csv")
+
+library(randomForest)
+
+extractFeatures <- function(data) {
+  features <- c("season",
+                "holiday",
+                "workingday",
+                "weather",
+                "temp",
+                "atemp",
+                "humidity",
+                "windspeed",
+                "hour")
+  data$hour <- hour(ymd_hms(data$datetime))
+  return(data[,features])
+}
+
+trainFea <- extractFeatures(train)
+testFea  <- extractFeatures(test)
+
+submission <- data.frame(datetime=test$datetime, count=NA)
+
+# We only use past data to make predictions on the test set, 
+# so we train a new model for each test set cutoff point
+for (i_year in unique(year(ymd_hms(test$datetime)))) {
+  for (i_month in unique(month(ymd_hms(test$datetime)))) {
+    cat("Year: ", i_year, "\tMonth: ", i_month, "\n")
+    testLocs   <- year(ymd_hms(test$datetime))==i_year & month(ymd_hms(test$datetime))==i_month
+    testSubset <- test[testLocs,]
+    trainLocs  <- ymd_hms(train$datetime) <= min(ymd_hms(testSubset$datetime))
+    rf <- randomForest(extractFeatures(train[trainLocs,]), train[trainLocs,"count"], ntree=100)
+    submission[testLocs, "count"] <- predict(rf, extractFeatures(testSubset))
+  }
+}
+
+write.csv(submission, file = "./Résultats/1_random_forest_submission.csv", row.names=FALSE)
+
+# Train a model across all the training data and plot the variable importance
+rf <- randomForest(extractFeatures(train), train$count, ntree=100, importance=TRUE)
+imp <- importance(rf, type=1)
+featureImportance <- data.frame(Feature=row.names(imp), Importance=imp[,1])
+
+p <- ggplot(featureImportance, aes(x=reorder(Feature, Importance), y=Importance)) +
+     geom_bar(stat="identity", fill="#53cfff") +
+     coord_flip() + 
+     theme_light(base_size=20) +
+     xlab("Importance") +
+     ylab("") + 
+     ggtitle("Random Forest Feature Importance\n") +
+     theme(plot.title=element_text(size=18))
+
+ggsave("./Résultats/Avec_Graphiques/2_feature_importance.png", p)
+
+submission$hour  <- hour(ymd_hms(submission$datetime))
+submission$day <- wday(ymd_hms(submission$datetime), label=TRUE)
+submission$day <- as.integer(submission$day)
+train$hour  <- hour(ymd_hms(train$datetime))
+train$day <- wday(ymd_hms(train$datetime), label=TRUE)
+train$day <- as.integer(train$day)
+
+par(mfrow = c(1,2))
+plot(train$hour,train$count, col=color)
+plot(submission$hour,submission$count, col=color)
+
+
+########################################################################################
+###			   Régression généralisée				     ###
+########################################################################################
+
+library(MASS)
+library(lubridate) 
+
+train <- read.csv("./sources/train.csv")
+train$hour  <- hour(ymd_hms(train$datetime))
+train$day <- wday(ymd_hms(train$datetime), label=TRUE)
+train$day<-as.integer(train$day)
+train<-train[,-c(1)]
+train<-train[,-c(9)]
+train<-train[,-c(9)]
 train$season<-as.factor(train$season)
 train$holiday<-as.factor(train$holiday)
 train$workingday<-as.factor(train$workingday)
 train$weather<-as.factor(train$weather)
 train$hour<-as.factor(train$hour)
 train$day<-as.factor(train$day)
-
 weekend_train<-subset(train,day==6|day==7)
 semaine_train<-subset(train,day==1|day==2|day==3|day==4|day==5)
 
@@ -394,7 +611,7 @@ test$hour  <- hour(ymd_hms(test$datetime))
 test$day <- wday(ymd_hms(test$datetime), label=TRUE)
 test$day <- as.integer(test$day)
 
-# On pré-remplit le résultat final
+# On pré-remplit le résultat final !
 submission <- data.frame(datetime=test$datetime, count=NA)
 
 # On remplit avec une boucle :
@@ -477,22 +694,8 @@ for (i in 1:nrow(test)){
 	}
 }
 
+#submission$hour  <- hour(ymd_hms(submission$datetime))
+#submission$day <- wday(ymd_hms(submission$datetime), label=TRUE)
+#submission$day<-as.integer(submission$day)
+
 write.csv(submission, file = "./Résultats/linear_poisson_factor_model.csv", row.names=FALSE)
-```
-
-Nous avons alors soumis le résultat à Kaggle et obtenu le score suivant, plutôt satisfaisant :
-
-![Modèle 4](http://nsa38.casimages.com/img/2016/05/19/160519101616150129.png)
-
-### Python
-
-TODO
-
-## Random Forest et Feature Engineering
-
-Après avoir exploré le forum du sujet [Bike Sharing](https://www.kaggle.com/c/bike-sharing-demand/scripts) et lu l'article sur le [Titanic](http://trevorstephens.com/post/73770963794/titanic-getting-started-with-r-part-5-random), nous avons voulu voir les résultats atteignables avec la méthode de Random Forest. Nous avons donc utilisé le code de [Ben Hamner](https://www.kaggle.com/benhamner/bike-sharing-demand/random-forest-benchmark) et obtenu sur Kaggle une erreur de 0.59, soit seulement 13% de mieux que notre régression linéaire. Malgré la complexité du modèle Random Forest, nous avons découvert qu'avec une [regression linéaire plus affinée](http://brandonharris.io/kaggle-bike-sharing/) il était possible de faire un score encore meilleur (~0.49). Ainsi, l'expérience nous a démontré l'importance de bien traiter le données et de chercher à leur donner le plus de sens possible avant de se lancer dans des processus complexes.
-
-## Remarques
-
-### Choix du modèle - représentation des données
-TODO - Représentation PC ?

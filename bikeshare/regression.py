@@ -1,6 +1,7 @@
 #!/usr/bin/python3.3
 # -*-coding:Utf-8 -*
 
+
 import pandas as pd 
 import statsmodels.formula.api as smf
 import statsmodels.api as sm
@@ -17,6 +18,7 @@ for i in range(len(train)) :
 	train['date'][i]=datetime.strptime(train['datetime'][i],'%Y-%m-%d %H:%M:%S')
 
 train=train.set_index("datetime")
+
 
 test['date']=0
 for i in range(len(test)) :
