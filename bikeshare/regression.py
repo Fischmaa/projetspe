@@ -9,8 +9,8 @@ import matplotlib.pyplot as plt
 from datetime import datetime
 pd.options.mode.chained_assignment = None  # default='warn'
 # reading data
-train = pd.read_csv("data/train.csv")
-test = pd.read_csv("data/test.csv")
+train = pd.read_csv("sources/train.csv")
+test = pd.read_csv("sources/test.csv")
 
 #add a new column 'date' convert into datetime for both training and test set
 train['date']=0
