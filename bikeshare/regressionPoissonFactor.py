@@ -101,7 +101,7 @@ for i in range(len(test_factor)) :
 test_factor['daypart']=test_factor['daypart'].astype('category')
 
 #linear regression
-formula = "count ~ season + weather + temp +  windspeed + humidity + daypart + hour + Sunday"
+formula = "count ~ season + weather + temp +  windspeed + humidity + daypart + hour"
 
 train_factor_weekday=train_factor[(train_factor['day']!=5)]
 train_factor_weekday=train_factor_weekday[(train_factor_weekday['day']!=6)]
@@ -109,6 +109,10 @@ regression_weekday=smf.glm(formula,data=train_factor_weekday,family=sm.families.
 regression_weekday=regression_weekday.fit()
 print(regression_weekday.summary2())
 
+test_factor_weekday=test_factor[(test_factor['day']!=5)]
+test_factor_weekday=test_factor_weekday[(test_factor_weekday['day']!=6)]
+
+formula = "count ~ season + weather + temp +  windspeed + humidity + daypart + hour + Sunday"
 train_factor_weekend=train_factor[(train_factor['day']!=0)]
 train_factor_weekend=train_factor_weekend[(train_factor_weekend['day']!=1)]
 train_factor_weekend=train_factor_weekend[(train_factor_weekend['day']!=2)]
@@ -118,6 +122,12 @@ regression_weekend=smf.glm(formula,data=train_factor_weekend,family=sm.families.
 regression_weekend=regression_weekend.fit()
 print(regression_weekend.summary2())
 
+test_factor_weekend=test_factor[(test_factor['day']!=0)]
+test_factor_weekend=test_factor_weekend[(test_factor_weekend['day']!=1)]
+test_factor_weekend=test_factor_weekend[(test_factor_weekend['day']!=2)]
+test_factor_weekend=test_factor_weekend[(test_factor_weekend['day']!=3)]
+test_factor_weekend=test_factor_weekend[(test_factor_weekend['day']!=4)]
+
 #prediction 
 prediction_weekday=regression_weekday.predict(test_factor_weekday)
 prediction_weekday[prediction_weekday<0]=0 # bike demand is positive
@@ -126,17 +136,22 @@ prediction_weekend=regression_weekend.predict(test_factor_weekend)
 prediction_weekend[prediction_weekend<0]=0 # bike demand is positive
 
 
-
 #convert to dataframe
-prediction=pd.DataFrame(prediction_weekday)
-prediction.columns=['weekday']
-prediction['weekend']=pd.DataFrame(prediction_weekend)
-prediction["datetime"]=test_factor.index.values
-prediction = prediction.set_index("datetime")
+prediction_weekend=pd.DataFrame(prediction_weekend)
+prediction_weekend.columns=['count']
+prediction_weekend["datetime"]=test_factor_weekend.index.values
+prediction_weekend = prediction_weekend.set_index("datetime")
 
-prediction['count']=round(prediction['count'])
+prediction_weekday=pd.DataFrame(prediction_weekday)
+prediction_weekday.columns=['count']
+prediction_weekday["datetime"]=test_factor_weekday.index.values
+prediction_weekday = prediction_weekday.set_index("datetime")
+
+prediction=prediction_weekend;
+prediction=prediction.append(prediction_weekday)
+prediction.sort_index()
 print(prediction)
 
 #write the submission
-prediction.to_csv("regressionSubmission.csv")
+prediction.to_csv("Résultat/regressionPoissonFactor.csv")
 
