@@ -1,1 +1,2 @@
 https://class.coursera.org/ml-003/lecture
+http://rstudio-pubs-static.s3.amazonaws.com/165355_31258469013748f7b35d1fa58fb9772b.html
