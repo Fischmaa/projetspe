@@ -10,20 +10,20 @@ Nous avons décider de résoudres différents projets kaggle afin de comprendre 
 
 [Lien vers le challenge](https://www.kaggle.com/c/bike-sharing-demand)
 
-**Résumé du problème :** On possède les données de circulation des vélo du type des *velib* parisiens entre différentes stations ainsi que les données météo associées. On cherche à prédire dans quelles vélo sont louer les vélos. Le problème est situé dans le système de location de vélo de la ville de Washigton.
+**Résumé du problème :** On possède les données de circulation des vélos du type des *velib* parisiens entre différentes stations ainsi que les données météo associées. On cherche à prédire dans quelles quantitée sont loués les vélos, dans le système de location de vélo de la ville de Washigton.
 
-**Données disponible :** Données sur deux ans. Les 19 premiers jours de chaque mois constituent les `training set`, il s'agit des données permettant de calibrer le classificateur. Le reste du mois correspond au données pour tester le classificateur.
+**Données disponible :** Données sur deux ans. Les 19 premiers jours de chaque mois constituent les `training set`, il s'agit des données permettant de calibrer le classificateur. Le reste du mois correspond aux données pour tester le classificateur.
 
-On possède une jeu de données pour chaque heure de la journée  :
+On possède une jeu de données contenant des informations différentes selon le types de données :
 
-*Entrainement et tests*
+*Entrainement (train.csv) et Test (test.csv)*
 
 * Jour et heure
 * Saison
 * Vacances, semaine ou weekend
 * Temps qu'il fait
-* Températures ressentie et réelle
-* L'humidité
+* Températures : ressentie et réelle
+* Humidité
 * Vitesse du vent
 
 *Entrainement uniquement*
@@ -37,7 +37,7 @@ On possède une jeu de données pour chaque heure de la journée  :
 
 ## Introduction
 
-Nous effectué les prédictions demandées avec différents algorithmes. Nous allons détailler les différentes méthode employées puis nous comparerons les résultats.
+Nous avons mis en place différents modèles prédictifs, en abordant le problème de manière différente à chaque itération. Nous allons détailler les différents raisonnements suivis, puis nous comparerons les résultats.
 
 ## Regression linéaire
 
@@ -45,23 +45,79 @@ Pour une première approche de prédiction on utilise un algorithme de regressio
 
 ### R
 
+#### Régression linéaire avec données continues
+
+La toute première solution envisagée était d'effectuer une régression linéaire directement sur les données du problème.
+
 ```R
-train <- read.csv("~/Bureau/kaggle/train.csv")
+library(MASS)
+library(lubridate)
+ 
+train <- read.csv("./sources/train.csv")
+# traduction de la date en jour, sous forme d'entier entre 1 et 7 :  
 train$date<-wday(ymd_hms(train$datetime), label=TRUE)
 train$date<-as.integer(train$date)
-# supprimer la date pour avoir une matrice de corrélation et essayer de voir le lien entre les 
+
+# supprimer la date "String" pour avoir une matrice de corrélation et essayer de voir le lien entre les 
 # différentes variables !
 train<-train[,-c(1)]
 cor(train)
-# On va essayer de faire une regression linéaire :
+
+# Regression linéaire (on retire les variables registred et casual):
+train<-train[,-c(9)]
+train<-train[,-c(9)]
 mylm<-lm(count~.,data=train)
 stepAIC(mylm)
-# On obtient :
-# (Intercept)         temp        atemp     humidity    windspeed       casual   registered  
-#  -4.816e-13    7.518e-15   -1.698e-14    3.528e-15   -2.835e-15    1.000e+00    1.000e+00  
-# RQ : ça craint ... On va plutot faire en fonction de l'heure et regarder si on est en WE ou pas
+
+#Coefficients:
+#(Intercept)       season      weather         temp        atemp     humidity  
+#   125.3005      22.6820       5.8493       1.6584       5.8229      -3.0411  
+#  windspeed         date  
+#     0.7966       1.9603
+
+test <- read.csv("./sources/test.csv")
+test$hour  <- hour(ymd_hms(test$datetime))
+test$day <- wday(ymd_hms(test$datetime), label=TRUE)
+test$day<-as.integer(test$day)
+
+# On pré-remplit le résultat final !
+submission <- data.frame(datetime=test$datetime, count=NA)
+
+# On applique le modèle
+for (i in 1:nrow(test)){
+	submission[i,2] = max(125.3005+test$season[i]*22.6820+test$weather[i]*5.8493+test$temp[i]*1.6584+test$atemp[i]*5.8229+test$humidity[i]*-3.0411+test$windspeed[i]*0.7966+test$day[i]*1.9603,0)
+}
+
+# Ecriture du fichier à soumettre 
+write.csv(submission, file = "./Résultats/linear_model.csv", row.names=FALSE)
+
+```
+
+Nous avons alors soumis le résultat à Kaggle et obtenu le score suivant :
+![Modèle 1](http://nsa38.casimages.com/img/2016/05/19/160519095057129443.png)
+
+
+
+#### Régression linéaire avec données discrètes
+```R
+
+```
+
+#### Régression linéaire avec données discrètes et découpage du problème
+```R
+
+```
+
+#### Régression linéaire avec données discrètes, découpage du problème et modélisation de Poisson
+```R
+
 ```
 
 ### Python
 
+## Random Forest
 
+## Remarques
+
+### Choix du modèle - représentation des données
+Représentation PC ?
