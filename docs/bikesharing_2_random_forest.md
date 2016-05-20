@@ -1,4 +1,4 @@
-## Random Forest et Feature Engineering
+## Random Forest
 
 L'algorithme du Random Forest est très utilisé pour le challenge kaggle. Cet algorithme demandant une grande puissance de calcul mais certifie une très bonne prédiction dans bon nombre de cas.
 
