@@ -4,7 +4,7 @@ L'algorithme du Random Forest est très utilisé pour le challenge kaggle. Cet a
 
 Pour illustrer l'algorithme, nous avons représenté ci-dessous un arbre de décision minimaliste. Dans ce cas, on observe l'impact de l'humidité sur les résultats. Pour chaque neud de l'arbre, le chiffre supérieur correspond à la moyen des locations par heure et le pourcentage correspond à la proportion de la population considérée.
 
-![Arbre de décision](images/random_forest_bikesharing)
+![Arbre de décision](images/random_forest_bikesharing.png)
 
 Ainsi le random forest correspond à la génération d'arbres de décision dont les variables utilisées sont aléatoires. On fait ensuite une commité de vote entre les différents arbres.
 
