@@ -6,5 +6,5 @@ Nous avons décider de résoudres différents projets kaggle afin de comprendre 
 
 # Sommaire
 
-* (Le problème du bikesharing)[docs/rapport_bikesharing.md]
+* [Le problème du bikesharing](docs/rapport_bikesharing.md)
 
