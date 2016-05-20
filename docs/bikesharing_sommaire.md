@@ -34,7 +34,7 @@ Nous avons mis en place différents modèles prédictifs, en abordant le problè
 
 ## Sommaire
 
-1. [Regression linéaire](bikesharing_1_linear_regression,md)
+1. [Regression linéaire](bikesharing_1_linear_regression.md)
 2. [Random forest](bikesharing_2_random_forest.md)
 
 ## Conclusion
