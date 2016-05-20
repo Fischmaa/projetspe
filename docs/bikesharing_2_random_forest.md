@@ -1,6 +1,14 @@
 ## Random Forest et Feature Engineering
 
-L'algorithme du Random Forest est très utilisé pour le challenge kaggle. Cet algorithme demandant une certaine puissance de calcul mais certifie une très bonne prédiction dans bon nombre de cas.
+L'algorithme du Random Forest est très utilisé pour le challenge kaggle. Cet algorithme demandant une grande puissance de calcul mais certifie une très bonne prédiction dans bon nombre de cas.
+
+Nous implémenté cet algorithme en Python. Cela nous a permit d'obtenir un score de 0,68 sur le challenge kaggle. Il est important de préciser que nous avons uniquement pu utiliser 30 arbres alors que cette technique nécessite une centaine d'arbres pour être efficace. Cette limitation est dûe à un manque de ressources de calcul.
+
+Pour pouvoir appliquer l'algorithme du random forest dans les meilleurs conditions, une mise en forme des données a été nécessaire. Il est à noter que ce conditionnement est similaire à celui employé pour les autres techniques de prédiction. Nous le redonnons ici à titre d'information.
+
+**Mise en forme des données :**
+* Nous avons indiquer à notre algorithme de considérer les variable telles que `season`, `weather` comme des variables discrètes. Ceci est fait en Python grâce à l'instruction `as_type('categorie')`.
+* Nous avons créé des nouvelles colonne d'information : la colonne `date` qui contient la date de l'enregistrement au format `Datetime` et qui permet de créer la colonne `hour` qui contient l'heure de la journée sous forme d'un entier.
 
 ```python
 import pandas as pa
