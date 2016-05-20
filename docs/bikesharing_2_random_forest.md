@@ -15,7 +15,9 @@ import pandas as pa
 from sklearn.ensemble import RandomForestClassifier as rf
 import matplotlib.pyplot as plt
 from datetime import datetime
-pa.options.mode.chained_assignment = None  # default='warn'
+pa.options.mode.chained_assignment = None
+
+# On lit les données fournies
 
 tabtrain = pa.read_csv('sources/train.csv')
 tabtest = pa.read_csv('sources/test.csv')
@@ -58,17 +60,26 @@ tabtest['hour']=tabtest['hour'].astype('category')
 y_train = tabtrain['count']
 x_train = tabtrain.drop(['datetime','count','casual','registered','date'],1)
 
-# On forme les tableaux des résultats
+# Tableau de résultats
 x_test = tabtest.drop(['datetime','date'],1)
 
 model = rf(100)
 
+# Entrainement du modèle
 model.fit(x_train, y_train)
 
+# On détermine les prédictions
 y_test = model.predict(x_test)
+
+# On formate la sortie pour la submission
 y_test = pa.DataFrame(y_test)
 y_test.index = tabtest['datetime']
 
 y_test.to_csv('csv/random_forest.csv')
 ```
+
+**Remarque :** On a ici limité le traitement des données. Ce n'était en effet pas le but premier de cet exercice. Nous cherchions ici plutôt à prendre en main le langage et le forme de challenge kaggle plutôt qu'à optimiser au mieux les algorithme.
+
+Les premières étapes d'un travail plus poussé serait de déterminer de meilleurs variables définissant le systèmes. C'est ce type d'approche que l'on essaiera de développer sur le challenge suivant. 
+
 
