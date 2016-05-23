@@ -2,7 +2,7 @@
 # -*-coding:utf-8-*
 
 import pandas as pd
-
+import time 
 #move the 10000 first value from file to out_file
 
 #train = pd.read_csv('train.csv', iterator = True, chunksize = 10000)
@@ -17,12 +17,21 @@ import pandas as pd
 #tabtest.to_csv('out_test.csv')
 #tabdest.to_csv('out_dest.csv')
 
-train = pd.read_csv('out_train.csv')
-train = train['user_id']
-for i in range(1,len(train)) :
-	if train[i] < train[i-1]:
-		print("not ordered")
-		print(i)
-		break
 
-print("ordered")
+start_time = time.time()
+train = pd.read_csv('train.csv', iterator = True, chunksize = 10000)
+user = 0 
+last_user = 0
+count = 0
+for chunk in train:
+	tab = chunk['is_mobile']
+	if last_user == 0 :
+		last_user = tab[0]
+	for j in range(len(tab)) : 
+		user = tab[j]
+		if last_user != user :
+			last_user = user
+			count += 1
+
+print (count)
+print("--- %s seconds ---" % (time.time() - start_time))
