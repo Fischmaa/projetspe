@@ -12,9 +12,10 @@
 library(MASS)
 library(lubridate)
  
-train <- read.csv("~/Bureau/kaggle/train.csv")
+train <- read.csv("./sources/train.csv")
 train$date<-wday(ymd_hms(train$datetime), label=TRUE)
 train$date<-as.integer(train$date)
+train$hour  <- hour(ymd_hms(train$datetime))
 
 # supprimer la date pour avoir une matrice de corrélation et essayer de voir le lien entre les 
 # différentes variables !
@@ -49,9 +50,9 @@ submission$hour  <- hour(ymd_hms(submission$datetime))
 submission$day <- wday(ymd_hms(submission$datetime), label=TRUE)
 submission$day <- as.integer(submission$day)
 
-color  <- rep(c("#FD6C9E","#A91101","#7FDD4C","#884DA7","#F0C300","#74D0F1","#FF7F00"), c(24,24,24,24,24,24,24))
-plot(submission$hour,submission$count, col=color)
-
+par(mfrow = c(1,2))
+plot(train$hour,train$count, col="black")
+plot(submission$hour,submission$count, col="black")
 
 write.csv(submission, file = "./Résultats/linear_model.csv", row.names=FALSE)
 
@@ -99,15 +100,28 @@ test$day<-as.integer(test$day)
 
 # On pré-remplit le résultat final !
 submission <- data.frame(datetime=test$datetime, count=NA)
+submission_we <- data.frame(datetime=NA,count=NA)
+submission_sem <- data.frame(datetime=NA,count=NA)
 
 # On remplit en regardant si on est en semaine ou pas :
+k<-1
+m<-1
 for (i in 1:nrow(test)){
 	if (test[i,11]<6) {
 		submission[i,2] = max((5.8248+22.0184*test[i,2]-7.3750*test[i,5]-5.5177*test[i,6]+11.1996*test[i,7]-1.9762*test[i,8]+0.7709*test[i,9]+7.8518*test[i,10]+2.1974*test[i,11]),0)
+		submission_sem[k,1] = as.character(submission[i,1])
+		submission_sem[k,2] = submission[i,2]
+		k<-k+1
 	} else {
 		submission[i,2] = max((64.358+20.18*test[i,2]-50.868*test[i,3]+9.958*test[i,5]+5.918*test[i,6]+2.024*test[i,7]-2.853*test[i,8]+6.788*test[i,10]),0)
+		submission_we[m,1] = as.character(submission[i,1])
+		submission_we[m,2] = submission[i,2]
+		m<-m+1
 	}
 }
+
+head(submission_sem)
+head(submission_we)
 
 # RQ IMPORTANT : on a considéré les variables comme continues alors qu'elles ne le sont
 # pas ; on va désormais utiliser des factor.
@@ -116,37 +130,62 @@ submission$hour  <- hour(ymd_hms(submission$datetime))
 submission$day <- wday(ymd_hms(submission$datetime), label=TRUE)
 submission$day<-as.integer(submission$day)
 
-color  <- rep(c("black","red"), c(120,48))
-plot(submission$hour,submission$count, col=color)
+submission_we$hour  <- hour(ymd_hms(submission_we$datetime))
+submission_sem$hour  <- hour(ymd_hms(submission_sem$datetime))
 
+#################
+###   GRAPH   ###
+#################
+color  <- rep(c("black","red"), c(120,48))
+
+par(mfrow = c(1,2))
+plot(semaine_train$hour,semaine_train$count, col="black")
+plot(submission_sem$hour,submission_sem$count, col="black")
+
+par(mfrow = c(1,2))
+plot(weekend_train$hour,weekend_train$count, col="black")
+plot(submission_we$hour,submission_we$count, col="black")
+
+#plot(submission$hour,submission$count, col=color)
+
+##################
 
 write.csv(submission, file = "./Résultats/linear_double_model.csv", row.names=FALSE)
 
+
 ###########################################################################
-###		    3e essai : idem avec des factor     		###
+###			 3e essai : idem avec des factor     		###
 ###########################################################################
 library(MASS)
 library(lubridate) 
 
 train <- read.csv("./sources/train.csv")
+
 train$hour  <- hour(ymd_hms(train$datetime))
 train$day <- wday(ymd_hms(train$datetime), label=TRUE)
 train$day<-as.integer(train$day)
+
 train<-train[,-c(1)]
 train<-train[,-c(9)]
 train<-train[,-c(9)]
+
 train$season<-as.factor(train$season)
 train$holiday<-as.factor(train$holiday)
 train$workingday<-as.factor(train$workingday)
 train$weather<-as.factor(train$weather)
 train$hour<-as.factor(train$hour)
 train$day<-as.factor(train$day)
+#train$count<-as.factor(train$count)
+
 weekend_train<-subset(train,day==6|day==7)
 semaine_train<-subset(train,day==1|day==2|day==3|day==4|day==5)
 
 
 mylm_semaine<-lm(count~.,data=semaine_train)
-stepAIC(mylm_semaine)
+step_sem_front<-stepAIC(mylm_semaine,direction = "forward", trace=FALSE)
+#step_sem_back<-stepAIC(mylm_semaine,direction = "backward", trace=FALSE)
+#step_sem_both<-stepAIC(mylm_semaine,direction = "both", trace=FALSE)
+#htmlTable(anova(step_sem_front,step_sem_back,step_sem_both))
 
 #Coefficients SEMAINE:
 #(Intercept)      season2      season3      season4     weather2     weather3  
@@ -188,8 +227,12 @@ test$day <- as.integer(test$day)
 
 # On pré-remplit le résultat final !
 submission <- data.frame(datetime=test$datetime, count=NA)
+submission_we <- data.frame(datetime=NA,count=NA)
+submission_sem <- data.frame(datetime=NA,count=NA)
 
 # On remplit avec une boucle :
+m<-1
+k<-1
 for (i in 1:nrow(test)){
 	if (test$day[i]!=6 & test$day[i]!=7) {
 		submission[i,2] = max(0,-50.0786
@@ -229,6 +272,9 @@ for (i in 1:nrow(test)){
 					+as.integer(test$day[i]==3)*7.3319
 					+as.integer(test$day[i]==4)*11.4758
 					+as.integer(test$day[i]==5)*13.1366)
+		submission_sem[k,1] = as.character(submission[i,1])
+		submission_sem[k,2] = submission[i,2]
+		k<-k+1
 	} else {
 		submission[i,2] = max(0,3.280
 					+as.integer(test$season[i]==2)*37.554
@@ -263,6 +309,9 @@ for (i in 1:nrow(test)){
 					+as.integer(test$hour[i]==21)*75.212
 					+as.integer(test$hour[i]==22)*64.078
 					+as.integer(test$hour[i]==23)*41.828)
+		submission_we[m,1] = as.character(submission[i,1])
+		submission_we[m,2] = submission[i,2]
+		m<-m+1
 	}
 }
 
@@ -270,7 +319,118 @@ submission$hour  <- hour(ymd_hms(submission$datetime))
 #submission$day <- wday(ymd_hms(submission$datetime), label=TRUE)
 #submission$day<-as.integer(submission$day)
 
+submission_we$hour  <- hour(ymd_hms(submission_we$datetime))
+submission_sem$hour  <- hour(ymd_hms(submission_sem$datetime))
+
+#################
+###   GRAPH   ###
+#################
+color  <- rep(c("black","red"), c(120,48))
+
+par(mfrow = c(1,2))
+plot(semaine_train$hour,semaine_train$count, col="black")
+plot(submission_sem$hour,submission_sem$count, col="black")
+
+par(mfrow = c(1,2))
+plot(weekend_train$hour,weekend_train$count, col="black")
+plot(submission_we$hour,submission_we$count, col="black")
 write.csv(submission, file = "./Résultats/linear_factor_model.csv", row.names=FALSE)
+
+
+##########################################################################>
+# La même en découpant en table :
+##########################################################################>
+
+library(MASS)
+library(lubridate) 
+
+train <- read.csv("./sources/train.csv")
+
+train$hour  <- hour(ymd_hms(train$datetime))
+train$day <- wday(ymd_hms(train$datetime), label=TRUE)
+train$day<-as.integer(train$day)
+
+train<-train[,-c(1)]
+train<-train[,-c(9)]
+train<-train[,-c(9)]
+
+train$season<-as.factor(train$season)
+train$holiday<-as.factor(train$holiday)
+train$workingday<-as.factor(train$workingday)
+train$weather<-as.factor(train$weather)
+train$hour<-as.factor(train$hour)
+train$day<-as.factor(train$day)
+#train$count<-as.factor(train$count)
+
+weekend_train<-subset(train,day==6|day==7)
+semaine_train<-subset(train,day==1|day==2|day==3|day==4|day==5)
+
+weekend_test<-subset(test,day==6|day==7)
+semaine_test<-subset(test,day==1|day==2|day==3|day==4|day==5)
+#<------------------------------------------------
+## GENERAL
+mylm_s<-glm(count~.,family="poisson",data=train)
+step_s_front<-stepAIC(mylm_s,direction = "forward", trace=FALSE)
+step_s_back<-stepAIC(mylm_s,direction = "backward", trace=FALSE)
+step_s_both<-stepAIC(mylm_s,direction = "both", trace=FALSE)
+anova(step_s_front,step_s_back,step_s_both)
+# front donne le min
+mdl_s<-step_s_front
+#------------------------------------------------>
+
+
+mylm_semaine<-glm(count~.,family="poisson",data=semaine_train)
+step_sem_front<-stepAIC(mylm_semaine,direction = "forward", trace=FALSE)
+#step_sem_back<-stepAIC(mylm_semaine,direction = "backward", trace=FALSE)
+#step_sem_both<-stepAIC(mylm_semaine,direction = "both", trace=FALSE)
+#anova(step_sem_front,step_sem_back,step_sem_both)
+# front donne le min
+mdl_sem<-step_sem_front
+
+
+mylm_we<-glm(count~.,family="poisson",data=weekend_train)
+step_we_front<-stepAIC(mylm_we,direction = "forward", trace=FALSE)
+#step_we_back<-stepAIC(mylm_we,direction = "backward", trace=FALSE)
+#step_we_both<-stepAIC(mylm_we,direction = "both", trace=FALSE)
+#anova(step_we_front,step_we_back,step_we_both)
+# front donne le min
+mdl_we<-step_we_front
+
+
+test <- read.csv("./sources/test.csv")
+test$hour  <- hour(ymd_hms(test$datetime))
+test$day <- wday(ymd_hms(test$datetime), label=TRUE)
+test$day <- as.integer(test$day)
+
+test$season<-as.factor(test$season)
+test$holiday<-as.factor(test$holiday)
+test$workingday<-as.factor(test$workingday)
+test$weather<-as.factor(test$weather)
+test$hour<-as.factor(test$hour)
+test$day<-as.factor(test$day)
+
+# On pré-remplit le résultat final !
+submission <- data.frame(datetime=test$datetime, count=NA)
+submission_we <- data.frame(datetime=NA,count=NA)
+submission_sem <- data.frame(datetime=NA,count=NA)
+
+# On remplit avec predict()
+for (i in 1:nrow(test)){
+	if (test$day[i]==6 | test$day[i]==7) {
+		submission[i,2]<-max(0,predict(mdl_we,test[i,],type="response"))
+	} else {
+		submission[i,2]<-max(0,predict(mdl_sem,test[i,],type="response"))
+	}
+}
+
+for (i in 1:nrow(test)){
+	submission_s[i,2]<-max(0,predict(mdl_s,test[i,],type="response"))
+}
+
+
+
+write.csv(submission, file = "./Résultats/linear_factor_model.csv", row.names=FALSE)
+write.csv(submission_s, file = "./Résultats/modele_unique_poisson_factorise_model.csv", row.names=FALSE)
 
 
 ###########################################################################
@@ -470,7 +630,7 @@ write.csv(submission, file = "./Résultats/linear_corrected_decoupagejournee_fac
 
 
 ########################################################################################
-###				    RANDOM FOREST				     ###
+###			    	     RANDOM FOREST 		  		     ###
 ########################################################################################
 
 library(ggplot2)
@@ -542,12 +702,12 @@ train$day <- wday(ymd_hms(train$datetime), label=TRUE)
 train$day <- as.integer(train$day)
 
 par(mfrow = c(1,2))
-plot(train$hour,train$count, col=color)
-plot(submission$hour,submission$count, col=color)
+plot(train$hour,train$count, col="black")
+plot(submission$hour,submission$count, col="black")
 
 
 ########################################################################################
-###			   Régression généralisée				     ###
+###		 	          Régression généralisée			     ###
 ########################################################################################
 
 library(MASS)
@@ -613,8 +773,12 @@ test$day <- as.integer(test$day)
 
 # On pré-remplit le résultat final !
 submission <- data.frame(datetime=test$datetime, count=NA)
+submission_sem <- data.frame(datetime=NA, count=NA)
+submission_we <- data.frame(datetime=NA, count=NA)
 
 # On remplit avec une boucle :
+k<-1
+m<-1
 for (i in 1:nrow(test)){
 	if (test$day[i]!=6 & test$day[i]!=7) {
 		submission[i,2] = max(0,exp(3.130707
@@ -656,6 +820,10 @@ for (i in 1:nrow(test)){
 					+as.integer(test$day[i]==3)*0.035558
 					+as.integer(test$day[i]==4)*0.059364
 					+as.integer(test$day[i]==5)*0.077021))
+		submission_sem[k,1] = as.character(submission[i,1])
+		submission_sem[k,2] = submission[i,2]
+		k<-k+1
+					
 	} else {
 		submission[i,2] = max(0,exp(3.720409
 					+as.integer(test$season[i]==2)*0.307315
@@ -690,12 +858,250 @@ for (i in 1:nrow(test)){
 					+as.integer(test$hour[i]==20)*0.899586
 					+as.integer(test$hour[i]==21)*0.716428
 					+as.integer(test$hour[i]==22)*0.630703
-					+as.integer(test$hour[i]==23)*0.449692))
+					+as.integer(test$hour[i]==23)*0.449692))		
+		submission_we[m,1] = as.character(submission[i,1])
+		submission_we[m,2] = submission[i,2]
+		m<-m+1
 	}
 }
 
-#submission$hour  <- hour(ymd_hms(submission$datetime))
+submission$hour  <- hour(ymd_hms(submission$datetime))
 #submission$day <- wday(ymd_hms(submission$datetime), label=TRUE)
 #submission$day<-as.integer(submission$day)
 
+submission_we$hour  <- hour(ymd_hms(submission_we$datetime))
+submission_sem$hour  <- hour(ymd_hms(submission_sem$datetime))
+
+#################
+###   GRAPH   ###
+#################
+color  <- rep(c("black","red"), c(120,48))
+
+par(mfrow = c(1,2))
+plot(semaine_train$hour,semaine_train$count, col="black")
+plot(submission_sem$hour,submission_sem$count, col="black")
+
+par(mfrow = c(1,2))
+plot(weekend_train$hour,weekend_train$count, col="black")
+plot(submission_we$hour,submission_we$count, col="black")
+
+
+
 write.csv(submission, file = "./Résultats/linear_poisson_factor_model.csv", row.names=FALSE)
+
+###########################################################################
+###	          6e essai : en découpant en 3 la journée     		###
+###			     (avec POISSON)   				###
+###########################################################################
+
+
+library(MASS)
+library(lubridate) 
+
+train <- read.csv("./sources/train.csv")
+train$hour  <- hour(ymd_hms(train$datetime))
+train$day <- wday(ymd_hms(train$datetime), label=TRUE)
+train$day<-as.integer(train$day)
+train<-train[,-c(1)]
+train<-train[,-c(9)]
+train<-train[,-c(9)]
+train$season<-as.factor(train$season)
+train$holiday<-as.factor(train$holiday)
+train$workingday<-as.factor(train$workingday)
+train$weather<-as.factor(train$weather)
+train$day<-as.factor(train$day)
+
+weekend_train_nuit<-subset(train,(day==6|day==7)&(hour>20|hour<=6))
+weekend_train_matin<-subset(train,(day==6|day==7)&(hour>6&hour<=13))
+weekend_train_soir<-subset(train,(day==6|day==7)&(hour>13&hour<=20))
+
+semaine_train_nuit<-subset(train,(day==1|day==2|day==3|day==4|day==5)&(hour>20|hour<=6))
+semaine_train_matin<-subset(train,(day==1|day==2|day==3|day==4|day==5)&(hour>6&hour<=13))
+semaine_train_soir<-subset(train,(day==1|day==2|day==3|day==4|day==5)&(hour>13&hour<=20))
+
+###########
+# SEMAINE
+###########
+
+mylm_semaine_nuit<-glm(count~.,family=poisson,data=semaine_train_nuit)
+stepAIC(mylm_semaine_nuit)
+#Coefficients:
+#(Intercept)      season2      season3      season4     holiday1     weather2  
+#   2.541537     0.240970     0.220980     0.465778     0.123470    -0.038192  
+#   weather3         temp        atemp     humidity    windspeed         hour  
+#  -0.392610     0.018115     0.027431    -0.006219    -0.002648     0.066926  
+#       day2         day3         day4         day5  
+#  -0.135261    -0.059559     0.021609     0.066878
+
+mylm_semaine_matin<-glm(count~.,family=poisson,data=semaine_train_matin)
+stepAIC(mylm_semaine_matin)
+#Coefficients:
+#(Intercept)      season2      season3      season4     holiday1     weather2  
+#   5.554851     0.329789     0.282519     0.464723     0.061016    -0.046497  
+#   weather3         temp        atemp     humidity    windspeed         hour  
+#  -0.598558    -0.043041     0.057368    -0.001385    -0.001519    -0.077788  
+#       day2         day3         day4         day5  
+#   0.005884     0.037604     0.080710     0.094545  
+
+mylm_semaine_soir<-glm(count~.,family=poisson,data=semaine_train_soir)
+stepAIC(mylm_semaine_soir)
+#Coefficients:
+#(Intercept)      season2      season3      season4     holiday1     weather2  
+#  3.5880672    0.2796333    0.2225579    0.4743010   -0.0217482   -0.0213004  
+#   weather3     weather4         temp        atemp     humidity    windspeed  
+# -0.2749172    0.1966790   -0.0192585    0.0509824   -0.0060865   -0.0006525  
+#       hour         day2         day3         day4         day5  
+#  0.0757447    0.0575751    0.0667446    0.0598289    0.0592517
+
+###########
+# W-E
+###########
+
+mylm_we_nuit<-glm(count~.,family=poisson,data=weekend_train_nuit)
+stepAIC(mylm_we_nuit)
+#Coefficients:
+#(Intercept)      season2      season3      season4     holiday1  workingday1  
+#   2.753416     0.260261     0.123534     0.502101    -0.424731    -0.076721  
+#   weather2     weather3         temp        atemp     humidity    windspeed  
+#  -0.070580    -0.358851     0.070847    -0.012228    -0.006433    -0.010031  
+#       hour  
+#   0.062011 
+
+mylm_we_matin<-glm(count~.,family=poisson,data=weekend_train_matin)
+stepAIC(mylm_we_matin)
+#Coefficients:
+#(Intercept)      season2      season3      season4     holiday1  workingday1  
+#   4.497087     0.237913     0.086880     0.390759    -0.279256     0.031551  
+#   weather2     weather3         temp        atemp     humidity    windspeed  
+#  -0.044564    -0.676798     0.021950     0.007736    -0.003002    -0.005392  
+#       hour  
+#   0.047104 
+
+
+mylm_we_soir<-glm(count~.,family=poisson,data=weekend_train_soir)
+stepAIC(mylm_we_soir)
+#Coefficients:
+#(Intercept)      season2      season3      season4     holiday1  workingday1  
+#  5.2879291    0.3257528    0.2250004    0.4955032   -0.3452564   -0.0097681  
+#   weather2     weather3         temp        atemp     humidity    windspeed  
+#  0.0120785   -0.2094366    0.0238912    0.0101855   -0.0067173    0.0004933  
+#       hour  
+# -0.0162442
+
+
+###########
+## SIMU  ##
+###########
+
+test <- read.csv("./sources/test.csv")
+test$hour  <- hour(ymd_hms(test$datetime))
+test$day <- wday(ymd_hms(test$datetime), label=TRUE)
+test$day <- as.integer(test$day)
+
+# On pré-remplit le résultat final !
+submission <- data.frame(datetime=test$datetime, count=NA)
+
+# On remplit avec une boucle :
+for (i in 1:nrow(test)){
+	if (test$day[i]!=6 & test$day[i]!=7) {
+		if (test$hour[i]<=6 | test$hour[i]>20){
+			submission[i,2] = max(0,exp(2.541537
+						+as.integer(test$season[i]==2)*0.240970
+						+as.integer(test$season[i]==3)*0.220980
+						+as.integer(test$season[i]==4)*0.465778
+						+as.integer(test$holiday[i]==1)*0.123470
+						+as.integer(test$weather[i]==2)*-0.038192
+						+as.integer(test$weather[i]==3)*-0.392610
+						+test$temp[i]*0.018115
+						+test$atemp[i]*0.027431
+						+test$humidity[i]*-0.006219
+						+test$windspeed[i]*-0.002648
+						+test$hour[i]*0.066926
+						+as.integer(test$day[i]==2)*-0.135261
+						+as.integer(test$day[i]==3)*-0.059559
+						+as.integer(test$day[i]==4)*0.021609
+						+as.integer(test$day[i]==5)*0.066878))
+		} else if(test$hour[i]>6 & test$hour[i]<=13){
+			submission[i,2] = max(0,exp(5.554851
+						+as.integer(test$season[i]==2)*0.329789
+						+as.integer(test$season[i]==3)*0.282519
+						+as.integer(test$season[i]==4)*0.464723
+						+as.integer(test$holiday[i]==1)*0.061016
+						+as.integer(test$weather[i]==2)*-0.046497
+						+as.integer(test$weather[i]==3)*-0.598558
+						+test$temp[i]*-0.043041
+						+test$atemp[i]*0.057368
+						+test$humidity[i]*-0.001385
+						+test$windspeed[i]*-0.001519
+						+test$hour[i]*-0.077788
+						+as.integer(test$day[i]==2)*0.005884
+						+as.integer(test$day[i]==3)*0.037604
+						+as.integer(test$day[i]==4)*0.080710
+						+as.integer(test$day[i]==5)*0.094545))
+		} else {
+			submission[i,2] = max(0,exp(3.5880672
+						+as.integer(test$season[i]==2)*0.2796333
+						+as.integer(test$season[i]==3)*0.2225579
+						+as.integer(test$season[i]==4)*0.4743010
+						+as.integer(test$holiday[i]==1)*-0.0217482
+						+as.integer(test$weather[i]==2)*-0.0213004
+						+as.integer(test$weather[i]==3)*-0.2749172
+						+as.integer(test$weather[i]==4)*0.1966790
+						+test$temp[i]*-0.0192585
+						+test$atemp[i]*0.0509824
+						+test$humidity[i]*-0.0060865
+						+test$windspeed[i]*-0.0006525
+						+test$hour[i]*0.0757447
+						+as.integer(test$day[i]==2)*0.0575751
+						+as.integer(test$day[i]==3)*0.0667446
+						+as.integer(test$day[i]==4)*0.0598289
+						+as.integer(test$day[i]==5)*0.0592517))
+		}
+	} else {
+		if (test$hour[i]<=6 | test$hour[i]>20){
+			submission[i,2] = max(0,exp(2.753416
+						+as.integer(test$season[i]==2)*0.260261
+						+as.integer(test$season[i]==3)*0.123534
+						+as.integer(test$season[i]==4)*0.502101
+						+as.integer(test$holiday[i]==1)*-0.424731
+						+as.integer(test$workingday[i]==1)*-0.076721
+						+as.integer(test$weather[i]==2)*-0.070580
+						+as.integer(test$weather[i]==3)*-0.358851
+						+test$temp[i]*0.070847
+						+test$atemp[i]*-0.012228
+						+test$humidity[i]*-0.006433
+						+test$windspeed[i]*-0.010031
+						+test$hour[i]*0.062011))
+		} else if(test$hour[i]>6 & test$hour[i]<=13){
+			submission[i,2] = max(0,exp(4.497087
+						+as.integer(test$season[i]==2)*0.237913
+						+as.integer(test$season[i]==3)*0.086880
+						+as.integer(test$season[i]==4)*0.390759
+						+as.integer(test$holiday[i]==1)*-0.279256
+						+as.integer(test$workingday[i]==1)*0.031551
+						+as.integer(test$weather[i]==2)*-0.044564
+						+as.integer(test$weather[i]==3)*-0.676798
+						+test$temp[i]*0.021950
+						+test$atemp[i]*0.007736
+						+test$humidity[i]*-0.003002
+						+test$windspeed[i]*-0.005392
+						+test$hour[i]*0.047104))
+		} else {
+			submission[i,2] = max(0,exp(5.2879291
+						+as.integer(test$season[i]==2)*0.3257528
+						+as.integer(test$season[i]==3)*0.2250004
+						+as.integer(test$season[i]==4)*0.4955032
+						+as.integer(test$holiday[i]==1)*-0.3452564
+						+as.integer(test$workingday[i]==1)*-0.0097681
+						+as.integer(test$weather[i]==2)*0.0120785
+						+as.integer(test$weather[i]==3)*-0.2094366
+						+test$temp[i]*0.0238912
+						+test$atemp[i]*0.0101855
+						+test$humidity[i]*-0.0067173
+						+test$windspeed[i]*0.0004933
+						+test$hour[i]*-0.0162442))
+		}
+	}
+}
+
+write.csv(submission, file = "./Résultats/linear_poisson_corrected_decoupagejournee_factor_model.csv", row.names=FALSE)
