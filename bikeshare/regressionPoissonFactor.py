@@ -61,8 +61,7 @@ test_factor['hour']=test_factor['hour'].astype('category')
 
 #is a day more significant ?
 byday=train_factor.groupby('day')
-print(byday.describe())
-print('Sunday seems to be an important predictor')
+#print(byday.describe())
 
 #create Sunday variable and convert to category 
 train_factor['Sunday'] = 0 ;
@@ -74,6 +73,31 @@ test_factor['Sunday'] = 0 ;
 test_factor.ix[test_factor['day']==6,'Sunday']=1
 
 test_factor['Sunday']=test_factor['Sunday'].astype('category')
+
+#create Hot variable and convert to category (4 category) for both training and test set
+train_factor['hot'] = 0
+for i in range(len(train_factor)) :
+	currentTemp = train_factor['atemp'][i]
+	if (currentTemp>=16.6 and currentTemp<24.24 ):
+		train_factor['hot'][i] = 1
+	elif (currentTemp>=24.24 and currentTemp<31.06):
+		train_factor['hot'][i] = 2
+	elif (currentTemp>=31.06) :
+		train_factor['hot'][i] = 3
+
+train_factor['hot']=train_factor['hot'].astype('category')
+
+test_factor['hot'] = 0
+for i in range(len(test_factor)) :
+	currentTemp = test_factor['atemp'][i]
+	if (currentTemp>=16.6 and currentTemp<24.24 ):
+		test_factor['hot'][i] = 1
+	elif (currentTemp>=24.24 and currentTemp<31.06):
+		test_factor['hot'][i] = 2
+	elif (currentTemp>=31.06) :
+		test_factor['hot'][i] = 3
+
+test_factor['hot']=test_factor['hot'].astype('category')
 
 #create Hour variable and convert to category (4 category) for both training and test set
 train_factor['daypart'] = 0
@@ -99,20 +123,18 @@ for i in range(len(test_factor)) :
 		test_factor['daypart'][i] = 1
 
 test_factor['daypart']=test_factor['daypart'].astype('category')
-
 #linear regression
-formula = "count ~ season + weather + temp +  windspeed + humidity + daypart + hour"
+formula = "count ~ season + weather + humidity + hour + holiday + atemp + hot + daypart "
 
 train_factor_weekday=train_factor[(train_factor['day']!=5)]
 train_factor_weekday=train_factor_weekday[(train_factor_weekday['day']!=6)]
 regression_weekday=smf.glm(formula,data=train_factor_weekday,family=sm.families.Poisson(link=sm.families.links.log))
 regression_weekday=regression_weekday.fit()
-print(regression_weekday.summary2())
 
 test_factor_weekday=test_factor[(test_factor['day']!=5)]
 test_factor_weekday=test_factor_weekday[(test_factor_weekday['day']!=6)]
 
-formula = "count ~ season + weather + temp +  windspeed + humidity + daypart + hour + Sunday"
+formula = "count ~ season + weather + humidity  + hour + Sunday + atemp + hot "
 train_factor_weekend=train_factor[(train_factor['day']!=0)]
 train_factor_weekend=train_factor_weekend[(train_factor_weekend['day']!=1)]
 train_factor_weekend=train_factor_weekend[(train_factor_weekend['day']!=2)]
@@ -120,7 +142,6 @@ train_factor_weekend=train_factor_weekend[(train_factor_weekend['day']!=3)]
 train_factor_weekend=train_factor_weekend[(train_factor_weekend['day']!=4)]
 regression_weekend=smf.glm(formula,data=train_factor_weekend,family=sm.families.Poisson(link=sm.families.links.log))
 regression_weekend=regression_weekend.fit()
-print(regression_weekend.summary2())
 
 test_factor_weekend=test_factor[(test_factor['day']!=0)]
 test_factor_weekend=test_factor_weekend[(test_factor_weekend['day']!=1)]
@@ -150,8 +171,7 @@ prediction_weekday = prediction_weekday.set_index("datetime")
 prediction=prediction_weekend;
 prediction=prediction.append(prediction_weekday)
 prediction.sort_index()
-print(prediction)
 
 #write the submission
-prediction.to_csv("Résultat/regressionPoissonFactor.csv")
+prediction.to_csv("Résultats/regressionPoissonFactor.csv")
 

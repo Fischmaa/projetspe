@@ -10,11 +10,10 @@ pa.options.mode.chained_assignment = None  # default='warn'
 tabtrain = pa.read_csv('sources/train.csv')
 tabtest = pa.read_csv('sources/test.csv')
 
+# On ajoute une colonne contenant le date au format Datetime
 tabtrain['date']=0
 for i in range(len(tabtrain)) :
 	tabtrain['date'][i]=datetime.strptime(tabtrain['datetime'][i],'%Y-%m-%d %H:%M:%S')
-
-
 
 tabtest['date']=0
 for i in range(len(tabtest)) :
@@ -32,33 +31,27 @@ tabtest['workingday'] = tabtest['workingday'].astype('category')
 tabtest['weather'] = tabtest['weather'].astype('category')
 
 
-#create day of week column and hour column then convert into category for both training and test set
-tabtrain['day']=0
+# Création de la colonne contenant l'heure de la journée
 tabtrain['hour']=0
 for i in range(len(tabtrain)) :
-	tabtrain['day'][i] = tabtrain['date'][i].weekday()
 	tabtrain['hour'][i] = tabtrain['date'][i].hour
 
-tabtrain['day']=tabtrain['day'].astype('category')
 tabtrain['hour']=tabtrain['hour'].astype('category')
 
-tabtest['day']=0
 tabtest['hour']=0
 for i in range(len(tabtest)) :
-	tabtest['day'][i] = tabtest['date'][i].weekday()
 	tabtest['hour'][i] = tabtest['date'][i].hour
 
-tabtest['day']=tabtest['day'].astype('category')
 tabtest['hour']=tabtest['hour'].astype('category')
 
 # Tableaux d'entrainement
 y_train = tabtrain['count']
-x_train = tabtrain.drop(['datetime','count','casual','registered','date','day'],1)
+x_train = tabtrain.drop(['datetime','count','casual','registered','date'],1)
 
 # On forme les tableaux des résultats
-x_test = tabtest.drop(['datetime','date','day'],1)
+x_test = tabtest.drop(['datetime','date'],1)
 
-model = rf(30)
+model = rf(100)
 
 model.fit(x_train, y_train)
 
