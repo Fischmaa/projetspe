@@ -39,9 +39,4 @@ Nous avons mis en place différents modèles prédictifs, en abordant le problè
 
 ## Conclusion
 
-Après avoir exploré le forum du sujet [Bike Sharing](https://www.kaggle.com/c/bike-sharing-demand/scripts) et lu l'article sur le [Titanic](http://trevorstephens.com/post/73770963794/titanic-getting-started-with-r-part-5-random), nous avons voulu voir les résultats atteignables avec la méthode de Random Forest. Nous avons donc utilisé le code de [Ben Hamner](https://www.kaggle.com/benhamner/bike-sharing-demand/random-forest-benchmark) et obtenu sur Kaggle une erreur de 0.59, soit seulement 13% de mieux que notre régression linéaire. Malgré la complexité du modèle Random Forest, nous avons découvert qu'avec une [regression linéaire plus affinée](http://brandonharris.io/kaggle-bike-sharing/) il était possible de faire un score encore meilleur (~0.49). Ainsi, l'expérience nous a démontré l'importance de bien traiter le données et de chercher à leur donner le plus de sens possible avant de se lancer dans des processus complexes.
-
-## Remarques
-
-### Choix du modèle - représentation des données
-TODO - Représentation PC ?
+Après avoir exploré le forum du sujet [Bike Sharing](https://www.kaggle.com/c/bike-sharing-demand/scripts) et lu l'article de Trevor Stephens sur le sujet Kaggle concernant les victimes du [Titanic](http://trevorstephens.com/post/73770963794/titanic-getting-started-with-r-part-5-random), nous avons voulu voir les résultats atteignables avec la méthode de Random Forest. Nous avons donc utilisé le code de [Ben Hamner](https://www.kaggle.com/benhamner/bike-sharing-demand/random-forest-benchmark) et obtenu sur Kaggle une erreur de 0.59, soit X % moins bien que notre régression linéaire. Malgré la complexité du modèle Random Forest, nous avons donc découvert qu'avec une regression linéaire plus affinée il était possible de faire un score bien meilleur (~0.40). Ainsi, l'expérience nous a démontré l'importance de bien traiter le données et de chercher à leur donner le plus de sens possible avant de se lancer dans des processus complexes.
