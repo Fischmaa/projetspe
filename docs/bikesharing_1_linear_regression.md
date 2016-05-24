@@ -1299,3 +1299,4 @@ print(predictor_weekday.ranking_)
 print(predictor_weekend.support_)
 print(predictor_weekend.ranking_)
 ```
+![score finale](https://raw.githubusercontent.com/matthiasbe/projetspe/master/bikeshare/R%C3%A9sultats/Avec_Graphiques/scoreRegressionPoissonFactgorFinal.png)
