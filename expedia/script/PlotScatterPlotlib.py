@@ -16,7 +16,7 @@ pl.offline.init_notebook_mode()
 
 # In[10]:
 
-train = pd.read_csv('/home/valerian/Projets/Projet_spe/projetspe/expedia/train.csv', iterator = True, chunksize = 100000)
+train = pd.read_csv('../out_train.csv', iterator = True, chunksize = 100000)
 
 #à la volée 
 for chunk in train :
