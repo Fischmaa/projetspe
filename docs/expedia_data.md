@@ -16,24 +16,43 @@ Nous détaillons ici les différentes attributs. Pour train.csv, un ligne corres
 
 #### Champs communs à train.csv et test.csv
 
+Contexte de recherche
+
 nom du champ                | description
 :--------------------------:|------------
-`date_time`                 | La date de l'évènement sous forme de timestamp
+`date_time`                 | La date du clic/de la réservation sous forme de timestamp
 `site_name`                 | ID du nom de domaine
 `posa_continent`            | ID du continent associé au nom de domaine
+`is_mobile`                 | `1` si l'utilisateur à accédé au site depuis un **mobile**
+`channel`                   | ??????
+
+Informations sur l'utilisateur :
+
+nom du champ                | description
+:--------------------------:|------------
 `user_location_country`     | ID du **pays** de l'utilisateur
 `user_location_region`      | ID de la **région** de l'utilisateur
 `user_location_city`        | ID de la **ville** de l'utilisateur
-orig_destination_distance
-user_id
-is_mobile
-is_package
-channel
-srch_ci
-srch_co
-srch_adult_cnt
-srch_children_cnt
-srch_rm_cnt
+`user_id`                   | ID de l'utilisateur
+
+Informations sur l'évènement
+
+nom du champ                | description
+:--------------------------:|------------
+`is_package`                | `1` si le clic/la réservation a été généré avec un **vol**
+`orig_destination_distance` | **Distance** physique entre la position de l'utilisateur et celle de l'hôtel cliqué/reservé
+
+Informations sur la recherche conduisant au clic/à la réservation
+
+nom du champ                | description
+:--------------------------:|------------
+`srch_ci`                   | Date de début du voyage spécifié lors de la recherche qui a conduit au clic/à la réservation
+`srch_co`                   | Date de fin du voyage
+`srch_adult_cnt`            | Nombre d'adultes faisant partie du voyage
+`srch_children_cnt`         | Nombre d'enfants faisant partie du voyage
+`srch_rm_cnt`               | Nombre de chambre demandé
+
+
 srch_destination_id
 srch_destination_type_id
 is_booking
