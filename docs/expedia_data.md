@@ -16,6 +16,12 @@ Nous détaillons ici les différentes attributs. Pour train.csv, un ligne corres
 
 #### Champs communs à train.csv et test.csv
 
+Uniquement dans test.csv
+
+nom du champ                | description
+:--------------------------:|------------
+`id`                        | Index de la ligne
+
 Contexte de recherche
 
 nom du champ                | description
@@ -51,16 +57,24 @@ nom du champ                | description
 `srch_adult_cnt`            | Nombre d'adultes faisant partie du voyage
 `srch_children_cnt`         | Nombre d'enfants faisant partie du voyage
 `srch_rm_cnt`               | Nombre de chambre demandé
+`srch_destination_id`       | ID de la destination spécifiée lors de la recherche
+`srch_destination_type_id`  | Le type de cette destination
 
+Informations sur l'hôtel
 
-srch_destination_id
-srch_destination_type_id
-is_booking
-cnt
-hotel_continent
-hotel_country
-hotel_market
-hotel_cluster
+nom du champ                | description
+:--------------------------:|------------
+`hotel_continent`           | Continent sur lequel se trouve l'hôtel
+`hotel_country`             | Pays dans lequel se trouve l'hôtel
+`hotel_market`              | ???????
+
+*Uniquement dans train.csv*
+
+nom du champ                | description
+:--------------------------:|------------
+`is_booking`                | `1` Si il s'agit d'une réservation, `0` si il s'agit d'un clic
+`cnt`                       | Nombre de clic/réservations effectués pendant la même session par l'utilisateur
+`hotel_cluster`             | Type d'hôtel, *cluster* auquel il appartient.
 
 #### Champs propres à train.csv
 
