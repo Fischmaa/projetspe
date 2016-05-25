@@ -7,6 +7,7 @@ Nous avons décider de résoudres différents projets kaggle afin de comprendre 
 # Sommaire
 
 1. [Le problème du bikesharing](docs/bikesharing_sommaire.md)
+2. [Expedia - Suggestion d'hotels](docs/expedia_sommaire.md)
 
 ## Annexe
 
