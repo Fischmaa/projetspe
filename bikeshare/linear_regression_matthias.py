@@ -20,7 +20,7 @@ x_test = tabtest.drop(['datetime'],1)
 y_train = tabtrain['count']
 
 
-model = lr()
+model = lr(5)
 
 model.fit(x_train, y_train)
 
