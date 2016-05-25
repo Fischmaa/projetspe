@@ -4,6 +4,7 @@
 import pandas as pd
 import time 
 import math as mt
+from threading import Thread, RLock
 #move the 10000 first value from file to out_file
 
 #train = pd.read_csv('train.csv', iterator = True, chunksize = 10000)
@@ -19,23 +20,33 @@ import math as mt
 #tabdest.to_csv('out_dest.csv')
 
 
+
+
+
+verrou = RLock()
+
 start_time = time.time()
 train = pd.read_csv('../train.csv', iterator = True, chunksize = 100000)
 count_user = 0 
 count_distance = 0
-for chunk in train:
-	#tab = chunk['user_id']
-	tab2 = chunk['orig_destination_distance']
-	#if last_user == 0 :
-	#	last_user = tab[0]
-	for j in range(len(tab2)) : 
-		if not mt.isnan(tab2[j]):		
-			count_user += 1
-			count_distance += tab2[j]	
-	#	user = tab[j]
-	#	if last_user != user :
-	#		last_user = user
-	#		count += 1
 
-print (count_user/count_distance)
+class Analyse (Thread):
+
+	def __init__(self, train):
+		Thread.__init__(self)
+		self.train = train
+
+	def run(self):
+		global count_distance
+		global count_user
+		for chunk in self.train:
+			tab = chunk['orig_destination_distance']
+			for j in range(len(tab)) : 
+				if not isnan(tab[j]):
+					with verrou:
+						count_user += 1
+						count_distance += tab[j]
+
+
+
 print("--- %s seconds ---" % (time.time() - start_time))
