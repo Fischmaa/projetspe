@@ -8,3 +8,6 @@ Nous avons décider de résoudres différents projets kaggle afin de comprendre 
 
 1. [Le problème du bikesharing](docs/bikesharing_sommaire.md)
 
+## Annexe
+
+A. [Charte d'équipe](Charte_dequipe.md)
