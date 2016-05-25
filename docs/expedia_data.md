@@ -12,9 +12,11 @@ Sur la age du challenge, on nous popose de télécharger quatre fichiers:
 
 ## train.csv et test.csv
 
-Nous détaillons ici les différentes attributs. Pour train.csv, un ligne correspond à une recherche (un clic) ou à une réservation. Pour test.csv, une ligne correspond à une recherche ou une reservation. Toutes les colonnes sont communes aux deux fichiers, mis à part les deux dernières catégories qui sont propres à un seul des deux fichiers.
+Nous détaillons ici les différentes attributs. Pour train.csv, un ligne correspond à une recherche (un clic) ou à une réservation. Pour test.csv, une ligne correspond à une recherche ou une reservation. Toutes les colonnes sont communes aux deux fichiers, sauf celle marquées *[TRAIN]* qui ne se trouvent pas dans les données de test.
 
 ### Contexte de recherche
+
+Des informations générales sur le contexte dans lequel l'évènement est survenu.
 
 nom du champ                | description
 :--------------------------:|------------
@@ -23,8 +25,11 @@ nom du champ                | description
 `posa_continent`            | ID du continent associé au nom de domaine
 `is_mobile`                 | `1` si l'utilisateur à accédé au site depuis un **mobile**
 `channel`                   | ??????
+`cnt`                       | *[TRAIN]* Nombre de clic/réservations effectués pendant la même session par l'utilisateur
 
 ### Informations sur l'utilisateur :
+
+Les informations spécifiques à l'utilisateur.
 
 nom du champ                | description
 :--------------------------:|------------
@@ -39,6 +44,7 @@ nom du champ                | description
 :--------------------------:|------------
 `is_package`                | `1` si le clic/la réservation a été généré avec un **vol**
 `orig_destination_distance` | **Distance** physique entre la position de l'utilisateur et celle de l'hôtel cliqué/reservé
+`is_booking`                | *[TRAIN]* `1` Si il s'agit d'une réservation, `0` si il s'agit d'un clic
 
 ### Informations sur la recherche conduisant au clic/à la réservation
 
@@ -59,18 +65,5 @@ nom du champ                | description
 `hotel_continent`           | Continent sur lequel se trouve l'hôtel
 `hotel_country`             | Pays dans lequel se trouve l'hôtel
 `hotel_market`              | ???????
-
-### Champs propres à train.csv
-
-nom du champ                | description
-:--------------------------:|------------
-`is_booking`                | `1` Si il s'agit d'une réservation, `0` si il s'agit d'un clic
-`cnt`                       | Nombre de clic/réservations effectués pendant la même session par l'utilisateur
-`hotel_cluster`             | Type d'hôtel, *cluster* auquel il appartient.
-
-### Uniquement dans test.csv
-
-nom du champ                | description
-:--------------------------:|------------
-`id`                        | Index de la ligne
+`hotel_cluster`             | *[TRAIN]* Type d'hôtel, Id du cluster auquel il appartient.
 
