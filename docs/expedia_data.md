@@ -1,6 +1,6 @@
-[Retour au sommaire Expedia](expedia_sommaire.md)
+Explication des données
 
-## Explication des données
+[Retour au sommaire Expedia](expedia_sommaire.md)
 
 Pour le problème Expedia, on possède beaucoup de données, on va donc ici détailler les différentes données et leur signification.
 Sur la age du challenge, on nous popose de télécharger quatre fichiers:
@@ -10,19 +10,11 @@ Sur la age du challenge, on nous popose de télécharger quatre fichiers:
 * **sample_submission.csv :** Un exemple de fichier à soumettre.
 * **destinations.csv :** Des informations sur les hôtels traduis en `float` (avis sur les hôtels, données de recherche ...)
 
-### train.csv et test.csv
+## train.csv et test.csv
 
-Nous détaillons ici les différentes attributs. Pour train.csv, un ligne correspond à une recherche (un clic) ou à une réservation. Pour test.csv, une ligne correspond à une recherche ou une reservation.
+Nous détaillons ici les différentes attributs. Pour train.csv, un ligne correspond à une recherche (un clic) ou à une réservation. Pour test.csv, une ligne correspond à une recherche ou une reservation. Toutes les colonnes sont communes aux deux fichiers, mis à part les deux dernières catégories qui sont propres à un seul des deux fichiers.
 
-#### Champs communs à train.csv et test.csv
-
-Uniquement dans test.csv
-
-nom du champ                | description
-:--------------------------:|------------
-`id`                        | Index de la ligne
-
-Contexte de recherche
+### Contexte de recherche
 
 nom du champ                | description
 :--------------------------:|------------
@@ -32,7 +24,7 @@ nom du champ                | description
 `is_mobile`                 | `1` si l'utilisateur à accédé au site depuis un **mobile**
 `channel`                   | ??????
 
-Informations sur l'utilisateur :
+### Informations sur l'utilisateur :
 
 nom du champ                | description
 :--------------------------:|------------
@@ -41,14 +33,14 @@ nom du champ                | description
 `user_location_city`        | ID de la **ville** de l'utilisateur
 `user_id`                   | ID de l'utilisateur
 
-Informations sur l'évènement
+### Informations sur l'évènement
 
 nom du champ                | description
 :--------------------------:|------------
 `is_package`                | `1` si le clic/la réservation a été généré avec un **vol**
 `orig_destination_distance` | **Distance** physique entre la position de l'utilisateur et celle de l'hôtel cliqué/reservé
 
-Informations sur la recherche conduisant au clic/à la réservation
+### Informations sur la recherche conduisant au clic/à la réservation
 
 nom du champ                | description
 :--------------------------:|------------
@@ -60,7 +52,7 @@ nom du champ                | description
 `srch_destination_id`       | ID de la destination spécifiée lors de la recherche
 `srch_destination_type_id`  | Le type de cette destination
 
-Informations sur l'hôtel
+### Informations sur l'hôtel
 
 nom du champ                | description
 :--------------------------:|------------
@@ -68,7 +60,7 @@ nom du champ                | description
 `hotel_country`             | Pays dans lequel se trouve l'hôtel
 `hotel_market`              | ???????
 
-*Uniquement dans train.csv*
+### Champs propres à train.csv
 
 nom du champ                | description
 :--------------------------:|------------
@@ -76,5 +68,9 @@ nom du champ                | description
 `cnt`                       | Nombre de clic/réservations effectués pendant la même session par l'utilisateur
 `hotel_cluster`             | Type d'hôtel, *cluster* auquel il appartient.
 
-#### Champs propres à train.csv
+### Uniquement dans test.csv
+
+nom du champ                | description
+:--------------------------:|------------
+`id`                        | Index de la ligne
 
