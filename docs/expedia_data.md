@@ -16,8 +16,6 @@ Nous détaillons ici les différentes attributs. Pour train.csv, un ligne corres
 
 ### Contexte de recherche
 
-Des informations générales sur le contexte dans lequel l'évènement est survenu.
-
 nom du champ                | description
 :--------------------------:|------------
 `date_time`                 | La date du clic/de la réservation sous forme de timestamp
@@ -28,8 +26,6 @@ nom du champ                | description
 `cnt`                       | [Entrainement] Nombre de clic/réservations effectués pendant la même session par l'utilisateur
 
 ### Informations sur l'utilisateur :
-
-Les informations spécifiques à l'utilisateur.
 
 nom du champ                | description
 :--------------------------:|------------
