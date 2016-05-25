@@ -68,4 +68,4 @@ nom du champ                | description
 Ce fichier contient des informations sur les différentes régions recherchées par les utilisateurs. Il contient 62 mille régions différentes et 150 colonnes.
 
 * La première colonne **srch_destination_id** correspond correspond à une des régions recherchées.
-* Les 149 autres colonnes **d1-149** correspondent à des caractéristiques de la régions basées sur les avis donnés par utilisateurs aux hôtels qui s'y trouvent. Ces informations permettent construire des similitudes et des différences entre les différentes régions.
+* Les 149 autres colonnes **d1-149** correspondent à des caractéristiques de la régions basées sur les avis donnés par utilisateurs aux hôtels qui s'y trouvent. Ces informations permettent de construire des similitudes et des différences entre les différentes régions.
