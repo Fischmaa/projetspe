@@ -16,15 +16,32 @@ Nous détaillons ici les différentes attributs. Pour train.csv, un ligne corres
 
 #### Champs communs à train.csv et test.csv
 
-nom du champ | description
-:-----------:|------------
-`date_time`
-site_name
-posa_continent
-user_location_country
-user_location_region
-user_location_city
-orig_destination_distanceuser_id 	is_mobile 	... 	srch_children_cnt 	srch_rm_cnt 	srch_destination_id 	srch_destination_type_id 	is_booking 	cnt 	hotel_continent 	hotel_country 	hotel_market 	hotel_cluster
+nom du champ                | description
+:--------------------------:|------------
+`date_time`                 | La date de l'évènement sous forme de timestamp
+`site_name`                 | ID du nom de domaine
+`posa_continent`            | ID du continent associé au nom de domaine
+`user_location_country`     | ID du **pays** de l'utilisateur
+`user_location_region`      | ID de la **région** de l'utilisateur
+`user_location_city`        | ID de la **ville** de l'utilisateur
+orig_destination_distance
+user_id
+is_mobile
+is_package
+channel
+srch_ci
+srch_co
+srch_adult_cnt
+srch_children_cnt
+srch_rm_cnt
+srch_destination_id
+srch_destination_type_id
+is_booking
+cnt
+hotel_continent
+hotel_country
+hotel_market
+hotel_cluster
 
 #### Champs propres à train.csv
 
