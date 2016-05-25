@@ -69,3 +69,5 @@ Ce fichier contient des informations sur les différentes régions recherchées 
 
 * La première colonne **srch_destination_id** correspond correspond à une des régions recherchées.
 * Les 149 autres colonnes **d1-149** correspondent à des caractéristiques de la régions basées sur les avis donnés par utilisateurs aux hôtels qui s'y trouvent. Ces informations permettent de construire des similitudes et des différences entre les différentes régions.
+
+Toutes les valeurs de **srch_destination_id** ne peuvent être retrouvées dans `destinations.csv`. En effet, certaines régions ne possèdent pas d'hôtels assez récents pour construire les informations nécessaire à la complétion de la table des destinations.
