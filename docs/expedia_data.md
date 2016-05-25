@@ -12,7 +12,7 @@ Sur la age du challenge, on nous popose de télécharger quatre fichiers:
 
 ## train.csv et test.csv
 
-Nous détaillons ici les différentes attributs. Pour train.csv, un ligne correspond à une recherche (un clic) ou à une réservation. Pour test.csv, une ligne correspond à une recherche ou une reservation. Toutes les colonnes sont communes aux deux fichiers, sauf celle marquées *[TRAIN]* qui ne se trouvent pas dans les données de test.
+Nous détaillons ici les différentes attributs. Pour train.csv, un ligne correspond à une recherche (un clic) ou à une réservation. Pour test.csv, une ligne correspond à une recherche ou une reservation. Toutes les colonnes sont communes aux deux fichiers, sauf celle marquées **[TRAIN]** qui ne se trouvent pas dans les données de test.
 
 ### Contexte de recherche
 
@@ -25,7 +25,7 @@ nom du champ                | description
 `posa_continent`            | ID du continent associé au nom de domaine
 `is_mobile`                 | `1` si l'utilisateur à accédé au site depuis un **mobile**
 `channel`                   | ??????
-`cnt`                       | *[TRAIN]* Nombre de clic/réservations effectués pendant la même session par l'utilisateur
+`cnt`                       | **[TRAIN]** Nombre de clic/réservations effectués pendant la même session par l'utilisateur
 
 ### Informations sur l'utilisateur :
 
@@ -44,7 +44,7 @@ nom du champ                | description
 :--------------------------:|------------
 `is_package`                | `1` si le clic/la réservation a été généré avec un **vol**
 `orig_destination_distance` | **Distance** physique entre la position de l'utilisateur et celle de l'hôtel cliqué/reservé
-`is_booking`                | *[TRAIN]* `1` Si il s'agit d'une réservation, `0` si il s'agit d'un clic
+`is_booking`                | *[Train]* `1` Si il s'agit d'une réservation, `0` si il s'agit d'un clic
 
 ### Informations sur la recherche conduisant au clic/à la réservation
 
