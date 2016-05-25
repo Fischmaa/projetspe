@@ -19,7 +19,7 @@ import time
 
 
 start_time = time.time()
-train = pd.read_csv('train.csv', iterator = True, chunksize = 10000)
+train = pd.read_csv('../train.csv', iterator = True, chunksize = 10000)
 user = 0 
 last_user = 0
 count = 0
