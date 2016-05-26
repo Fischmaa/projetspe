@@ -60,7 +60,7 @@ nom du champ                | description
 :--------------------------:|------------
 `hotel_continent`           | Continent sur lequel se trouve l'hôtel
 `hotel_country`             | Pays dans lequel se trouve l'hôtel
-`hotel_market`              | ???????
+`hotel_market`              | Zone géographique précise qui recouvre différentes destinations spécifiées dans srch_destination_id
 `hotel_cluster`             | [Entrainement] Type d'hôtel, Id du cluster auquel il appartient.
 
 ## destinations.csv
