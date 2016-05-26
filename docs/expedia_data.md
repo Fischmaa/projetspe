@@ -71,3 +71,19 @@ Ce fichier contient des informations sur les différentes régions recherchées 
 * Les 149 autres colonnes **d1-149** correspondent à des caractéristiques de la régions basées sur les avis donnés par utilisateurs aux hôtels qui s'y trouvent. Ces informations permettent de construire des similitudes et des différences entre les différentes régions.
 
 Toutes les valeurs de **srch_destination_id** ne peuvent être retrouvées dans `destinations.csv`. En effet, certaines régions ne possèdent pas d'hôtels assez récents pour construire les informations nécessaire à la complétion de la table des destinations.
+
+## En chiffres
+
+Il est plus facile de se représenter les données avec quelques chiffres clés. Nous allons donc donner des données concernant les fichiers.
+
+### Nombre de lignes
+
+* **train.csv :** 37.670.294 lignes
+* **test.csv :** 2.528.244
+* **destinations.csv :** 62.107
+
+### Nombre de destinations
+
+* **train.csv :** 59.455 destinations différentes (1.662 qui ne sont pas dans destinations.csv)
+* **test.csv :** 40.718 destinations différentes (2.763 qui ne sont pas das destinations.csv)
+* **destinations.csv :** 62.106 destinations différentes
