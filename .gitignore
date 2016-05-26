@@ -1,3 +1,6 @@
 *~
 *.ipynb_checkpoints
 *__pycache__
+expedia/destinations.csv
+expedia/test.csv
+expedia/train.csv
