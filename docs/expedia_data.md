@@ -1,14 +1,16 @@
-Explication des données
+# Explication des données
 
 [Retour au sommaire Expedia](expedia_sommaire.md)
 
 Pour le problème Expedia, on possède beaucoup de données, on va donc ici détailler les différentes données et leur signification.
-Sur la age du challenge, on nous popose de télécharger quatre fichiers:
+Sur la page du challenge, on nous propose de télécharger quatre fichiers:
 
 * [train.csv](#traincsv-et-testcsv) : Regroupe les données d'entrainement. Ce fichier fait 38 millions de lignes. Il s'agit d'un échantillon pris parmi les données d'Expedia des années 2013 et 2014. Ces données correspondent aux recherches d'hôtels et aux réservations faites par les utilisateurs.
 * [test.csv](#traincsv-et-testcsv) : Regroupe les données de test. Fichier de 2,5 millions de lignes. Ce fichier regroupe les données de 2015 concernant uniquement les réservations faites par les utilisateurs.
 * **sample_submission.csv :** Un exemple de fichier à soumettre.
 * [destinations.csv](#destinationscsv) : Des informations sur les hôtels traduis en `float` (avis sur les hôtels, données de recherche ...)
+
+Nous donnons plus bas des [chiffres clés](#en_chiffres) à propos de chaque fichier, et de chaque colonne.
 
 ## train.csv et test.csv
 
@@ -60,7 +62,7 @@ nom du champ                | description
 :--------------------------:|------------
 `hotel_continent`           | Continent sur lequel se trouve l'hôtel
 `hotel_country`             | Pays dans lequel se trouve l'hôtel
-`hotel_market`              | ???????
+`hotel_market`              | Zone géographique précise qui recouvre différentes destinations spécifiées dans srch_destination_id
 `hotel_cluster`             | [Entrainement] Type d'hôtel, Id du cluster auquel il appartient.
 
 ## destinations.csv
@@ -71,3 +73,19 @@ Ce fichier contient des informations sur les différentes régions recherchées 
 * Les 149 autres colonnes **d1-149** correspondent à des caractéristiques de la régions basées sur les avis donnés par utilisateurs aux hôtels qui s'y trouvent. Ces informations permettent de construire des similitudes et des différences entre les différentes régions.
 
 Toutes les valeurs de **srch_destination_id** ne peuvent être retrouvées dans `destinations.csv`. En effet, certaines régions ne possèdent pas d'hôtels assez récents pour construire les informations nécessaire à la complétion de la table des destinations.
+
+## En chiffres
+
+Il est plus facile de se représenter les données avec quelques chiffres clés. Nous allons donc donner des données concernant les fichiers.
+
+### Nombre de lignes
+
+* **train.csv :** 37 millions 670 mille 294 lignes (3,8 Go)
+* **test.csv :** 2 millions 528 mille 244 lignes (263,7 Mo)
+* **destinations.csv :** 62 107 lignes (131,8 Mo)
+
+### Nombre de destinations
+
+* **train.csv :** 59 455 destinations différentes (1.662 qui ne sont pas dans destinations.csv)
+* **test.csv :** 40 718 destinations différentes (2.763 qui ne sont pas das destinations.csv)
+* **destinations.csv :** 62 106 destinations différentes
