@@ -78,9 +78,9 @@ Il est plus facile de se représenter les données avec quelques chiffres clés.
 
 ### Nombre de lignes
 
-* **train.csv :** 37.670.294 lignes
-* **test.csv :** 2.528.244
-* **destinations.csv :** 62.107
+* **train.csv :** 37 670 294 lignes - 3,8 Go
+* **test.csv :** 2.528.244 lignes - 263,7 Mo
+* **destinations.csv :** 62.107 lignes - 131,8 Mo
 
 ### Nombre de destinations
 
