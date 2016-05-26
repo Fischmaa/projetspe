@@ -28,8 +28,8 @@ nom du champ                | description
 `site_name`                 | ID du nom de domaine (i.e. Expedia.com, Expedia.co.uk, Expedia.co.jp, ...)
 `posa_continent`            | ID du continent associé au nom de domaine
 `is_mobile`                 | `1` si l'utilisateur à accédé au site depuis un **mobile**
-`channel`                   | ??????
-`cnt`                       | [Entrainement] Nombre de clic/réservations effectués pendant la même session par l'utilisateur
+`channel`                   | Information concernant le moyen d'accès à la page expedia. Par exemple "Direct", "SEM" (via les liens payés à google), "Meta channel" (via Tripadvisor par exemple), etc.
+`cnt`                       | [Entrainement] Nombre de clic/réservations effectués pendant la même session par l'utilisateur, les sessions prennent fin après 30 minutes d'inactivité.
 
 ### Informations sur l'utilisateur :
 
@@ -37,7 +37,7 @@ nom du champ                | description
 :--------------------------:|------------
 `user_location_country`     | ID du **pays** de l'utilisateur
 `user_location_region`      | ID de la **région** de l'utilisateur
-`user_location_city`        | ID de la **ville** de l'utilisateur
+`user_location_city`        | ID de la **ville** de l'utilisateur. Attention, des villes ont le même nom dans différents pays, il faut dont relier user_location_city à user_location_country systématiquement.
 `user_id`                   | ID de l'utilisateur
 
 ### Informations sur l'évènement
@@ -67,7 +67,7 @@ nom du champ                | description
 `hotel_continent`           | Continent sur lequel se trouve l'hôtel
 `hotel_country`             | Pays dans lequel se trouve l'hôtel
 `hotel_market`              | Zone géographique précise qui recouvre différentes destinations spécifiées dans srch_destination_id
-`hotel_cluster`             | [Entrainement] Type d'hôtel, Id du cluster auquel il appartient.
+`hotel_cluster`             | [Entrainement] Type d'hôtel, Id du cluster auquel il appartient. Les clusters sont créés en fonctions de la popularité de l'hotel, des notations (étoiles), des avis d'utilisateurs, des prix, des distances aux centre-ville, des aménagements, etc. Les hôtels peuvent appartenir à différents clusters en fonction de la saison (populaire et cher en été pour la plage mais pas cher et pas populaire en hiver par exemple).
 
 ## destinations.csv
 
