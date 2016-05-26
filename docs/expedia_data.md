@@ -10,9 +10,13 @@ Sur la page du challenge, on nous propose de télécharger quatre fichiers:
 * **sample_submission.csv :** Un exemple de fichier à soumettre.
 * [destinations.csv](#destinationscsv) : Des informations sur les hôtels traduis en `float` (avis sur les hôtels, données de recherche ...)
 
-Nous donnons plus bas des [chiffres clés](#en_chiffres) à propos de chaque fichier, et de chaque colonne.
+Nous donnons plus bas des [chiffres clés](#en-chiffres) à propos de chaque fichier, et de chaque colonne.
 
 ## train.csv et test.csv
+
+Nombre de colonnes dans chaque fichier :
+* train.csv possède 25 colonnes
+* test.csv possède 22 colonnes
 
 Nous détaillons ici les différentes attributs. Pour train.csv, un ligne correspond à une recherche (un clic) ou à une réservation. Pour test.csv, une ligne correspond à une recherche ou une reservation. Toutes les colonnes sont communes aux deux fichiers, sauf celle marquées [Entrainement] qui ne se trouvent pas dans les données de test.
 
@@ -80,12 +84,17 @@ Il est plus facile de se représenter les données avec quelques chiffres clés.
 
 ### Nombre de lignes
 
-* **train.csv :** 37 millions 670 mille 294 lignes (3,8 Go)
-* **test.csv :** 2 millions 528 mille 244 lignes (263,7 Mo)
+* **train.csv :** 37 millions 670 294 lignes (3,8 Go)
+* **test.csv :** 2 millions 528 244 lignes (263,7 Mo)
 * **destinations.csv :** 62 107 lignes (131,8 Mo)
 
 ### Nombre de destinations
 
 * **train.csv :** 59 455 destinations différentes (1.662 qui ne sont pas dans destinations.csv)
-* **test.csv :** 40 718 destinations différentes (2.763 qui ne sont pas das destinations.csv)
+* **test.csv :** 40 718 destinations différentes (2.763 qui ne sont pas dans destinations.csv)
 * **destinations.csv :** 62 106 destinations différentes
+
+### Nombre d'utilisateurs
+
+* **train.csv :** 1 million 198 786 utilisateurs
+* **destinations.csv :** 1 million 181 577 utilisateurs
