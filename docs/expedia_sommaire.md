@@ -10,3 +10,4 @@ d'effectuer des calculs sur l'ensemble du dataset sans traiter les données et o
 ### Sommaire
 
 1. [Explication des données](expedia_data.md)
+2. [Interprétation des données](expedia_intepretation_data.md)
