@@ -78,12 +78,12 @@ Il est plus facile de se représenter les données avec quelques chiffres clés.
 
 ### Nombre de lignes
 
-* **train.csv :** 37 670 294 lignes - 3,8 Go
-* **test.csv :** 2.528.244 lignes - 263,7 Mo
-* **destinations.csv :** 62.107 lignes - 131,8 Mo
+* **train.csv :** 37 millions 670 mille 294 lignes (3,8 Go)
+* **test.csv :** 2 millions 528 mille 244 lignes (263,7 Mo)
+* **destinations.csv :** 62 107 lignes (131,8 Mo)
 
 ### Nombre de destinations
 
-* **train.csv :** 59.455 destinations différentes (1.662 qui ne sont pas dans destinations.csv)
-* **test.csv :** 40.718 destinations différentes (2.763 qui ne sont pas das destinations.csv)
-* **destinations.csv :** 62.106 destinations différentes
+* **train.csv :** 59 455 destinations différentes (1.662 qui ne sont pas dans destinations.csv)
+* **test.csv :** 40 718 destinations différentes (2.763 qui ne sont pas das destinations.csv)
+* **destinations.csv :** 62 106 destinations différentes
