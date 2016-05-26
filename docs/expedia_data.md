@@ -29,7 +29,7 @@ nom du champ                | description
 `posa_continent`            | ID du continent associé au nom de domaine
 `is_mobile`                 | `1` si l'utilisateur à accédé au site depuis un **mobile**
 `channel`                   | Information concernant le moyen d'accès à la page expedia. Par exemple "Direct", "SEM" (via les liens payés à google), "Meta channel" (via Tripadvisor par exemple), etc.
-`cnt`                       | [Entrainement] Nombre de clic/réservations effectués pendant la même session par l'utilisateur, les sessions prennent fin après 30 minutes d'inactivité.
+`cnt`                       | [Entrainement] Nombre de clic/réservations effectués pendant la même session par l'utilisateur, les sessions prennent fin après 30 minutes d'inactivité. S'il s'agit d'une session conduisant à un booking (is_booking==1) alors on peut supposer que cnt==1 car le plus généralement il y a qu'une réservation pas session.
 
 ### Informations sur l'utilisateur :
 
