@@ -63,3 +63,84 @@ Les utilisateurs consultent et réservent beaucoup plus vers des destinations à
 
 Cette donnée pondère les distances de recherches par l'origine des utilisateurs. En soit cette variable semble ne pas être porteuse d'information majeure, mais sans elle les résultats retournées par l'algorithme de recommandation ne tiendront pas compte de l'importance de l'origine des données récoltées.
 Cette variable semble donc être assez significative.
+
+### Year : 
+
+Comme remarqué dans l'analyse de l'histogramme suivant la data : entre l'année 2013 et 2014 il y a eu une forte augmentation de l'activité ( booking ou consulation ) sur le site expedia.
+
+Pour l'année 2013, il y a plus de booking que de consultations. Ce rapport s'inverse pour l'année 2014. Toutefois, la différence de ratio booking/consultation reste faible.
+
+Si l'augmentation de l'activité sur le site expedia est vrai, on pourrait imaginer que de plus en plus de visiteurs consulteraient le site sans pour autant booker une reservation.
+
+### User_location_region :
+
+Aucune différence significative observée entre booking et consultation.
+Il y a quelques régions où il y a une légère différence, cependant la différence ne se fait pas plus en faveur de booking ou de consultation.
+
+### user_location_country : 
+
+De même que pour user_location_region, il n'y a aucune différence perceptible ( ce qui paraît logique ).
+Tout de même, on peut remarquer que seule quelques user_location_country sont représentés et deux en particulier (67 et 205) qui sont extrêmements élévées par rapport aux autres. 
+
+### user_location_city : 
+
+De même, il n'y a aucune différence remarquable entre booking/consultation.
+On peut observer, que certaines villes ressortent d'avantage : 
+* très utilisatrice de expedia : 2250, 4750, 14750, 24250, 25250, 26250, 36250, 47750, 48750, 49250
+* très peu utilisatrice de expedia : 4250, 6250, 14250, 19750, 20250, 26750, 32000->33000, 35750, 37250, 43750, 52750, 55250
+
+### user_id : 
+
+On voit que tous les utilisateurs ne fonctionnent pas de la même façon : ainsi certains consultent plus souvent expedia qu'ils ne book quelque chose et d'autre l'inverse ( ils book dès qu'ils consultent) et certains ratio quasi égal (très peu d'utilisateurs dans ce cas).
+
+Globalement, parmi les utilisateurs qui se rendent le plus souvent sur expedia, ils book plus qu'ils ne consultent ( ils ont tendances à faire confiance aux site et à être sur de leur choix) et de même, parmi ceux qui se rendent le moins souvent sur expedia, ils ont tendances à consulter d'avantage qu'ils ne book.
+
+### srch_rm_cnt :
+
+Tout d'abord, la grande majorité est constitué par des demandes d'une chambre unique puis de deux chambre.
+On remarque que pour la demande de chambre unique il y a un peu plus (~+4%) de demande pour les consultations que pour les booking.
+Tandis que pour deux chambres, c'est l'inverse il y a plus de booking (~+22%) que de consultations.
+
+### srch_destination_type_id :
+
+Tout d'abord toues les types ne sont pas représentés : le type 2 est complétement absent. Les seuls types présents sont : 1, 3, 4, 5, 6.
+
+Seul le type 1 comprend plus de consultations que de booking et c'est le type le plus demandé (et de loin : plus de 2 fois par rapport au second ( type 6)). C'est donc le type le plus populaire.
+Les autre types comportent systématiquement plus de booking que de consultations (presque égale pour le type 4) : ces destinations moins prisé génèrent plus de réservations que de consultations.
+
+### srch_destination_id : 
+
+On remarque que comme pour srch_destination_type_id il y a très peu de destinations qui sont plus consultés que bookées. On pourrait donc envisager une corrélation entre srch_destination_id et srch_destination_type_id de façon à identifier le type d'une destination avec son id.
+
+De plus, il y a clairement des destinations plus populaires que d'autres et une fois encore les plus populaires générent d'avantage de consultation que de booking. Inversement pour les destinations moins populaires.
+
+### srch_co : 
+
+Etrangement l'histogramme ne superpose pas les données, il faudrait déterminer pourquoi cela : erreur dans la génération du graphe ? bizarrerie des données ? explication rationnelle ?
+On remarque qu'entre l'année 2013, 2014, 2015 la forme des données a évoluée : 
+* en nombre total, il y a une nette augmentation pour 2014 par rapport à 2013 et en 2015 très : l'interprétation semble compliqué. L'augmentation en 2014 pourrait être expliqué par la hausse d'affluence sur le site (hypothèse déjà émise dans d'autre analyse d'histogramme). Concernant la baisse en 2015, peut-il s'agir d'un problème dans l'échantillon retenu ? (à vérifier ...)
+* répartition Booking/Consultation : en 2013, mise à part une date en Décembre, systématiquement le nombre de booking est plus important que de consultation. Alors qu'en 2014, la tendance semble s'être inversée. Peut-être qu'il s'agit d'une amélioration d'expedia qui permet en 2014 de mieux prévoir son voayge ?
+
+Autrement, on remarque que le début d'année n'est pas propice aux checkout et c'est plutôt à partir du mois d'Avril que les données augmentent en nombre, et on peut noter un légère baisse en Septembre. Il y a un pic particulièrement important au mois de Décembre où, toute année confondu il y a plus de consultation que de booking : il pourraît s'agir de tentatives de départ pour les fêtes, il faudrait vérifier si la distance des voyages est plus courte en Décembre ce qui conforterait cette idée.
+
+### srch_ci : 
+
+L'histogramme ressemble énormément à celui de srch_co, ce qui est en soi très étrange car une forte demande de départ devrait conduire à une forte demande d'arrivée mais à des dates différentes... Ou alors c'est que la durée des voyages est très courtes et que donc les périodes se recoupent : à vérifier avec une nouvelle variable trip_duration.
+
+### srch_children_cnt : 
+
+Clairement, il y a majoritairement 0 enfant (~8 fois plus qu'avec 1 enfant) lors des voyages avec un peu plus (~+3%) de booking que de consultation.
+Pour les voyages avec 1 enfant, il y a presque égalité parfaite entre booking et consultation.
+Toutefois, pour les voyages avec 2 enfants il y a plus de consultations que de booking (~+37%) : surement plus compliqué de partir avec avec des enfants ...
+
+### srch_adults_cnt : 
+
+La majorité des voyages se fait avec 2 adultes (~2 fois plus qu'avec 1 adulte). Dans ces voyages, il y a plus de consultations que de booking (~+20%).
+Pour les voyages avec 1 adulte, la tendance s'inverse et il y a presque deux fois plus de booking que de consultations.
+Les voyages comportant 3 ou 4 adultes sont plus rares et il y a à chaque fois un peu plus (~+10%) de consultations que de booking.
+Les voayges comportants un autre nombre d'adulte sont quasi inexistants.
+
+### site_name : 
+
+Il y un nom de domaine qui est très majoritairement utilisé (domaine 0) concentrant ~75% des activités. Le nombre de booking est un tout petit peu plus élevé sur ce domaine mais rien de significatif (<+1%)
+Il y a 5 autres domaines (8, 11, 13, 23, 34) où il y a de l'activité en particulier les domaines 11 et 34. De même la différence entre booking et consultation n'est pas significative, toutefois le ratio est inversé pour certains domaines.
