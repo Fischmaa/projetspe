@@ -10,6 +10,8 @@ Sur la page du challenge, on nous propose de télécharger quatre fichiers:
 * **sample_submission.csv :** Un exemple de fichier à soumettre.
 * [destinations.csv](#destinationscsv) : Des informations sur les hôtels traduis en `float` (avis sur les hôtels, données de recherche ...)
 
+Nous donnons plus bas des [chiffres clés](#en_chiffres) à propos de chaque fichier, et de chaque colonne.
+
 ## train.csv et test.csv
 
 Nous détaillons ici les différentes attributs. Pour train.csv, un ligne correspond à une recherche (un clic) ou à une réservation. Pour test.csv, une ligne correspond à une recherche ou une reservation. Toutes les colonnes sont communes aux deux fichiers, sauf celle marquées [Entrainement] qui ne se trouvent pas dans les données de test.
