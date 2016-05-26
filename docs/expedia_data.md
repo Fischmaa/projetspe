@@ -24,7 +24,7 @@ Nous détaillons ici les différentes attributs. Pour train.csv, un ligne corres
 
 nom du champ                | description
 :--------------------------:|------------
-`date_time`                 | La date du clic/de la réservation sous forme de timestamp
+`date_time`                 | La date du clic/de la réservation sous forme de timestamp. Attention, date_time est relatif au site_name
 `site_name`                 | ID du nom de domaine (i.e. Expedia.com, Expedia.co.uk, Expedia.co.jp, ...)
 `posa_continent`            | ID du continent associé au nom de domaine
 `is_mobile`                 | `1` si l'utilisateur à accédé au site depuis un **mobile**
