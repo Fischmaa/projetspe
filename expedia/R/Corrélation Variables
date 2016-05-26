@@ -1,0 +1,99 @@
+library(data.table)
+library(lubridate)
+library("BBmisc")
+
+booked<-fread('sampled_booking.csv',header=TRUE)
+booked_hotel$hotel_market<-booked$hotel_market
+
+# Garder les variables hotel_*
+booked_hotel<-data.frame(hotel_continent=booked$hotel_continent,hotel_country=booked$hotel_country,hotel_market=booked$hotel_market,hotel_cluster=booked$hotel_cluster)
+
+cor(booked_hotel)
+#                hotel_continent hotel_country hotel_market hotel_cluster
+#hotel_continent     1.000000000    0.25756852  -0.08783683   0.009592157
+#hotel_country       0.257568518    1.00000000   0.01100334  -0.016431689
+#hotel_market       -0.087836829    0.01100334   1.00000000   0.027520094
+#hotel_cluster       0.009592157   -0.01643169   0.02752009   1.000000000
+
+booked_locations<-data.frame(srch_adults_cnt=booked$srch_adults_cnt, srch_children_cnt=booked$srch_children_cnt, srch_rm_cnt=booked$srch_rm_cnt, srch_destination_type_id=booked$srch_destination_type_id, is_mobile=booked$is_mobile)
+
+cor(booked_locations)
+#                           srch_adults_cnt  srch_children_cnt   srch_rm_cnt  srch_destination_type_id   is_mobile
+#srch_adults_cnt                 1.00000000  0.13555552         0.5384534549   -0.0185261918           0.043718323
+#srch_children_cnt            -0.0205114437  0.022863294        0.13555552      1.00000000             0.0797992797
+#srch_rm_cnt                   0.0003327668 -0.021032556        0.53845345      0.07979928             1.0000000000
+#srch_destination_type_id      1.0000000000 -0.003041612        -0.01852619    -0.02051144             0.0003327668
+#is_mobile                    -0.0030416125  1.000000000        0.04371832      0.02286329            -0.0210325559
+
+
+booked_importance_site<-data.frame(posa_continent=booked$posa_continent, hotel_cluster=booked$hotel_cluster)
+cor(booked_importance_site)
+#               posa_continent hotel_cluster
+#posa_continent    1.000000000   0.004341008
+#hotel_cluster     0.004341008   1.000000000
+
+str(booked)
+
+#Classes ‘data.table’ and 'data.frame':	100000 obs. of  24 variables:
+# $ date_time                : chr  "2014-10-27 13:39:33" "2013-03-11 13:58:30" "2014-01-16 11:56:46" "2014-01-29 11:23:18" ...
+# $ site_name                : int  13 2 2 34 2 2 2 2 2 2 ...
+# $ posa_continent           : int  1 3 3 3 3 3 3 3 3 3 ...
+# $ user_location_country    : int  46 66 66 205 66 66 66 66 66 66 ...
+# $ user_location_region     : int  172 258 220 155 467 442 198 174 337 293 ...
+# $ user_location_city       : int  56153 19630 5444 9851 30092 76 36172 14752 1057 38090 ...
+# $ orig_destination_distance: num  523.29 5487.94 6.57 1155.19 1099.28 ...
+# $ user_id                  : int  1170099 320859 711936 265991 1016380 14435 516649 332749 877988 173964 ...
+# $ is_mobile                : int  0 0 0 0 0 0 0 0 0 0 ...
+# $ is_package               : int  1 0 0 0 0 0 0 0 0 0 ...
+# $ channel                  : int  9 1 9 9 9 9 9 3 9 9 ...
+# $ srch_ci                  : chr  "2014-10-31" "2013-05-01" "2014-01-20" "2014-03-08" ...
+# $ srch_co                  : chr  "2014-11-03" "2013-05-04" "2014-01-22" "2014-03-09" ...
+# $ srch_adults_cnt          : int  1 2 1 2 1 2 2 2 2 1 ...
+# $ srch_children_cnt        : int  0 1 0 2 0 0 0 0 0 0 ...
+# $ srch_rm_cnt              : int  1 1 1 1 1 1 1 1 1 1 ...
+# $ srch_destination_id      : int  8234 28610 12008 3373 26981 1701 8219 20278 12206 12233 ...
+# $ srch_destination_type_id : int  1 6 1 3 6 1 1 6 6 6 ...
+# $ is_booking               : int  1 1 1 1 1 1 1 1 1 1 ...
+# $ cnt                      : int  1 1 1 1 1 1 1 1 1 1 ...
+# $ hotel_continent          : int  6 6 2 2 2 2 2 6 2 2 ...
+# $ hotel_country            : int  7 22 50 50 50 50 50 105 50 50 ...
+# $ hotel_market             : int  8 245 686 970 409 603 688 809 628 675 ...
+# $ hotel_cluster            : int  91 22 6 48 13 91 72 30 1 91 ...
+# Il faut donc traduire les dates pour pas avoir des chr (ie. character), qu'on ne peut pas utiliser
+# avec la fonction cor.
+
+booked$hour_navigation <- hour(ymd_hms(booked$date_time))
+booked$day_navigation <- day(ymd_hms(booked$date_time))
+booked$month_navigation <- month(ymd_hms(booked$date_time))
+booked$year_navigation <- year(ymd_hms(booked$date_time))
+booked<-booked %>% BBmisc::dropNamed("date_time")
+
+#copie_booked<-booked
+#booked<-copie_booked
+
+booked$ci_day_navigation <- day(booked$srch_ci)
+booked$ci_month_navigation <- month(booked$srch_ci)
+booked$ci_year_navigation <- year(booked$srch_ci)
+booked<-booked %>% BBmisc::dropNamed("srch_ci")
+
+booked$co_day_navigation <- day(booked$srch_co)
+booked$co_month_navigation <- month(booked$srch_co)
+booked$co_year_navigation <- year(booked$srch_co)
+booked<-booked %>% BBmisc::dropNamed("srch_co")
+
+
+#nms <- c("site_name","posa_continent", "user_location_country", "user_location_region", "user_location_city","user_id","is_mobile", "is_package", "channel", "srch_adults_cnt", "srch_children_cnt", "srch_rm_cnt", "srch_destination_id", "srch_destination_type_id", "is_booking", "cnt", "hotel_continent", "hotel_country","hotel_market", "hotel_cluster")
+#booked[nms] <- lapply(booked[nms], as.factor)
+
+
+
+
+
+
+
+
+
+
+
+
+

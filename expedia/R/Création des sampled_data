@@ -1,0 +1,23 @@
+#########################################
+###   Données sampled pour Graph      ###
+#########################################
+
+library(data.table)
+library("BBmisc")
+library(dplyr)
+
+train <- fread('train.csv', header = TRUE)
+train_no_NA = na.omit(train)
+train_is_booking = train_no_NA[is_booking == 1]
+train_not_booking = train_no_NA[is_booking == 0]
+
+#train_is_booking_allegee <- train_is_booking %>% BBmisc::dropNamed("is_booking")
+#train_not_booking_allegee <- train_not_booking %>% BBmisc::dropNamed("is_booking")
+
+booking_sampled = train_is_booking[sample(1:nrow(train_is_booking), 100000, replace=FALSE),]
+not_booking_sampled = train_not_booking[sample(1:nrow(train_not_booking), 100000, replace=FALSE),]
+
+write.csv(booking_sampled, file = "./sampled_booking.csv", row.names=FALSE)
+write.csv(not_booking_sampled, file = "./sampled_not_booking.csv", row.names=FALSE)
+
+
