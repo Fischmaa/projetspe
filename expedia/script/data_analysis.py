@@ -20,7 +20,7 @@ import math as mt
 
 
 start_time = time.time()
-train = pd.read_csv('../train.csv', iterator = True, chunksize = 100000)
+train = pd.read_csv('../train.csv', iterator = True, chunksize = 100000, usecols = ['orig_destination_distance'])
 count_user = 0 
 count_distance = 0
 for chunk in train:

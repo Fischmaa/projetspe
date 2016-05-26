@@ -5,6 +5,7 @@ import pandas as pd
 import time 
 import math as mt
 from threading import Thread, RLock
+import sys
 #move the 10000 first value from file to out_file
 
 #train = pd.read_csv('train.csv', iterator = True, chunksize = 10000)
@@ -26,9 +27,9 @@ from threading import Thread, RLock
 verrou = RLock()
 
 start_time = time.time()
-train1 = pd.read_csv('first_data.csv', iterator = True, chunksize = 100000)
-train2 = pd.read_csv('second_data.csv', iterator = True, chunksize = 100000)
-train3 = pd.read_csv('third_data.csv', iterator = True, chunksize = 100000)
+train1 = pd.read_csv('first_data.csv', iterator = True, chunksize = 100, usecols = ['orig_destination_distance'])
+train2 = pd.read_csv('second_data.csv', iterator = True, chunksize = 100, usecols = ['orig_destination_distance'])
+train3 = pd.read_csv('third_data.csv', iterator = True, chunksize = 100, usecols = ['orig_destination_distance'])
 
 
 count_user = 0 
@@ -45,17 +46,16 @@ class Analyse (Thread):
 		global count_user
 		count_local = 0
 		count_dis = 0
+		print (self.train)
 		for chunk in self.train:
 			tab = chunk['orig_destination_distance']
-			for j in range(len(tab)) : 
+			for j in range(len(tab)) :
 				if not mt.isnan(tab[j]) :
 					count_local += 1
 					count_dis += tab[j]
 		with verrou:
 			count_user += count_local
 			count_distance += count_dis
-		print('fin')
-
 
 
 thread_1 = Analyse(train1)
