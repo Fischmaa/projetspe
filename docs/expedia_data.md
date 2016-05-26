@@ -45,7 +45,7 @@ nom du champ                | description
 nom du champ                | description
 :--------------------------:|------------
 `is_package`                | `1` si le clic/la réservation a été généré avec un **vol**
-`orig_destination_distance` | **Distance** physique entre la position de l'utilisateur et celle de l'hôtel cliqué/reservé
+`orig_destination_distance` | **Distance** physique entre la position de l'utilisateur et celle de l'hôtel cliqué/reservé. Attention : distance exprimée en miles.
 `is_booking`                | [Entrainement] `1` Si il s'agit d'une réservation, `0` si il s'agit d'un clic
 
 ### Informations sur la recherche conduisant au clic/à la réservation
