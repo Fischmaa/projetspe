@@ -7,6 +7,8 @@ Plus compliqué par son nombre de variables et par leur complexité. Plus compli
 importante, soulevant des nouvelles difficultés. En effet, il n'est pas possible de charger toutes les données en mémoire ou même
 d'effectuer des calculs sur l'ensemble du dataset sans traiter les données et optimiser le code.
 
+[Lien vers le challenge Expedia](https://www.kaggle.com/c/expedia-hotel-recommendations)
+
 ### Sommaire
 
 1. [Explication des données](expedia_data.md)
