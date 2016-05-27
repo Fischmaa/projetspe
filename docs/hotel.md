@@ -24,12 +24,26 @@ La personne utilise les données GPS venant d'un site [http://www.distancefromto
 
 
 ##Cheminement de la réflexion
-1. [Trouver une première localisation](#Trouver-une-première-localisation)
+1. [Trouver une première localisation](#trouver-une-première-localisation)
 2. Trouver les villes et régions à partir de la première localisation (villes des Etats-Unis)
 3. Trouver les pays, régions et villes à l'international
 
 
 ### Trouver une première localisation
 
+La démarche commence par récupérer un million de lignes de la base de test et on les regroupe en fonction des user_location_country et des hotel_country. Puis on calcule le minimum, le maximum, la moyenne et le nombre de fois ou chaque couple (user_location_country, hotel_country) a été trouvé. Nous obtenons un tableau:
 
+|                      |               |  min | mean     | max        | count  |
+|:--------------------:|:-------------:|:----:|:--------:|:----------:|:------:|
+|user_location_country | hotel_country |      |          |            |        |
+|66                    |	50 	         |0.0056|860.307373|5156.8218   |	323353 |
+|205 	                 |198 	         |0.0056|484.961579|3113.8813 	|20790   |
+|46 	                 |144 	         |0.0060|197.404405|500.7198 	  |2178    |
+1 	105 	0.0766 	222.188807 	730.5410 	3754
+
+
+
+
+
+### Trouver les pays, régions et villes à l'international
 
