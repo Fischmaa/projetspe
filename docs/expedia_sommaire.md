@@ -18,4 +18,4 @@ d'effectuer des calculs sur l'ensemble du dataset sans traiter les données et o
 
 
 ### Annexe
-1. [Leak du challenge](leak.md)
+1. [Retrouver les hôtels](hotels.md)
