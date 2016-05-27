@@ -22,4 +22,8 @@ Dans la page concernant l'évaluation, on nous propose une formule expliquant co
 
 Ainsi on effectue la moyenne sur l'ensemble de l'échantillon des utilisateurs de la somme des précisions `P(k)` de chaque suggestions faites.
 
-**La précision P(k) :**
+On considère les cinq suggestions de cluster faites à un utilisateur et les cinq clusters réellement cliqués par l'utilisateur.
+
+**La précision P(k) vaut alors :**
+* 0 si la k-ème suggestion faite ne fait pas partie des clusters cliqués
+* k/i si la k-ème suggestion a le rang i dans la liste des clusters réellement cliqués.
