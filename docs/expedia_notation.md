@@ -16,7 +16,7 @@ Il s'agit donc de prédire quelles cluster sont susceptibles d'être cliqués pa
 
 ### Formule d'évaluation
 
-Pour évaluer la pertinence des suggestions et conformément au format des challenge kaggle, les résultats prédis sont comparés à des résultats réèls. Dans ce cas, Expedia utilise pour les résultats réèl la suite de clics effectué par l'utilisateur.
+Pour évaluer la pertinence des suggestions et conformément au format des challenge kaggle, les résultats prédis sont comparés à des résultats réels. Dans ce cas, Expedia utilise pour les résultats réel la suite de clics effectué par l'utilisateur.
 
 En résumé les deux données comparées sont
 * Les cinq suggestions de clic faites à partir des réservations de `test.csv`
