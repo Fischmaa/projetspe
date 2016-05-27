@@ -24,9 +24,12 @@ La personne utilise les données GPS venant d'un site [http://www.distancefromto
 
 
 ##Cheminement de la réflexion
-1. Trouver une première localisation (Hawaii)
+1. [Trouver une première localisation](#Trouver-une-première-localisation)
 2. Trouver les villes et régions à partir de la première localisation (villes des Etats-Unis)
 3. Trouver les pays, régions et villes à l'international
+
+
+###Trouver une première localisation
 
 
 
