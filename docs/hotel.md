@@ -36,10 +36,18 @@ La démarche commence par récupérer un million de lignes de la base de test et
 |                      |               |  min | mean     | max        | count  |
 |:--------------------:|:-------------:|:----:|:--------:|:----------:|:------:|
 |user_location_country | hotel_country |      |          |            |        |
-|66                    |	50 	         |0.0056|860.307373|5156.8218   |	323353 |
+|66                    |50 	           |0.0056|860.307373|5156.8218   |323353 |
 |205 	                 |198 	         |0.0056|484.961579|3113.8813 	|20790   |
 |46 	                 |144 	         |0.0060|197.404405|500.7198 	  |2178    |
-1 	105 	0.0766 	222.188807 	730.5410 	3754
+|1 	                   |105 	         |0.0766|222.188807|730.5410 	  |3754    |
+|205 	                 |50 	           |2.9126|1360.29673|5812.7800 	|30217   |
+
+
+On peut voir que beaucoup de le tuple (66, 50) revient très souvent. On suppose à ce moment la que *hotel_country n°50 et user_location_country n°66 représente les USA*.
+
+Pour vérifier cela, on essaye de savoir combien de region se trouve dedans. On trouve 51 régions différentes donc cela confirme notre supposition.
+
+On sait que Hawaii est une grosse attraction. Du coup, on essaye de savoir quel hotel_country est la plus rechercher par les américains.
 
 
 
