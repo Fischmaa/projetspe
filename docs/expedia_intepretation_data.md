@@ -44,7 +44,7 @@ Cet histogramme nous a apprend que les utilisateurs ont largement tendance à co
 
 ### Hotel_country :
 
-Sur ce graphique, on constate des comportements similaires au précédent; on pourrait par exemple se servir de ces données en émettant l'hypothèse que l'hôtel 51 est situé sur le continent 2 pour explorer un peu plus les données, ce qui est fait dans la partie [Data Leak](leak.md).
+Sur ce graphique, on constate des comportements similaires au précédent; on pourrait par exemple se servir de ces données en émettant l'hypothèse que l'hôtel 51 est situé sur le continent 2 pour explorer un peu plus les données, ce qui est fait dans la partie [Data Leak](hotel.md).
 
 ### Hotel_market :
 
