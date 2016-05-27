@@ -7,7 +7,7 @@ Sur la page du challenge, on nous propose de télécharger quatre fichiers:
 
 * [train.csv](#traincsv-et-testcsv) : Regroupe les données d'entrainement. Ce fichier fait 38 millions de lignes. Il s'agit d'un échantillon pris parmi les données d'Expedia des années 2013 et 2014. Ces données correspondent aux recherches d'hôtels et aux réservations faites par les utilisateurs.
 * [test.csv](#traincsv-et-testcsv) : Regroupe les données de test. Fichier de 2,5 millions de lignes. Ce fichier regroupe les données de 2015 concernant uniquement les réservations faites par les utilisateurs.
-* [sample_submission.csv :](expedia_notation.md#donnees-a-soumettre) Un exemple de fichier à soumettre.
+* [sample_submission.csv :](expedia_notation.md#données-à-soumettre) Un exemple de fichier à soumettre.
 * [destinations.csv](#destinationscsv) : Des informations sur les hôtels traduis en `float` (avis sur les hôtels, données de recherche ...)
 
 Nous donnons plus bas des [chiffres clés](#en-chiffres) à propos de chaque fichier, et de chaque colonne.
