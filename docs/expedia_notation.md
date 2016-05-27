@@ -16,6 +16,10 @@ Il s'agit donc de prédire quelles cluster sont susceptibles d'être cliqués pa
 
 ### Formule d'évaluation
 
-Dans la page concernant l'évaluation, on nous propose une formule expliquant comment la notation est faite. Ainsi on effectue la moyenne sur l'ensemble de l'échantillon des utilisateurs de la somme des précisions des suggestions faites.
+Dans la page concernant l'évaluation, on nous propose une formule expliquant comment la notation est faite : 
 
+![Formule d'évaluation](images/formule_eval_expedia.png)
 
+Ainsi on effectue la moyenne sur l'ensemble de l'échantillon des utilisateurs de la somme des précisions `P(k)` de chaque suggestions faites.
+
+**La précision P(k) :**
