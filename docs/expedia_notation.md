@@ -32,4 +32,19 @@ On considère les cinq suggestions de cluster faites à un utilisateur et la sui
 
 **La précision P(k) vaut alors :**
 * 0 si la k-ème suggestion faite ne fait pas partie des clusters cliqués
-* k/i si la k-ème suggestion a le rang i dans la liste des clusters réellement cliqués.
+* k/(5i) si la k-ème suggestion a le rang i dans la liste des clusters réellement cliqués.
+
+**Exemple :**
+On a soumis les suggestion suivante : a b c d e
+En réalité, l'utilisateur à cliqué sur : a i l d p k c s
+La précision de cette suggestion sera : (P(a) + P(d) + P(c))/5 = (1/1 + 4/4 + 3/7)/5 = 0.48
+
+### Etat actuels du classement
+
+* 1608 Participant
+* Meilleur résultat : 0.51439
+* Médiane : 0.49560
+* 3e quartile : 0.30209
+* Dernier : 0.00
+
+**Interprétation :** Les derniers centièmes semblent être une difficulté majeure : Le score 0.49 occupe les places 449 à 896 et le score 0.50 les places 7 à 448.
