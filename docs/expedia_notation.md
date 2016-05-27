@@ -16,13 +16,19 @@ Il s'agit donc de prédire quelles cluster sont susceptibles d'être cliqués pa
 
 ### Formule d'évaluation
 
+Pour évaluer la pertinence des suggestions et conformément au format des challenge kaggle, les résultats prédis sont comparés à des résultats réèls. Dans ce cas, Expedia utilise pour les résultats réèl la suite de clics effectué par l'utilisateur.
+
+En résumé les deux données comparées sont
+* Les cinq suggestions de clic faites à partir des réservations de `test.csv`
+* La suite des clic qui ont été enregistrés sur la base de données Expedia et qui ne sont pas fournis aux participants
+
 Dans la page concernant l'évaluation, on nous propose une formule expliquant comment la notation est faite : 
 
 ![Formule d'évaluation](images/formule_eval_expedia.png)
 
 Ainsi on effectue la moyenne sur l'ensemble de l'échantillon des utilisateurs de la somme des précisions `P(k)` de chaque suggestions faites.
 
-On considère les cinq suggestions de cluster faites à un utilisateur et les cinq clusters réellement cliqués par l'utilisateur.
+On considère les cinq suggestions de cluster faites à un utilisateur et la suite clusters réellement cliqués par l'utilisateur.
 
 **La précision P(k) vaut alors :**
 * 0 si la k-ème suggestion faite ne fait pas partie des clusters cliqués
