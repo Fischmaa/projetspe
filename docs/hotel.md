@@ -1,4 +1,4 @@
-#Leak du challenge
+#Noms de villes et d'hôtels
 
 Dans le forum du challenge, nous avons trouvé une personne qui avait réussi à trouver le nom des villes ainsi
 que les hotels en rajoutant uniquement les données géographiques de certaines grandes villes. Nous avons donc 
@@ -17,5 +17,16 @@ La personne utilise uniquement les données relatives à la position des hôtels
 | user_location_country     |  hotel_country      | orig_destination_distance |
 | user_location_region      |  hotel_market       |                           |
 | user_location_city        |  srch_destination_id|                           |
+
+
+###Données apportés
+La personne utilise les données GPS venant d'un site [http://www.distancefromto.net/](http://www.distancefromto.net/) qui permet de connaitre la distance entre deux villes.
+
+
+##Cheminement de la réflexion
+1. Trouver une première localisation (Hawaii)
+2. Trouver les villes et régions à partir de la première localisation (villes des Etats-Unis)
+3. Trouver les pays, régions et villes à l'international
+
 
 
