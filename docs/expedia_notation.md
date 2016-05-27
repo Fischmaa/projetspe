@@ -10,4 +10,4 @@ La page kaggle du challenge nous fournit une [première explication](https://www
 
 ### Données à soumettre
 
-
+Pour se classer dans le challenge Expedia, on nous demande de soumettre un fichier au format `csv` associant les identifiants des utilisateurs (colonne `id`) à une liste de au plus cinq clusters d'hôtels (colonne `hotel_cluster`). Voir [l'explication des données](expedia_data.md#informations-sur-lhôtel) pour une explication de la donnée `hotel_cluster`.
