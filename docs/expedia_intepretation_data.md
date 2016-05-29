@@ -35,13 +35,13 @@ Notre hypothèse pour ces pics au cours du mois sont les dates de jour de paie; 
 
 ### DayOfWeek - Lundi à Dimanche :
 
-<img src="" width="400" height="400" />
+<img src="http://nsa38.casimages.com/img/2016/05/29/160529101154758762.png" width="400" height="400" />
 
 On constate une baisse d'activité sur le site d' Expéria au fil de la semaine avec une remontée le Dimanche. Néanmoins on constate que les utilisateurs ont plus tendance à faire des réservations en semaine qu'en week-end. Notre hypothèse quand à ce comportement concerne le moral des personnes qui profitent du week-end pour faire leur recherche et discuter ensemble des destinations.
 
 ### HotelCluster :
 
-<img src="" width="400" height="400" />
+<img src="http://nsa37.casimages.com/img/2016/05/29/160529101308196752.png" width="400" height="400" />
 
 Ce graphique dégage une tendance des utilisateurs : les clusters les plus reservés (ex : 91, 48) sont ceux les plus souvent consultés. Néanmoins, la réciproque n'est pas forcement vrai et un hôtel très consulté peu très bien avoir un très faible taux de réservation (ex: 66, 87).
 
@@ -49,18 +49,25 @@ Si on arrivait à géolocaliser les clusters, il serait possible de savoir si le
 
 ### Hotel_Continent :
 
-<img src="" width="400" height="400" />
+<img src="http://nsa37.casimages.com/img/2016/05/29/160529101429667734.png" width="400" height="400" />
+
 Cet histogramme nous a apprend que les utilisateurs ont largement tendance à consulter des offres du continent 2, et que concernant ce dernier ils ont plutôt tendance à réserver (~ 54%) qu'à simplement regarder (~ 46%). De plus, on apprend que les continents 0, 1 et 5 sont très peu présents (~ 7% du total) et qu'ils pourraient donc faire une bonne variable caractéristiques.
 
 ### Hotel_country :
+
+<img src="http://nsa38.casimages.com/img/2016/05/29/160529101652370362.png" width="400" height="400" />
 
 Sur ce graphique, on constate des comportements similaires au précédent; on pourrait par exemple se servir de ces données en émettant l'hypothèse que l'hôtel 51 est situé sur le continent 2 pour explorer un peu plus les données, ce qui est fait dans la partie [Data Leak](hotel.md).
 
 ### Hotel_market :
 
+<img src="http://nsa37.casimages.com/img/2016/05/29/160529103544260029.png" width="400" height="400" />
+
 On constate que certains groupes d'hôtels sont privilégiés par les utilisateurs (ex : 365, 625, 675). On remarque que certains hotels ont une grande proportion de booking (395, 405, 665, 645) et inversement (1505, 1465, 1705, 115). La variable semble donc caractérisante et probablement correlée aux deux précédentes.
 
 ### Is_mobile :
+
+<img src="http://nsa38.casimages.com/img/2016/05/29/160529103444278494.png" width="400" height="400" />
 
 Au vu du graphique, les gens ont plutôt tendance à utiliser leur ordinateur (90% utilisateurs PC vs. 10% mobile) :
  * sur ordinateur la tendance est à la réservation,
@@ -70,19 +77,27 @@ On pourrait estimer que cette variable est moins significative dans le cas de no
 
 ### Is_package :
 
+<img src="http://nsa38.casimages.com/img/2016/05/29/16052910334165645.png" width="400" height="400" />
+
 Ce graphique semble nous apporter une information majeure et caractéristante :
 * dans un package, les offres sont réservées à hauteur d'environ 33%
 * hors package, les offres sont réservées à hauteur d'environ 50%
 
 ### Orig_destination_distance :
 
+<img src="http://nsa38.casimages.com/img/2016/05/29/160529103239674354.png" width="400" height="400" />
+
 D'après ce graphique, les utilisateurs consultent et réservent beaucoup plus vers des destinations à moins de 500km. De plus, jusqu'à 1000km le ratio de booking est supérieur à 50%, et la tendance s'inverse au-delà.
 
 ### Posa_continent :
 
+<img src="http://nsa37.casimages.com/img/2016/05/29/160529103130591063.png" width="400" height="400" />
+
 Cet histogramme nous apprend que la plus grande affluence d'utilisateurs d'Expédia provient du continent 3; notre hypothèse sur ce dernier est donc assez partagée entre l'Asie et les Etats-Unis même si au vu des diagrammes précédent on aurait plutôt tendance à associer les Etats-Unis au continent 2. Si on réussisait à géolocaliser les données, on pourrait mettre en parallèle ce diagramme avec les données du point précédent pour dégager des tendances de reservations.
 
 ### Year : 
+
+<img src="http://nsa38.casimages.com/img/2016/05/29/160529103023490509.png" width="400" height="400" />
 
 Comme remarqué dans l'analyse de l'histogramme suivant la date, il y a eu une forte augmentation de l'activité entre l'année 2013 et 2014 sur le site Expedia.
 
@@ -92,15 +107,21 @@ Si l'augmentation de l'activité sur le site Expedia est encore vraie, on pourra
 
 ### User_location_region :
 
+<img src="http://nsa37.casimages.com/img/2016/05/29/160529102912525708.png" width="400" height="400" />
+
 Aucune différence significative observée entre booking et consultation.
 Il y a quelques régions où il y a une légère différence, cependant la différence ne se fait pas plus en faveur de booking ou de consultation.
 
 ### User_location_country : 
 
+<img src="http://nsa38.casimages.com/img/2016/05/29/160529102818703572.png" width="400" height="400" />
+
 De même que pour user_location_region, il n'y a aucune différence perceptible (ce qui paraît logique).
 Tout de même, on peut remarquer que seule quelques user_location_country sont représentées, en particulier 67 et 205 qui sont extrêmements élévées par rapport aux autres. 
 
 ### User_location_city : 
+
+<img src="http://nsa37.casimages.com/img/2016/05/29/160529102721929026.png" width="400" height="400" />
 
 Comme précédemment, il n'y a aucune différence remarquable entre booking et consultation.
 
@@ -109,6 +130,8 @@ On peut observer néanmoins observer que certaines villes ressortent d'avantage 
 * très peu utilisatrices d' Expedia : 4250, 6250, 14250, 19750, 20250, 26750, 32000->33000, 35750, 37250, 43750, 52750, 55250
 
 ### User_id : 
+
+<img src="http://nsa38.casimages.com/img/2016/05/29/160529102626555435.png" width="400" height="400" />
 
 On voit que tous les utilisateurs ne fonctionnent pas de la même façon. Ainsi, certains consultent plus souvent Expedia qu'ils ne font de réservation, d'autres font exactement l'inverse (ils réservent dès qu'ils consultent) et enfin certains ont un ratio proche de 50% (il y a très peu d'utilisateurs dans ce cas).
 
@@ -120,11 +143,15 @@ Notre hypothèse quant à ces données est que les utilisateurs réguliers ont t
 
 ### Srch_rm_cnt :
 
+<img src="http://nsa38.casimages.com/img/2016/05/29/160529102528126192.png" width="400" height="400" />
+
 La grande majorité des recherches est constituée par des demandes de chambre unique, puis de deux chambres :
 * pour une chambre unique, il y a un peu plus (~+4%) de consultations que de réservations.
 * pour deux chambres, il y a plus de réservations (~+22%) que de consultations.
 
 ### Srch_destination_type_id :
+
+<img src="http://nsa37.casimages.com/img/2016/05/29/16052910243043637.png" width="400" height="400" />
 
 On constate tout d'abord que tous les types ne sont pas représentés; en effet, le type 2 est absent.
 
@@ -133,11 +160,15 @@ Les autre types comportent systématiquement plus de réservations que de consul
 
 ### Srch_destination_id : 
 
+<img src="http://nsa37.casimages.com/img/2016/05/29/160529102327913298.png" width="400" height="400" />
+
 On remarque que comme pour srch_destination_type_id il y a très peu de destinations qui sont plus consultées que réservées. On pourrait donc envisager une combinaison des variables srch_destination_id et srch_destination_type_id de façon à identifier le type d'une destination avec son id.
 
 Il y a des destinations plus populaires que d'autres et, une fois encore, elles générent d'avantage de consultations que de réservations, et inversement pour les moins populaires.
 
 ### Srch_co (à vérifier) : 
+
+<img src="http://nsa37.casimages.com/img/2016/05/29/160529102213489833.png" width="400" height="400" />
 
 Etrangement l'histogramme ne superpose pas les données, il faudrait déterminer pourquoi cela : erreur dans la génération du graphe ? bizarrerie des données ? explication rationnelle ?
 
@@ -149,9 +180,13 @@ Autrement, on remarque que le début d'année n'est pas propice aux checkout et 
 
 ### Srch_ci : 
 
+<img src="http://nsa37.casimages.com/img/2016/05/29/160529102110823651.png" width="400" height="400" />
+
 L'histogramme ressemble énormément à celui de srch_co. On pouvait s'attendre à ce que les dates soient largement translatées mais ce n'est pas le cas. L'hypothèse qui en découle, et qui est validée grâce à la variable trip_duration, est que la durée des voyages est très courte, ce qui explique que les graphes puissent presquent se superposer.
 
 ### Srch_children_cnt : 
+
+<img src="http://nsa37.casimages.com/img/2016/05/29/160529102012532057.png" width="400" height="400" />
 
 On constate un comportement différent en fonction du nombre d'enfant :
 * 0 (donnée majoritaire, 8x plus qu'avec 1 enfant) : ~ 53% de réservations contre ~ 47% de consultations,
@@ -162,12 +197,16 @@ L'hypothèse qui résulte de ces données est qu'il doit être plus compliqué d
 
 ### Srch_adults_cnt : 
 
+<img src="http://nsa37.casimages.com/img/2016/05/29/160529101909949475.png" width="400" height="400" />
+
 La majorité des voyages se fait avec 2 adultes (~2 fois plus qu'avec 1 adulte). Dans ces voyages, il y a plus de consultations que de réservations (~+20%).
 Pour les voyages avec 1 adulte, la tendance s'inverse et il y a presque deux fois plus de réservations que de consultations.
 Les voyages comportant 3 ou 4 adultes sont plus rares et il y a à chaque fois un peu plus (~+10%) de consultations que de réservations.
 Les voyages comportants un autre nombre d'adulte sont quasi-inexistants.
 
 ### Site_name : 
+
+<img src="" width="400" height="400" />
 
 Il y un nom de domaine qui est très majoritairement utilisé (domaine 0) concentrant ~75% des activités. Le nombre de booking est un tout petit peu plus élevé sur ce domaine mais rien de significatif (<+1%).
 Il y a 5 autres domaines (8, 11, 13, 23, 34) où il y a de l'activité, en particulier les domaines 11 et 34. De même la différence entre booking et consultation n'est pas significative, toutefois le ratio est inversé pour certains domaines.
