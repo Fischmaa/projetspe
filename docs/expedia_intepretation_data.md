@@ -206,7 +206,7 @@ Les voyages comportants un autre nombre d'adulte sont quasi-inexistants.
 
 ### Site_name : 
 
-<img src="" width="400" height="400" />
+<img src="http://nsa37.casimages.com/img/2016/05/29/160529103815822567.png" width="400" height="400" />
 
 Il y un nom de domaine qui est très majoritairement utilisé (domaine 0) concentrant ~75% des activités. Le nombre de booking est un tout petit peu plus élevé sur ce domaine mais rien de significatif (<+1%).
 Il y a 5 autres domaines (8, 11, 13, 23, 34) où il y a de l'activité, en particulier les domaines 11 et 34. De même la différence entre booking et consultation n'est pas significative, toutefois le ratio est inversé pour certains domaines.
