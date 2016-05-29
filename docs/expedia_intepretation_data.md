@@ -14,6 +14,9 @@ TODO
 
 ### Date - Month :
 
+<img src="http://nsa38.casimages.com/img/2016/05/29/160529095746245247.png" width="400" height="400" />
+<img src="http://nsa37.casimages.com/img/2016/05/29/160529095746152166.png" width="400" height="400" />
+
 D'une année sur l'autre, on remarque quelques patterns récurrents :
 * En fin Décembre - début Janvier, les utilisateurs utilisent moins le site Expédia
 * En Mars, Juillet et Octobre, on remarque une augmentation d'activité. Notre hypothèse quand à ce phénomène est que ces mois correspondent à des vacances, notamment scolaire.
@@ -21,6 +24,8 @@ D'une année sur l'autre, on remarque quelques patterns récurrents :
 Si on fait la comparaison des résultats sur l'année, on constate que le nombre de clics par an a doublé entre 2013 et 2015. Quelques recherches nous ont amené à constater qu'en 2013 Expédia a été élu site de [voyage de l'année](http://espace.expedia.fr/presse/expediafr-est-nomme-meilleur-site-de-l-annee-2013-dans-la-categorie-loisirs-voyages-313), ce qui pourrait expliquer cette affluence.
 
 ### Day - 1 à 31 :
+
+<img src="http://nsa37.casimages.com/img/2016/05/29/160529100841947291.png" width="400" height="400" />
 
 Même si en moyenne les booking correpondent à ~50% des clics sur l'ensemble du mois, on constate 2 périodes bien distinctes sur ce graphique :
 * Jour 6 à 19 : les jours les plus favorables au booking sont situés dans cette période,
@@ -30,9 +35,13 @@ Notre hypothèse pour ces pics au cours du mois sont les dates de jour de paie; 
 
 ### DayOfWeek - Lundi à Dimanche :
 
+<img src="" width="400" height="400" />
+
 On constate une baisse d'activité sur le site d' Expéria au fil de la semaine avec une remontée le Dimanche. Néanmoins on constate que les utilisateurs ont plus tendance à faire des réservations en semaine qu'en week-end. Notre hypothèse quand à ce comportement concerne le moral des personnes qui profitent du week-end pour faire leur recherche et discuter ensemble des destinations.
 
 ### HotelCluster :
+
+<img src="" width="400" height="400" />
 
 Ce graphique dégage une tendance des utilisateurs : les clusters les plus reservés (ex : 91, 48) sont ceux les plus souvent consultés. Néanmoins, la réciproque n'est pas forcement vrai et un hôtel très consulté peu très bien avoir un très faible taux de réservation (ex: 66, 87).
 
@@ -40,6 +49,7 @@ Si on arrivait à géolocaliser les clusters, il serait possible de savoir si le
 
 ### Hotel_Continent :
 
+<img src="" width="400" height="400" />
 Cet histogramme nous a apprend que les utilisateurs ont largement tendance à consulter des offres du continent 2, et que concernant ce dernier ils ont plutôt tendance à réserver (~ 54%) qu'à simplement regarder (~ 46%). De plus, on apprend que les continents 0, 1 et 5 sont très peu présents (~ 7% du total) et qu'ils pourraient donc faire une bonne variable caractéristiques.
 
 ### Hotel_country :
