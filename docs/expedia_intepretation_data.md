@@ -57,7 +57,7 @@ Cet histogramme nous a apprend que les utilisateurs ont largement tendance à co
 
 <img src="http://nsa38.casimages.com/img/2016/05/29/160529101652370362.png" width="400" height="400" />
 
-Sur ce graphique, on constate des comportements similaires au précédent; on pourrait par exemple se servir de ces données en émettant l'hypothèse que l'hôtel 51 est situé sur le continent 2 pour explorer un peu plus les données, ce qui est fait dans la partie [Data Leak](hotel.md).
+Sur ce graphique, on constate des comportements similaires au précédent; on pourrait par exemple se servir de ces données en émettant l'hypothèse que l'hôtel 50 est situé sur le continent 2 pour explorer un peu plus les données, ce qui est fait dans la partie [Data Leak](hotel.md).
 
 ### Hotel_market :
 
@@ -73,7 +73,7 @@ Au vu du graphique, les gens ont plutôt tendance à utiliser leur ordinateur (9
  * sur ordinateur la tendance est à la réservation,
  * sur mobile, la tendance est à la simple navigation
 
-On pourrait estimer que cette variable est moins significative dans le cas de notre problème puisque dans les deux cas les clusters à proposer restent les mêmes, il s'agirait plutôt de stratégie commerciale/marketing. Néanmoins, rejeter cette variable sans étude plus précise ce serait rejeter de l'information arbitrairement.
+On pourrait estimer que cette variable est moins significative dans le cas de notre problème puisque dans les deux cas les clusters à proposer restent les mêmes, il s'agirait plutôt de stratégie commerciale/marketing. Néanmoins, rejeter cette variable sans étude plus précise serait rejeter de l'information arbitrairement.
 
 ### Is_package :
 
@@ -173,7 +173,7 @@ Il y a des destinations plus populaires que d'autres et, une fois encore, elles 
 Etrangement l'histogramme ne superpose pas les données, il faudrait déterminer pourquoi cela : erreur dans la génération du graphe ? bizarrerie des données ? explication rationnelle ?
 
 On remarque qu'entre l'année 2013, 2014, 2015 la forme des données a évoluée : 
-* en nombre total, il y a une nette augmentation pour 2014 par rapport à 2013 et en 2015 très : l'interprétation semble compliqué. L'augmentation en 2014 pourrait être expliqué par la hausse d'affluence sur le site (hypothèse déjà émise dans d'autre analyse d'histogramme). Concernant la baisse en 2015, peut-il s'agir d'un problème dans l'échantillon retenu ? (à vérifier ...)
+* en nombre total, il y a une nette augmentation pour 2014 par rapport à 2013 et en 2015 très : l'interprétation semble compliqué. L'augmentation en 2014 pourrait être expliqué par la hausse d'affluence sur le site (hypothèse déjà émise dans d'autres analyses d'histogrammes). Concernant la baisse en 2015, peut-il s'agir d'un problème dans l'échantillon retenu ? (à vérifier ...)
 * répartition Booking/Consultation : en 2013, mise à part une date en Décembre, systématiquement le nombre de booking est plus important que de consultation. Alors qu'en 2014, la tendance semble s'être inversée. Peut-être qu'il s'agit d'une amélioration d'expedia qui permet en 2014 de mieux prévoir son voayge ?
 
 Autrement, on remarque que le début d'année n'est pas propice aux checkout et c'est plutôt à partir du mois d'Avril que les données augmentent en nombre, et on peut noter un légère baisse en Septembre. Il y a un pic particulièrement important au mois de Décembre où, toute année confondu il y a plus de consultation que de booking : il pourraît s'agir de tentatives de départ pour les fêtes, il faudrait vérifier si la distance des voyages est plus courte en Décembre ce qui conforterait cette idée.
