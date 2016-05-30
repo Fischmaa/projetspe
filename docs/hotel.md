@@ -26,7 +26,7 @@ La personne utilise les données GPS venant d'un site [http://www.distancefromto
 ##Cheminement de la réflexion
 1. [Trouver une première localisation](#trouver-une-première-localisation)
 2. [Trouver les villes et régions à partir de la première localisation (villes des Etats-Unis)](#trouver-les-villes-et-régions-à-partir-de-la-première-localisation)
-3. [Trouver les pays, régions et villes à l'international](#trouver-les-pays-régions-et-villes-à-l-international)
+3. [Trouver les pays, régions et villes à l'international](#trouver-les-pays-régions-et-villes-à-linternational)
 
 
 ### Trouver une première localisation
@@ -73,3 +73,14 @@ A partir de ce point, on peut retrouver toutes les grandes villes des Etats-Unis
 
 ### Trouver les pays, régions et villes à l'international
 
+La méthode est la même que pour la deuxième partie de la démarche sauf que l'on utilise New York comme point de repère.
+On regarde les personnes qui regarde pour partir à New York mais qui ne sont pas nord Américains. On peut alors à partir des distances moyenne, retrouver les différents pays. Par exemple, on trouve user_location_country n°1 est l'Italie car plusieurs distances correspondent aux distances entre New York et des villes italiennes (Rome et Milan)
+
+Ensuite on regarde les personnes qui partent de New York vers des pays étrangers. On peut alors trouver la localisation d'autres comme Paris(hotel_country n°207). Pour trouver les autres villes des pays, on réitère les deux dernières étapes de la démarche.
+
+
+## Conclusion
+
+Cette démarche permet de montrer que l'on peut retrouver des données, qui sont pourtant cachées, à partir de la base de données fournie. Cela pourrait permettre d'utiliser de nouvelles informations pour pouvoir affiner les algortihmes utilisés comme le poids historiques de certaines villes ou si la ville à des attractions touristiques importantes.
+
+Cependant, il est nécessaire de noter que l'ajout de la distance entre les villes grâce au site internet [http://www.distancefromto.net/](http://www.distancefromto.net/) est contraire aux règles de Kaggle. Cela permet juste de montrer que beaucoup de données peuvent être retrouvées facilement à partir d'une base assez importante.
