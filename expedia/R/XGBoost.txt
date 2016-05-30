@@ -1,0 +1,182 @@
+# Librairies nécessaires :
+library("lubridate")
+library("data.table")
+library("BBmisc")
+library("dplyr")
+library(class)
+library(e1071)
+library('xgboost')
+library(stringr)
+
+#################
+# APPRENTISSAGE #
+#################
+
+# Lecture des fichiers en entrée :
+train<-fread('PROJET_SPE/train.csv',header=TRUE)
+
+
+# Modification des données et libération mémoire :
+train_is_booking<-train[is_booking==1]
+rm(train)
+gc()
+
+train_is_booking<-train_is_booking %>% BBmisc::dropNamed("is_booking")
+train_is_booking<-train_is_booking %>% BBmisc::dropNamed("cnt")
+train_hotel_cluster<-data.frame(hotel_cluster=train_is_booking$hotel_cluster)
+train_is_booking<-train_is_booking %>% BBmisc::dropNamed("hotel_cluster")
+
+# RQ :
+#
+# which(is.na(train_is_booking$srch_co))
+# > integer(0)
+# which(is.na(train_is_booking$srch_co))
+# > integer(0)
+#
+# Donc on peut calculer la durée prévue du voyage à tous les coups !
+
+# On rajoute la durée du voyage :
+
+train_is_booking$trip_duration<-as.integer(as.Date(train_is_booking$srch_co)-as.Date(train_is_booking$srch_ci))
+
+gc()
+
+##################
+# VERSION FACTOR #
+##################
+
+# 1.2 Variante [avec des factor]
+# On retire l'année et l'heure précise, on ne garde que les MM/JJ :
+train_is_booking$date_time<-str_sub(train_is_booking$date_time, 6, 10)
+train_is_booking$srch_ci<-str_sub(train_is_booking$srch_ci, 6, 10)
+train_is_booking$srch_co<-str_sub(train_is_booking$srch_co, 6, 10)
+train_is_booking$date_time<-as.factor(train_is_booking$date_time)
+train_is_booking$srch_ci<-as.factor(train_is_booking$srch_ci)
+train_is_booking$srch_co<-as.factor(train_is_booking$srch_co)
+
+gc()
+# 2. Other
+train_is_booking$site_name<-as.factor(train_is_booking$site_name)
+train_is_booking$user_id<-as.factor(train_is_booking$user_id)
+train_is_booking$posa_continent<-as.factor(train_is_booking$posa_continent)
+train_is_booking$srch_destination_id<-as.factor(train_is_booking$srch_destination_id)
+train_is_booking$srch_destination_type_id<-as.factor(train_is_booking$srch_destination_type_id)
+train_is_booking$hotel_continent<-as.factor(train_is_booking$hotel_continent)
+train_is_booking$hotel_country<-as.factor(train_is_booking$hotel_country)
+train_is_booking$hotel_market<-as.factor(train_is_booking$hotel_market)
+train_is_booking$channel<-as.factor(train_is_booking$channel)
+
+###################
+
+
+###################
+# VERSION NORMALE #
+###################
+
+# 1.1 Dates [avec changement de format -> peut etre optimisé (mois de Février, année impaire, etc.)]
+# On retire l'année et l'heure précise, on ne garde que les MM/JJ :
+train_is_booking$date_time<-str_sub(train_is_booking$date_time, 1, 10)
+train_is_booking$srch_ci<-str_sub(train_is_booking$srch_ci, 1, 10)
+train_is_booking$srch_co<-str_sub(train_is_booking$srch_co, 1, 10)
+train_is_booking$day_action<-day(train_is_booking$date_time)
+train_is_booking$month_action<-month(train_is_booking$date_time)
+train_is_booking$dayofyear_action<-30*train_is_booking$month_action+train_is_booking$day_action
+train_is_booking$day_ci<-day(train_is_booking$srch_ci)
+train_is_booking$month_ci<-month(train_is_booking$srch_ci)
+train_is_booking$dayofyear_ci<-30*train_is_booking$month_ci+train_is_booking$day_ci
+train_is_booking$day_co<-day(train_is_booking$srch_co)
+train_is_booking$month_co<-month(train_is_booking$srch_co)
+train_is_booking$dayofyear_co<-30*train_is_booking$month_co+train_is_booking$day_co
+train_is_booking<-train_is_booking %>% BBmisc::dropNamed("date_time")
+train_is_booking<-train_is_booking %>% BBmisc::dropNamed("srch_ci")
+train_is_booking<-train_is_booking %>% BBmisc::dropNamed("srch_co")
+
+###################
+
+
+# Trouver le modèle
+# http://stackoverflow.com/questions/36462372/difference-between-sparse-model-matrix-and-as-matrix
+library(Matrix)
+X <- sparse.model.matrix(train_hotel_cluster$hotel_cluster~., data = train_is_booking)
+dtrain <- xgb.DMatrix(data=X, label=train_hotel_cluster$hotel_cluster)
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+
+
+cv.res <- xgb.cv(data=dtrain, nfold=5, nrounds=2, objective="rank:pairwise", eval_metric="map@5", verbose=1)
+
+# Libération intermédiaire de mémoire :
+rm(train_is_booking)
+rm(train_hotel_cluster)
+gc()
+
+
+###############
+# APPLICATION #
+###############
+
+# Préparation du csv de sortie :
+test<-fread('PROJET_SPE/test.csv',header=TRUE)
+submission <- data.frame(id=test$id, hotel_cluster=NA)
+test<-test %>% BBmisc::dropNamed("id")
+
+test$trip_duration<-as.numeric(as.Date(test$srch_co)-as.Date(test$srch_ci))
+
+##################
+# VERSION FACTOR #
+##################
+
+test$date_time<-str_sub(test$date_time, 6, 10)
+
+test$srch_ci<-str_sub(test$srch_ci, 6, 10)
+test$srch_co<-str_sub(test$srch_co, 6, 10)
+
+test$site_name<-as.factor(test$site_name)
+test$user_id<-as.factor(test$user_id)
+test$posa_continent<-as.factor(test$posa_continent)
+test$srch_destination_id<-as.factor(test$srch_destination_id)
+test$srch_destination_type_id<-as.factor(test$srch_destination_type_id)
+test$hotel_continent<-as.factor(test$hotel_continent)
+test$hotel_country<-as.factor(test$hotel_country)
+test$hotel_market<-as.factor(test$hotel_market)
+test$trip_duration<-as.numeric(as.Date(test$srch_co)-as.Date(test$srch_ci))$channel<-as.factor(test$channel)
+
+
+###################
+# VERSION NORMALE #
+###################
+
+test$date_time<-str_sub(test$date_time, 1, 10)
+test$srch_ci<-str_sub(test$srch_ci, 1, 10)
+test$srch_co<-str_sub(test$srch_co, 1, 10)
+test$day_action<-day(test$date_time)
+test$month_action<-month(test$date_time)
+test$dayofyear_action<-30*test$month_action+test$day_action
+test$day_ci<-day(test$srch_ci)
+test$month_ci<-month(test$srch_ci)
+test$dayofyear_ci<-30*test$month_ci+test$day_ci
+test$day_co<-day(test$srch_co)
+test$month_co<-month(test$srch_co)
+test$dayofyear_co<-30*test$month_co+test$day_co
+test<-test %>% BBmisc::dropNamed("date_time")
+test<-test %>% BBmisc::dropNamed("srch_ci")
+test<-test %>% BBmisc::dropNamed("srch_co")
+
+###################
+
+
+# Application du modèle :
+# submission$hotel_cluster<-predict(classifier, test)
+
+# rm(test)
+
