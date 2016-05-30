@@ -8,8 +8,8 @@
 
 ## Plan
 
-1. [Trouver une première localisation](#gradient-boosting)
-2. [Trouver une première localisation](#naive-bayes)
+1. [Gradient Boosting](#gradient-boosting)
+2. [Naive Bayes](#naive-bayes)
 
 ## Gradient Boosting
 
