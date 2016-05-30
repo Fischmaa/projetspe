@@ -215,7 +215,7 @@ Il y a 5 autres domaines (8, 11, 13, 23, 34) où il y a de l'activité, en parti
 
 ![matrice de corrélation](https://raw.githubusercontent.com/matthiasbe/projetspe/master/expedia/matrix/correlationMatrix.png)
 
-La matrice de corrélation montre que les données sont très peu corrélées entre elles, en particulier la variable Hotel_cluster qui nous interessent le plus ne semble pas corrélés aux autres variables. Il faut dès lors faire en sorte de donner d'avantage d'informations en introduisant de nouvelles données.
+La matrice de corrélation montre que les données sont très peu corrélées entre elles, en particulier la variable Hotel_cluster qui nous intéresse le plus ne semble pas corrélée aux autres variables. Il faut, dès lors, faire en sorte de donner d'avantage d'informations en introduisant de nouvelles données.
 
 ## Ajout de variables et interprétation :
 
