@@ -51,7 +51,7 @@ x_train = tabtrain.drop(['datetime','count','casual','registered','date'],1)
 # On forme les tableaux des résultats
 x_test = tabtest.drop(['datetime','date'],1)
 
-model = rf(100)
+model = rf(200)
 
 model.fit(x_train, y_train)
 
