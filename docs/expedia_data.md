@@ -16,9 +16,9 @@ Nous donnons plus bas des [chiffres clés](#en-chiffres) à propos de chaque fic
 
 Nombre de colonnes dans chaque fichier :
 * train.csv possède 25 colonnes
-* test.csv possède 22 colonnes
+* test.csv possède 23 colonnes
 
-Nous détaillons ici les différentes attributs. Pour train.csv, un ligne correspond à une recherche (un clic) ou à une réservation. Pour test.csv, une ligne correspond à une recherche ou une reservation. Toutes les colonnes sont communes aux deux fichiers, sauf celle marquées [Entrainement] qui ne se trouvent pas dans les données de test.
+Nous détaillons ici les différentes attributs. Pour train.csv, un ligne correspond à une recherche (un clic) ou à une réservation. Pour test.csv, une ligne correspond uniquement à une reservation. Toutes les colonnes sont communes aux deux fichiers, sauf celle marquées [Entrainement] qui ne se trouvent pas dans les données de test.
 
 ### Contexte de recherche
 
