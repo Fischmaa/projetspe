@@ -14,6 +14,7 @@ d'effectuer des calculs sur l'ensemble du dataset sans traiter les données et o
 1. [Explication des données](expedia_data.md)
 2. [Interprétation des données](expedia_intepretation_data.md)
 3. [Fonction de notation du challenge](expedia_notation.md)
+4. [Algorithmes retenus](algorithmes.md)
 
 
 
