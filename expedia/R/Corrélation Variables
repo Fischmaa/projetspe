@@ -1,9 +1,14 @@
 library(data.table)
 library(lubridate)
 library("BBmisc")
+library("dplyr")
 
 booked<-fread('sampled_booking.csv',header=TRUE)
-booked_hotel$hotel_market<-booked$hotel_market
+
+##############################
+###      PARTIE 1          ###
+##############################
+
 
 # Garder les variables hotel_*
 booked_hotel<-data.frame(hotel_continent=booked$hotel_continent,hotel_country=booked$hotel_country,hotel_market=booked$hotel_market,hotel_cluster=booked$hotel_cluster)
@@ -31,6 +36,10 @@ cor(booked_importance_site)
 #               posa_continent hotel_cluster
 #posa_continent    1.000000000   0.004341008
 #hotel_cluster     0.004341008   1.000000000
+
+##############################
+###      PARTIE 2          ###
+##############################
 
 str(booked)
 
@@ -62,6 +71,10 @@ str(booked)
 # Il faut donc traduire les dates pour pas avoir des chr (ie. character), qu'on ne peut pas utiliser
 # avec la fonction cor.
 
+for (i in 1:nrow(booked)){
+	booked$trip_duration[i]<-as.numeric(as.Date(booked$srch_co[i]) - as.Date(booked$srch_ci[i]))
+}
+
 booked$hour_navigation <- hour(ymd_hms(booked$date_time))
 booked$day_navigation <- day(ymd_hms(booked$date_time))
 booked$month_navigation <- month(ymd_hms(booked$date_time))
@@ -85,6 +98,8 @@ booked<-booked %>% BBmisc::dropNamed("srch_co")
 #nms <- c("site_name","posa_continent", "user_location_country", "user_location_region", "user_location_city","user_id","is_mobile", "is_package", "channel", "srch_adults_cnt", "srch_children_cnt", "srch_rm_cnt", "srch_destination_id", "srch_destination_type_id", "is_booking", "cnt", "hotel_continent", "hotel_country","hotel_market", "hotel_cluster")
 #booked[nms] <- lapply(booked[nms], as.factor)
 
+booked<-booked %>% BBmisc::dropNamed("is_booking")
+write.csv(cor(booked),file='IS_BOOKING_Correlation.csv')
 
 
 
@@ -97,3 +112,25 @@ booked<-booked %>% BBmisc::dropNamed("srch_co")
 
 
 
+##############################
+###      PARTIE 3          ###
+##############################
+
+
+train<-fread('train.csv',header=TRUE)
+
+train$hour_navigation <- hour(ymd_hms(train$date_time))
+train$day_navigation <- day(ymd_hms(train$date_time))
+train$month_navigation <- month(ymd_hms(train$date_time))
+train$year_navigation <- year(ymd_hms(train$date_time))
+train<-train %>% BBmisc::dropNamed("date_time")
+
+train$ci_day_navigation <- day(train$srch_ci)
+train$ci_month_navigation <- month(train$srch_ci)
+train$ci_year_navigation <- year(train$srch_ci)
+train<-train %>% BBmisc::dropNamed("srch_ci")
+
+train$co_day_navigation <- day(train$srch_co)
+train$co_month_navigation <- month(train$srch_co)
+train$co_year_navigation <- year(train$srch_co)
+train<-train %>% BBmisc::dropNamed("srch_co")

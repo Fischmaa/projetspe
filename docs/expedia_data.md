@@ -7,7 +7,7 @@ Sur la page du challenge, on nous propose de télécharger quatre fichiers:
 
 * [train.csv](#traincsv-et-testcsv) : Regroupe les données d'entrainement. Ce fichier fait 38 millions de lignes. Il s'agit d'un échantillon pris parmi les données d'Expedia des années 2013 et 2014. Ces données correspondent aux recherches d'hôtels et aux réservations faites par les utilisateurs.
 * [test.csv](#traincsv-et-testcsv) : Regroupe les données de test. Fichier de 2,5 millions de lignes. Ce fichier regroupe les données de 2015 concernant uniquement les réservations faites par les utilisateurs.
-* **sample_submission.csv :** Un exemple de fichier à soumettre.
+* [sample_submission.csv :](expedia_notation.md#données-à-soumettre) Un exemple de fichier à soumettre.
 * [destinations.csv](#destinationscsv) : Des informations sur les hôtels traduis en `float` (avis sur les hôtels, données de recherche ...)
 
 Nous donnons plus bas des [chiffres clés](#en-chiffres) à propos de chaque fichier, et de chaque colonne.
@@ -18,7 +18,7 @@ Nombre de colonnes dans chaque fichier :
 * train.csv possède 25 colonnes
 * test.csv possède 22 colonnes
 
-Nous détaillons ici les différentes attributs. Pour train.csv, un ligne correspond à une recherche (un clic) ou à une réservation. Pour test.csv, une ligne correspond à une recherche ou une reservation. Toutes les colonnes sont communes aux deux fichiers, sauf celle marquées [Entrainement] qui ne se trouvent pas dans les données de test.
+Nous détaillons ici les différentes attributs. Pour train.csv, un ligne correspond à une recherche (un clic) ou à une réservation. Pour test.csv, une ligne correspond uniquement à une reservation. Toutes les colonnes sont communes aux deux fichiers, sauf celle marquées [Entrainement] qui ne se trouvent pas dans les données de test.
 
 ### Contexte de recherche
 
