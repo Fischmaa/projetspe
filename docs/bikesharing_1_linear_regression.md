@@ -452,7 +452,7 @@ Regression de Poisson avec différents ajouts de variables :
 * year
 * day
 * hour
-* Sunday
+
 ```python
 import pandas as pd 
 import statsmodels.formula.api as smf
@@ -1232,5 +1232,4 @@ plt.show()
 prediction.to_csv("Résultats/regressionPoissonFactorWeekend_Weekday.csv")
 
 ```
-
 ![score finale](https://raw.githubusercontent.com/matthiasbe/projetspe/master/bikeshare/R%C3%A9sultats/Avec_Graphiques/scoreRegressionPoissonFactgorFinal.png)
