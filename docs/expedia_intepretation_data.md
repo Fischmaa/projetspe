@@ -1,6 +1,10 @@
 [Retour au sommaire d'Expedia](expedia_sommaire.md)
-1. [Interprétation des données](#Interprétation-des-données-:) 
-2. [Interaction entre les variables données :](Interaction-entre-les-variables-données -:)
+
+Sommaire : 
+1. [Interprétation des données](#Interprétation-des-données) 
+2. [Interaction entre les variables données :](Interaction-entre-les-variables-données)
+
+
 # Interprétation des données
 
 Interprétation réalisée sur la base d'échantillons aléatoires sur l'ensemble des données (10 000 entrées). 
