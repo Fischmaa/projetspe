@@ -1,8 +1,8 @@
 [Retour au sommaire d'Expedia](expedia_sommaire.md)
 
 Sommaire : 
-1. [Interprétation des données](#Interprétation-des-données) 
-2. [Interaction entre les variables données :](Interaction-entre-les-variables-données)
+* [Interprétation des données](#Interprétation-des-données) 
+* [Interaction entre les variables données :](Interaction-entre-les-variables-données-:)
 
 
 # Interprétation des données
