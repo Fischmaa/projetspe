@@ -1,0 +1,254 @@
+# Librairies nécessaires :
+library("lubridate")
+library("data.table")
+library("BBmisc")
+library("dplyr")
+library(class)
+library(e1071)
+library('xgboost')
+library(stringr)
+
+#################
+# APPRENTISSAGE #
+#################
+
+# Lecture des fichiers en entrée :
+train<-fread('PROJET_SPE/train.csv',header=TRUE)
+
+
+# Modification des données et libération mémoire :
+train_is_booking<-train[is_booking==1]
+rm(train)
+gc()
+
+train_is_booking<-train_is_booking %>% BBmisc::dropNamed("is_booking")
+train_is_booking<-train_is_booking %>% BBmisc::dropNamed("cnt")
+#train_hotel_cluster<-data.frame(hotel_cluster=train_is_booking$hotel_cluster)
+#train_is_booking<-train_is_booking %>% BBmisc::dropNamed("hotel_cluster")
+
+# RQ :
+#
+# which(is.na(train_is_booking$srch_co))
+# > integer(0)
+# which(is.na(train_is_booking$srch_co))
+# > integer(0)
+#
+# Donc on peut calculer la durée prévue du voyage à tous les coups !
+
+# On rajoute la durée du voyage :
+
+train_is_booking$trip_duration<-as.integer(as.Date(train_is_booking$srch_co)-as.Date(train_is_booking$srch_ci))
+
+##################
+# VERSION FACTOR #
+##################
+
+# 1.2 Variante [avec des factor]
+# On retire l'année et l'heure précise, on ne garde que les MM/JJ :
+train_is_booking$date_time<-str_sub(train_is_booking$date_time, 6, 10)
+train_is_booking$srch_ci<-str_sub(train_is_booking$srch_ci, 6, 10)
+train_is_booking$srch_co<-str_sub(train_is_booking$srch_co, 6, 10)
+train_is_booking$date_time<-as.factor(train_is_booking$date_time)
+train_is_booking$srch_ci<-as.factor(train_is_booking$srch_ci)
+train_is_booking$srch_co<-as.factor(train_is_booking$srch_co)
+
+gc()
+# 2. Other
+train_is_booking$site_name<-as.factor(train_is_booking$site_name)
+train_is_booking$user_id<-as.factor(train_is_booking$user_id)
+train_is_booking$posa_continent<-as.factor(train_is_booking$posa_continent)
+train_is_booking$srch_destination_id<-as.factor(train_is_booking$srch_destination_id)
+train_is_booking$srch_destination_type_id<-as.factor(train_is_booking$srch_destination_type_id)
+train_is_booking$hotel_continent<-as.factor(train_is_booking$hotel_continent)
+train_is_booking$hotel_country<-as.factor(train_is_booking$hotel_country)
+train_is_booking$hotel_market<-as.factor(train_is_booking$hotel_market)
+train_is_booking$channel<-as.factor(train_is_booking$channel)
+
+#3. Hotel cluster
+train_is_booking$hotel_cluster<-as.factor(train_is_booking$hotel_cluster)
+
+###################
+
+
+###################
+# VERSION NORMALE #
+###################
+
+# 1.1 Dates [avec changement de format -> peut etre optimisé (mois de Février, année impaire, etc.)]
+# On retire l'année et l'heure précise, on ne garde que les MM/JJ :
+train_is_booking$date_time<-str_sub(train_is_booking$date_time, 1, 10)
+train_is_booking$srch_ci<-str_sub(train_is_booking$srch_ci, 1, 10)
+train_is_booking$srch_co<-str_sub(train_is_booking$srch_co, 1, 10)
+train_is_booking$day_action<-day(train_is_booking$date_time)
+train_is_booking$month_action<-month(train_is_booking$date_time)
+train_is_booking$dayofyear_action<-30*train_is_booking$month_action+train_is_booking$day_action
+train_is_booking$day_ci<-day(train_is_booking$srch_ci)
+train_is_booking$month_ci<-month(train_is_booking$srch_ci)
+train_is_booking$dayofyear_ci<-30*train_is_booking$month_ci+train_is_booking$day_ci
+train_is_booking$day_co<-day(train_is_booking$srch_co)
+train_is_booking$month_co<-month(train_is_booking$srch_co)
+train_is_booking$dayofyear_co<-30*train_is_booking$month_co+train_is_booking$day_co
+train_is_booking<-train_is_booking %>% BBmisc::dropNamed("date_time")
+train_is_booking<-train_is_booking %>% BBmisc::dropNamed("srch_ci")
+train_is_booking<-train_is_booking %>% BBmisc::dropNamed("srch_co")
+gc()
+
+#-------------------#
+# Trouver le modèle #
+#-------------------#
+
+###########
+   SOL 1  (BOF ...)
+###########
+
+# Si on a pas fait la partie du dessus juste avant (ie. on utilise le fread des commentaires ci-dessous) ...
+library("lubridate")
+library("data.table")
+library("BBmisc")
+library("dplyr")
+library(class)
+library(e1071)
+library('xgboost')
+library(stringr)
+
+# C'est ici que ça commence vraiment :
+library(Matrix)
+
+#essai de drop NA par la moyenne (ça marche, à voir pour la précision) :
+train_is_booking$orig_destination_distance[is.na(train_is_booking$orig_destination_distance)]<-mean(na.omit(train_is_booking$orig_destination_distance))
+
+#essai de drop NA avec des missing dans le XGBoost :
+train_is_booking$orig_destination_distance[is.na(train_is_booking$orig_destination_distance)]<- -42
+
+# Pré-traitement pour XGBoost
+hotel<-train_is_booking$hotel_cluster
+X <- sparse.model.matrix(hotel~.-1, data = train_is_booking)
+xgtrain <- xgb.DMatrix(data=X, label=hotel)
+gc()
+
+# Enregistrement du modèle (A CORRIGER)
+cv.res <- xgb.cv(data=xgtrain, nfold=5, nrounds=2, objective="rank:pairwise", eval_metric="map@5", verbose=1)
+
+# Libération intermédiaire de mémoire :
+rm(train_is_booking)
+#rm(train_hotel_cluster)
+gc()
+
+
+
+###########
+   SOL 2  (A APPROFONDIR)
+###########
+
+# Si on a pas fait la partie du dessus juste avant (ie. on utilise le fread des commentaires ci-dessous)
+library("lubridate")
+library("data.table")
+library("BBmisc")
+library("dplyr")
+library(class)
+library(e1071)
+library('xgboost')
+library(stringr)
+
+# C'est ici que ça commence vraiment :
+library(Matrix)
+
+# Back-Up :
+#
+# copie<-train_is_booking
+# train_is_booking<-copie
+
+# write.csv(train_is_booking, file='train_is_booking.csv')
+
+# train_is_booking<-fread('train_is_booking.csv',header=TRUE)
+# train_is_booking<-train_is_booking %>% BBmisc::dropNamed("V1")
+label<-train_is_booking$hotel_cluster
+train_is_booking<-train_is_booking %>% BBmisc::dropNamed("hotel_cluster")
+
+
+
+#essai de drop NA par la moyenne (ça marche, à voir pour la précision) [PAS UTILISE POUR LE MOMENT] :
+train_is_booking$orig_destination_distance[is.na(train_is_booking$orig_destination_distance)]<-mean(na.omit(train_is_booking$orig_destination_distance))
+data=as.matrix(train_is_booking[1:nrow(train_is_booking)])
+xgmat<-xgb.DMatrix(data, label=label)
+
+
+#essai de drop NA avec des missing dans le XGBoost :
+train_is_booking$orig_destination_distance[is.na(train_is_booking$orig_destination_distance)]<- -42
+data=as.matrix(train_is_booking[1:nrow(train_is_booking)])
+xgmat<-xgb.DMatrix(data, label=label, missing=-42)
+
+
+
+params=list("objective" = "rank:pairwise", "nthread" = 2, "eval_metric" = "map@5")
+
+bst = xgboost(params=params, data=xgmat, nround=1)
+# Marche pas trop pour le moment ... Crash de R, va savoir d'où ça vient l'erreur est jamais la même -.-'
+
+
+
+
+
+
+#################
+#/-------------\#
+#  APPLICATION  #
+#\-------------/#
+#################
+
+
+# Préparation du csv de sortie :
+test<-fread('PROJET_SPE/test.csv',header=TRUE)
+submission <- data.frame(id=test$id, hotel_cluster=NA)
+test<-test %>% BBmisc::dropNamed("id")
+
+test$trip_duration<-as.numeric(as.Date(test$srch_co)-as.Date(test$srch_ci))
+
+##################
+# VERSION FACTOR #
+##################
+
+test$date_time<-str_sub(test$date_time, 6, 10)
+
+test$srch_ci<-str_sub(test$srch_ci, 6, 10)
+test$srch_co<-str_sub(test$srch_co, 6, 10)
+
+test$site_name<-as.factor(test$site_name)
+test$user_id<-as.factor(test$user_id)
+test$posa_continent<-as.factor(test$posa_continent)
+test$srch_destination_id<-as.factor(test$srch_destination_id)
+test$srch_destination_type_id<-as.factor(test$srch_destination_type_id)
+test$hotel_continent<-as.factor(test$hotel_continent)
+test$hotel_country<-as.factor(test$hotel_country)
+test$hotel_market<-as.factor(test$hotel_market)
+test$trip_duration<-as.numeric(as.Date(test$srch_co)-as.Date(test$srch_ci))$channel<-as.factor(test$channel)
+
+
+###################
+# VERSION NORMALE #
+###################
+
+test$date_time<-str_sub(test$date_time, 1, 10)
+test$srch_ci<-str_sub(test$srch_ci, 1, 10)
+test$srch_co<-str_sub(test$srch_co, 1, 10)
+test$day_action<-day(test$date_time)
+test$month_action<-month(test$date_time)
+test$dayofyear_action<-30*test$month_action+test$day_action
+test$day_ci<-day(test$srch_ci)
+test$month_ci<-month(test$srch_ci)
+test$dayofyear_ci<-30*test$month_ci+test$day_ci
+test$day_co<-day(test$srch_co)
+test$month_co<-month(test$srch_co)
+test$dayofyear_co<-30*test$month_co+test$day_co
+test<-test %>% BBmisc::dropNamed("date_time")
+test<-test %>% BBmisc::dropNamed("srch_ci")
+test<-test %>% BBmisc::dropNamed("srch_co")
+
+###################
+
+
+# Application du modèle :
+# submission$hotel_cluster<-predict(classifier, test)
+
+# rm(test)
+

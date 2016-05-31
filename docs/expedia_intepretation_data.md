@@ -1,6 +1,13 @@
+[Retour au sommaire d'Expedia](expedia_sommaire.md)
+
+Sommaire : 
+* [Interprétation des données](expedia_intepretation_data.md#interprétation-des-données) 
+* [Interaction entre les variables données](expedia_intepretation_data.md#interaction-entre-les-variables-données)
+* [Ajout de variables et interprétation](expedia_intepretation_data.md#ajout-de-variables-et-interprétation)
+
 # Interprétation des données
 
-Interprétation réalisée sur la base d'échantillons aléatoires sur l'ensemble des données. 
+Interprétation réalisée sur la base d'échantillons aléatoires sur l'ensemble des données (10 000 entrées). 
 
 ## Interprétation individuelle de chaque donnée :
 
@@ -211,12 +218,21 @@ Les voyages comportants un autre nombre d'adulte sont quasi-inexistants.
 Il y un nom de domaine qui est très majoritairement utilisé (domaine 0) concentrant ~75% des activités. Le nombre de booking est un tout petit peu plus élevé sur ce domaine mais rien de significatif (<+1%).
 Il y a 5 autres domaines (8, 11, 13, 23, 34) où il y a de l'activité, en particulier les domaines 11 et 34. De même la différence entre booking et consultation n'est pas significative, toutefois le ratio est inversé pour certains domaines.
 
-## Interaction entre les variables données :
+# Interaction entre les variables données 
 
 ![matrice de corrélation](https://raw.githubusercontent.com/matthiasbe/projetspe/master/expedia/matrix/correlationMatrix.png)
 
 La matrice de corrélation montre que les données sont très peu corrélées entre elles, en particulier la variable Hotel_cluster qui nous intéresse le plus ne semble pas corrélée aux autres variables. Il faut, dès lors, faire en sorte de donner d'avantage d'informations en introduisant de nouvelles données.
 
-## Ajout de variables et interprétation :
+# Ajout de variables et interprétation 
 
-TODO
+## Discrétisation des orig_destination_distance en orig_destination_distance_type :
+
+L'idée est de regrouper les distances en différents groupes. Une première idée, à améliorer est de diviser orig_destination_distance en 4 groupes (25% - 50 % - 75 % de la répartition totale).
+
+## Ajout de la variable trip_duration :
+
+En utilisant les variables srch_ci et srch_co ont crée une nouvelle variable trip_duration qui correspond à la durée du voyage. 
+![matrice de corrélation](https://raw.githubusercontent.com/matthiasbe/projetspe/master/expedia/matrix/correlationMatrixIsBooking.png)
+
+![matrice de corrélation](https://raw.githubusercontent.com/matthiasbe/projetspe/master/expedia/matrix/correlationMatrixNotBooking.png)

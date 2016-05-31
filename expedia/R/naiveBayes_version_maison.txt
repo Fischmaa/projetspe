@@ -21,7 +21,7 @@ rm(train)
 gc()
 train_is_booking<-train_is_booking %>% BBmisc::dropNamed("is_booking")
 train_is_booking<-train_is_booking %>% BBmisc::dropNamed("cnt")
-train_hotel_cluster<-train_is_booking$hotel_cluster
+train_hotel_cluster<-data.frame(hotel_cluster=train_is_booking$hotel_cluster)
 train_is_booking<-train_is_booking %>% BBmisc::dropNamed("hotel_cluster")
 
 # RQ :
@@ -35,13 +35,27 @@ train_is_booking<-train_is_booking %>% BBmisc::dropNamed("hotel_cluster")
 
 
 # On rajoute la durée du voyage :
-train_is_booking$trip_duration<-as.numeric(as.Date(train_is_booking$srch_co)-as.Date(train_is_booking$srch_ci))
+train_is_booking$trip_duration<-as.integer(as.Date(train_is_booking$srch_co)-as.Date(train_is_booking$srch_ci))
 
 
 # On retire l'année et l'heure précise, on ne garde que les MM/JJ :
 train_is_booking$date_time<-str_sub(train_is_booking$date_time, 6, 10)
 train_is_booking$srch_ci<-str_sub(train_is_booking$srch_ci, 6, 10)
 train_is_booking$srch_co<-str_sub(train_is_booking$srch_co, 6, 10)
+
+# Discrétisation
+train_is_booking$date_time<-as.factor(train_is_booking$date_time)
+train_is_booking$site_name<-as.factor(train_is_booking$site_name)
+train_is_booking$user_id<-as.factor(train_is_booking$user_id)
+train_is_booking$posa_continent<-as.factor(train_is_booking$posa_continent)
+train_is_booking$srch_ci<-as.factor(train_is_booking$srch_ci)
+train_is_booking$srch_co<-as.factor(train_is_booking$srch_co)
+train_is_booking$srch_destination_id<-as.factor(train_is_booking$srch_destination_id)
+train_is_booking$srch_destination_type_id<-as.factor(train_is_booking$srch_destination_type_id)
+train_is_booking$hotel_continent<-as.factor(train_is_booking$hotel_continent)
+train_is_booking$hotel_country<-as.factor(train_is_booking$hotel_country)
+train_is_booking$hotel_market<-as.factor(train_is_booking$hotel_market)
+train_is_booking$channel<-as.factor(train_is_booking$channel)
 
 
 # Création du modèle :
