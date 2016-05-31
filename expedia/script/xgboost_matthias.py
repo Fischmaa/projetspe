@@ -31,31 +31,32 @@ test = pd.read_csv('../test.csv' , iterator = True, chunksize = 1000000)
 
 tab_train = train.get_chunk()
 tab_test = test.get_chunk()
-print('entre')
+print('creation premier tableau...')
 for chunk in train :
 	tab_train = pd.concat([tab_train, chunk])
-	print('fin entree')
 
+print('creation second tableau...')
 for chunk in test :
-	tab_test = tab_test.concat(chunk)
+	tab_test = pd.concat([tab_test, chunk])
 
-print (len(tab_train))
-print(len(tab_test))
 # In[8]:
 
 # On prépare les données pour l'algorithme
-
+print ('début pretraitement...')
 X_train = tab_train.drop(['hotel_cluster','date_time','srch_ci','srch_co',],1).as_matrix()
 Y_train = tab_train['hotel_cluster'].as_matrix()
 
 X_test = tab_test.drop(['date_time','srch_ci','srch_co'],1).as_matrix()
 result = tab_test[['id']]
+result = result.drop(['id'],1)
+
+print ('fin pretraitement')
 #type(result)
 
 
 # In[ ]:
 
-gbm = xgb.XGBClassifier(max_depth=3, n_estimators=300, learning_rate=0.05)
+gbm = xgb.XGBClassifier(max_depth=4, n_estimators=300, learning_rate=0.05)
 
 gbm.fit(X_train,Y_train)
 
@@ -66,4 +67,8 @@ Y_test = gbm.predict(X_test)
 
 result["hotel_cluster"]=pd.DataFrame(Y_test)
 result.to_csv('out_xgboost.csv')
-
+#features = [ "your list of features ..." ]
+#mapFeat = dict(zip(["f"+str(i) for i in range(len(features))],features))
+#ts = pd.Series(gbm.booster().get_fscore())
+#ts.index = ts.reset_index()['index'].map(mapFeat)
+#ts.order()[-15:].plot(kind="barh", title=("features importance"))
