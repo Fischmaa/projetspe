@@ -30,9 +30,11 @@ train = pd.read_csv('../train.csv',iterator = True, chunksize = 1000000)
 test = pd.read_csv('../test.csv' , iterator = True, chunksize = 1000000)
 
 tab_train = train.get_chunk()
-tab_test = test_train.get_chunk()
+tab_test = test.get_chunk()
+print('entre')
 for chunk in train :
-	tab_train = tab_train.concat(chunk)
+	tab_train = pd.concat([tab_train, chunk])
+	print('fin entree')
 
 for chunk in test :
 	tab_test = tab_test.concat(chunk)
@@ -43,33 +45,25 @@ print(len(tab_test))
 
 # On prépare les données pour l'algorithme
 
-#X_train = train.drop(['hotel_cluster','date_time','srch_ci','srch_co',],1).as_matrix()
-#Y_train = train['hotel_cluster'].as_matrix()
+X_train = tab_train.drop(['hotel_cluster','date_time','srch_ci','srch_co',],1).as_matrix()
+Y_train = tab_train['hotel_cluster'].as_matrix()
 
-#X_test = test.drop(['date_time','srch_ci','srch_co'],1).as_matrix()
-#result = test[['id']]
+X_test = tab_test.drop(['date_time','srch_ci','srch_co'],1).as_matrix()
+result = tab_test[['id']]
 #type(result)
 
 
 # In[ ]:
 
-#gbm = xgb.XGBClassifier(max_depth=3, n_estimators=300, learning_rate=0.05)
+gbm = xgb.XGBClassifier(max_depth=3, n_estimators=300, learning_rate=0.05)
 
-#gbm.fit(X_train,Y_train)
+gbm.fit(X_train,Y_train)
 
-#Y_test = gbm.predict(X_test)
+Y_test = gbm.predict(X_test)
 
 
 # In[ ]:
 
-#result["hotel_cluster"]=pd.DataFrame(Y_test)
-#result
-
-
-# In[112]:
-
-#get_ipython().magic('matplotlib inline')
-
-#counts = train['hotel_cluster'].value_counts()
-#counts
+result["hotel_cluster"]=pd.DataFrame(Y_test)
+result.to_csv('out_xgboost.csv')
 
