@@ -221,4 +221,13 @@ La matrice de corrélation montre que les données sont très peu corrélées en
 
 ## Ajout de variables et interprétation :
 
-TODO
+### Discrétisation des orig_destination_distance en orig_destination_distance_type :
+
+L'idée est de regrouper les distances en différents groupes. Une première idée, à améliorer est de diviser orig_destination_distance en 4 groupes (25% - 50 % - 75 % de la répartition totale).
+
+### Ajout de la variable trip_duration :
+
+En utilisant les variables srch_ci et srch_co ont crée une nouvelle variable trip_duration qui correspond à la durée du voyage. 
+![matrice de corrélation](https://raw.githubusercontent.com/matthiasbe/projetspe/master/expedia/matrix/correlationMatrixIsBooking.png)
+
+![matrice de corrélation](https://raw.githubusercontent.com/matthiasbe/projetspe/master/expedia/matrix/correlationMatrixNotBooking.png)
