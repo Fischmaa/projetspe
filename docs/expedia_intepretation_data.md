@@ -2,7 +2,7 @@
 
 # Interprétation des données
 
-Interprétation réalisée sur la base d'échantillons aléatoires sur l'ensemble des données. 
+Interprétation réalisée sur la base d'échantillons aléatoires sur l'ensemble des données (10 000 entrées). 
 
 ## Interprétation individuelle de chaque donnée :
 
