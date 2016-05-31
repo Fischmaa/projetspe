@@ -1,3 +1,5 @@
+[Retour au sommaire d'Expedia](expedia_sommaire.md)
+
 # Interprétation des données
 
 Interprétation réalisée sur la base d'échantillons aléatoires sur l'ensemble des données. 
