@@ -23,8 +23,8 @@ gc()
 
 train_is_booking<-train_is_booking %>% BBmisc::dropNamed("is_booking")
 train_is_booking<-train_is_booking %>% BBmisc::dropNamed("cnt")
-train_hotel_cluster<-data.frame(hotel_cluster=train_is_booking$hotel_cluster)
-train_is_booking<-train_is_booking %>% BBmisc::dropNamed("hotel_cluster")
+#train_hotel_cluster<-data.frame(hotel_cluster=train_is_booking$hotel_cluster)
+#train_is_booking<-train_is_booking %>% BBmisc::dropNamed("hotel_cluster")
 
 # RQ :
 #
@@ -38,8 +38,6 @@ train_is_booking<-train_is_booking %>% BBmisc::dropNamed("hotel_cluster")
 # On rajoute la durée du voyage :
 
 train_is_booking$trip_duration<-as.integer(as.Date(train_is_booking$srch_co)-as.Date(train_is_booking$srch_ci))
-
-gc()
 
 ##################
 # VERSION FACTOR #
@@ -66,6 +64,9 @@ train_is_booking$hotel_country<-as.factor(train_is_booking$hotel_country)
 train_is_booking$hotel_market<-as.factor(train_is_booking$hotel_market)
 train_is_booking$channel<-as.factor(train_is_booking$channel)
 
+#3. Hotel cluster
+train_is_booking$hotel_cluster<-as.factor(train_is_booking$hotel_cluster)
+
 ###################
 
 
@@ -90,40 +91,111 @@ train_is_booking$dayofyear_co<-30*train_is_booking$month_co+train_is_booking$day
 train_is_booking<-train_is_booking %>% BBmisc::dropNamed("date_time")
 train_is_booking<-train_is_booking %>% BBmisc::dropNamed("srch_ci")
 train_is_booking<-train_is_booking %>% BBmisc::dropNamed("srch_co")
+gc()
 
-###################
+#-------------------#
+# Trouver le modèle #
+#-------------------#
 
+###########
+   SOL 1  (BOF ...)
+###########
 
-# Trouver le modèle
-# http://stackoverflow.com/questions/36462372/difference-between-sparse-model-matrix-and-as-matrix
+# Si on a pas fait la partie du dessus juste avant (ie. on utilise le fread des commentaires ci-dessous) ...
+library("lubridate")
+library("data.table")
+library("BBmisc")
+library("dplyr")
+library(class)
+library(e1071)
+library('xgboost')
+library(stringr)
+
+# C'est ici que ça commence vraiment :
 library(Matrix)
-X <- sparse.model.matrix(train_hotel_cluster$hotel_cluster~., data = train_is_booking)
-dtrain <- xgb.DMatrix(data=X, label=train_hotel_cluster$hotel_cluster)
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
 
+#essai de drop NA par la moyenne (ça marche, à voir pour la précision) :
+train_is_booking$orig_destination_distance[is.na(train_is_booking$orig_destination_distance)]<-mean(na.omit(train_is_booking$orig_destination_distance))
 
-cv.res <- xgb.cv(data=dtrain, nfold=5, nrounds=2, objective="rank:pairwise", eval_metric="map@5", verbose=1)
+#essai de drop NA avec des missing dans le XGBoost :
+train_is_booking$orig_destination_distance[is.na(train_is_booking$orig_destination_distance)]<- -42
+
+# Pré-traitement pour XGBoost
+hotel<-train_is_booking$hotel_cluster
+X <- sparse.model.matrix(hotel~.-1, data = train_is_booking)
+xgtrain <- xgb.DMatrix(data=X, label=hotel)
+gc()
+
+# Enregistrement du modèle (A CORRIGER)
+cv.res <- xgb.cv(data=xgtrain, nfold=5, nrounds=2, objective="rank:pairwise", eval_metric="map@5", verbose=1)
 
 # Libération intermédiaire de mémoire :
 rm(train_is_booking)
-rm(train_hotel_cluster)
+#rm(train_hotel_cluster)
 gc()
 
 
-###############
-# APPLICATION #
-###############
+
+###########
+   SOL 2  (A APPROFONDIR)
+###########
+
+# Si on a pas fait la partie du dessus juste avant (ie. on utilise le fread des commentaires ci-dessous)
+library("lubridate")
+library("data.table")
+library("BBmisc")
+library("dplyr")
+library(class)
+library(e1071)
+library('xgboost')
+library(stringr)
+
+# C'est ici que ça commence vraiment :
+library(Matrix)
+
+# Back-Up :
+#
+# copie<-train_is_booking
+# train_is_booking<-copie
+
+# write.csv(train_is_booking, file='train_is_booking.csv')
+
+# train_is_booking<-fread('train_is_booking.csv',header=TRUE)
+# train_is_booking<-train_is_booking %>% BBmisc::dropNamed("V1")
+label<-train_is_booking$hotel_cluster
+train_is_booking<-train_is_booking %>% BBmisc::dropNamed("hotel_cluster")
+
+
+
+#essai de drop NA par la moyenne (ça marche, à voir pour la précision) [PAS UTILISE POUR LE MOMENT] :
+train_is_booking$orig_destination_distance[is.na(train_is_booking$orig_destination_distance)]<-mean(na.omit(train_is_booking$orig_destination_distance))
+data=as.matrix(train_is_booking[1:nrow(train_is_booking)])
+xgmat<-xgb.DMatrix(data, label=label)
+
+
+#essai de drop NA avec des missing dans le XGBoost :
+train_is_booking$orig_destination_distance[is.na(train_is_booking$orig_destination_distance)]<- -42
+data=as.matrix(train_is_booking[1:nrow(train_is_booking)])
+xgmat<-xgb.DMatrix(data, label=label, missing=-42)
+
+
+
+params=list("objective" = "rank:pairwise", "nthread" = 2, "eval_metric" = "map@5")
+
+bst = xgboost(params=params, data=xgmat, nround=1)
+# Marche pas trop pour le moment ... Crash de R, va savoir d'où ça vient l'erreur est jamais la même -.-'
+
+
+
+
+
+
+#################
+#/-------------\#
+#  APPLICATION  #
+#\-------------/#
+#################
+
 
 # Préparation du csv de sortie :
 test<-fread('PROJET_SPE/test.csv',header=TRUE)
