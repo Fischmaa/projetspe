@@ -1,9 +1,9 @@
 [Retour au sommaire d'Expedia](expedia_sommaire.md)
 
 Sommaire : 
-* [Interprétation des données](#Interprétation-des-données) 
-* [Interaction entre les variables données](#Interaction-entre-les-variables-données)
-* [Ajout de variables et interprétation](# Ajout de variables et interprétation )
+* [Interprétation des données](expedia_intepretation_data.md#interprétation-des-données) 
+* [Interaction entre les variables données](expedia_intepretation_data.md#interaction-entre-les-variables-données)
+* [Ajout de variables et interprétation](expedia_intepretation_data.md#ajout-de-variables-et-interprétation)
 
 # Interprétation des données
 
