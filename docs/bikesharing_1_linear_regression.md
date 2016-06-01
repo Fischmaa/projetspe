@@ -2,7 +2,7 @@
 ## Regression linéaire
 
 Pour une première approche de prédiction on utilise un algorithme de regression linéaire.
-Nous avons choisi de l'implémenté tout d'abord en [R](#r), puis en [Python](#r).
+Nous avons choisi de l'implémenté tout d'abord en [R](#r), puis en [Python](#python).
 
 ### R
 
