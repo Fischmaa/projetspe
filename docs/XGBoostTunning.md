@@ -89,9 +89,51 @@ C'est un paramètre important pour comparer différents modèles : il faut utili
 
 # XGBoost
 
-### Avantage 
+## Avantage 
 
 * **Regularisation** : 
 
+Inexistant dans le Gradient Boosting, on peut ajouter un terme de régularisation qui permet de lutter contre l'over-fitting.
+[Plus d'explication](http://www.analyticsvidhya.com/blog/2015/02/avoid-over-fitting-regularization/)
 
+* **Parralélisation** :
+
+Accélère considérablement les calculs par rapport au Gradient Boosting.
+
+* **Flexibilité** :
+
+Permet de gérer les critères d'évaluations et les fonctions objectives du modèle.
+
+* **Données manquantes** :
+
+XGBoost peut gérer les données manquantes.
+
+* **Elagage des arbres de décision** :
+
+Contrairement au Gradient Boosting qui est un algorithme glouton, XGBoost fait des recherches intélligentes dans le parcours des arbres pour supprimer des noeuds inutiles par exemples.
+
+* **Cross-Validation** :
+
+Permet de faire une cross-validation à chaque itération et permet donc de booster les paramètres en une seule fois (contrairement au Gradient Boosting).
+
+* **Reprendre un modèle déjà existant** : 
+
+Permet de reprendre un modèle XGBoost depuis ca dernière itération.
+
+[Plus d'informations](http://xgboost.readthedocs.io/en/latest/model.html)
+
+## Paramètres de XGBoost 
+
+Il y a trois types de paramètres sur lesquels on peut agir en utilisant XGBoost : 
+* paramètres généraux
+* paramètres de boosting 
+* paramètres d'apprentissage
+
+### Paramètres généraux 
+
+* **booster[default=gbtree]** :
+
+Permet de choisir le modèle à utiliser : 
+..*gbtree : modèle d'abre de décision
+..*gblinear : modèle linéaire
 
