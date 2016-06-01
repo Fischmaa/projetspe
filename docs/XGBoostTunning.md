@@ -16,7 +16,7 @@ Il y a différents algorithmes de boosting :
 * AdaBoost (Adaptive Boosting)
 * Gradient Tree Boosting 
 * XGBoost (Extreme Gradient Boost)
-* 
+
 ## Gradient Boosting
 
 Il y a trois types de paramètres sur lesquels on peut agir en faisant du gradient boosting : 
