@@ -37,7 +37,7 @@ train$dayofyear_ci<-round(as.numeric(difftime(strptime(as.Date(train$srch_ci), f
 train[, date_time := NULL]
 train[, srch_ci := NULL]
 train[, srch_co := NULL]
-gc()
+#gc()
 # On se demande si on utilise la moyenne pour remplace les NA (?) :
 # train$orig_destination_distance[is.na(train$orig_destination_distance)]<-mean(na.omit(train$orig_destination_distance))
 
@@ -54,7 +54,7 @@ test$dayofyear_ci<-round(as.numeric(difftime(strptime(as.Date(test$srch_ci), for
 test[, date_time := NULL]
 test[, srch_ci := NULL]
 test[, srch_co := NULL]
-gc()
+#gc()
 
 # Création du modèle :
 classifier<-naiveBayes(as.factor(hotel_cluster)~.,data=train)
