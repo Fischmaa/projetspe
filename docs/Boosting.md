@@ -16,7 +16,7 @@ Sommaire :
 
 
 # Boosting Algorithms
-![Introduction to Boosting Algorithms](http://www.analyticsvidhya.com/blog/2015/11/quick-introduction-boosting-algorithms-machine-learning/)
+[Source](http://www.analyticsvidhya.com/blog/2015/11/quick-introduction-boosting-algorithms-machine-learning/)
 
 *Boosting* : famille d'algorithmes d'optimisation de variables. L'idée est de transformer des weak learner en strong learner.
 
@@ -32,7 +32,7 @@ Il y a différents algorithmes de boosting :
 * XGBoost (Extreme Gradient Boost)
 
 # Gradient Boosting
-![Gradient Boosting Tunning](http://www.analyticsvidhya.com/blog/2016/02/complete-guide-parameter-tuning-gradient-boosting-gbm-python/)
+[Source](http://www.analyticsvidhya.com/blog/2016/02/complete-guide-parameter-tuning-gradient-boosting-gbm-python/)
 
 Il y a trois types de paramètres sur lesquels on peut agir en faisant du gradient boosting : 
 * paramètres spécifiques aux arbres de décision
@@ -92,7 +92,7 @@ Graine du générateur de nombre aléatoire.
 C'est un paramètre important pour comparer différents modèles : il faut utiliser la même graine.
 
 # XGBoost
-
+[Source](http://www.analyticsvidhya.com/blog/2016/03/complete-guide-parameter-tuning-xgboost-with-codes-python/)
 ## Avantage 
 
 * **Regularisation** : 
