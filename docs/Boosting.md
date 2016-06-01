@@ -1,6 +1,12 @@
 
 [Retour au sommaire d'Expedia](expedia_sommaire.md)
 
+Sommaire : 
+* [Boosting Algorithms](https://github.com/matthiasbe/projetspe/blob/master/docs/Boosting.md#boosting-algorithms) 
+* [Gradient Boosting](https://github.com/matthiasbe/projetspe/blob/master/docs/Boosting.md#gradient-boosting)
+* [XGBoost](https://github.com/matthiasbe/projetspe/blob/master/docs/Boosting.md#xgboost)
+
+
 # Boosting Algorithms
 ![Introduction to Boosting Algorithms](http://www.analyticsvidhya.com/blog/2015/11/quick-introduction-boosting-algorithms-machine-learning/)
 
