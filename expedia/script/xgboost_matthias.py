@@ -28,8 +28,11 @@ import os
 
 train = pd.read_csv('../train.csv',iterator = True, chunksize = 1000000)
 tab_train = train.get_chunk()
+count = 1
 print('creation premier tableau...')
 for chunk in train :
+	count += 1	
+	print(count * 100 /38 )	
 	tab_train = pd.concat([tab_train, chunk])
 print('fin premier tableau')
 
