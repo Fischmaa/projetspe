@@ -1,7 +1,7 @@
 
 [Retour au sommaire d'Expedia](expedia_sommaire.md)
 
-## Boosting Algorithms
+# Boosting Algorithms
 ![Introduction to Boosting Algorithms](http://www.analyticsvidhya.com/blog/2015/11/quick-introduction-boosting-algorithms-machine-learning/)
 
 Boosting : famille d'algorithmes d'optimisation de variables. L'idée est de transformer des weak learner en strong learner.
@@ -17,7 +17,7 @@ Il y a différents algorithmes de boosting :
 * Gradient Tree Boosting 
 * XGBoost (Extreme Gradient Boost)
 
-## Gradient Boosting
+# Gradient Boosting
 ![Gradient Boosting Tunning](http://www.analyticsvidhya.com/blog/2016/02/complete-guide-parameter-tuning-gradient-boosting-gbm-python/)
 
 Il y a trois types de paramètres sur lesquels on peut agir en faisant du gradient boosting : 
