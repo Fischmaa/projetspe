@@ -13,7 +13,9 @@
 \usepackage[T1]{fontenc}
 \usepackage[french]{babel}
 \usepackage{enumitem}
-\setlength{\parindent}{0cm}
+\setlength{\parindent}{0cm} % Retire les indentation en début de paragraphe
+\makeatletter
+\@addtoreset{section}{part}
 
 \renewcommand{\headrulewidth}{1pt}
 \fancyhead[R]{\textbf{page \thepage}} 
@@ -48,7 +50,7 @@ Ce document permet de montrer le travail effectué par l'équipe kaggle n5. Il p
 \section{Objectifs}
 Nous avons décidé de résoudre différents projets kaggle afin de comprendre le principe de prédiction sur un échantillon de données quand on possède un jeu de données d’entraînement. Cette étude s'inscrit dans le cursus de l'ENSIMAG en constituant une application concrète des cours de fouille de données et de systèmes intelligents. Ce document est composé de deux parties : une partie sur un sujet rapide pour se familiariser avec kaggle (bikesharing) et une partie sur un sujet avec un grand jeu de données (Expedia hotels recommendations).
 
-\include{chapitre1-bikesharing}
-\include{chapitre2-expedia}
+\include{bikesharing/chapitre1-bikesharing}
+\include{expedia/chapitre2-expedia}
 
 \end{document}

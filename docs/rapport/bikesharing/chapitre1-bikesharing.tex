@@ -1,0 +1,60 @@
+\part{Bikesharing}
+
+\textbf{Objectif :} Soumission d'une solution au problème kaggle : Bike Sharing Demand
+\\
+
+\section{Le problème}
+
+\textbf{Résumé du problème :} On possède les données de circulation des vélos du type des velib parisiens entre différentes stations ainsi que les données météo associées. On cherche à prédire dans quelles quantitée sont loués les vélos, dans le système de location de vélo de la ville de Washigton.
+\\
+
+\section{Étude des données}
+
+\textbf{Données disponibles :} On possède les données sur deux ans. Les 19 premiers jours de chaque mois constituent les training set, il s'agit des données permettant de calibrer le modèle. Le reste du mois correspond aux données pour valider le modèle.
+\\
+
+On possède une jeu de données contenant des informations différentes selon le types de données :\\
+
+\textbf{Données d'entrainement et de test : } (train.csv et test.csv)
+
+\begin{itemize}[label=$\circ$]
+\item Jour et heure
+\item Saison
+\item Vacances, semaine ou weekend
+\item Temps qu'il fait
+\item Températures : ressentie et réelle
+\item Humidité
+\item Vitesse du vent
+\end{itemize}
+
+\textbf{Données d'entrainement uniquement : } (train.csv)
+
+\begin{itemize}[label=$\circ$]
+\item Nombre de vélos loués par des inscrits
+\item Nombre de vélos loués par des non-inscrits
+\item Nombre de vélos loués au total
+\end{itemize}
+
+\section{Introduction aux modèles}
+
+Nous avons mis en place différents modèles prédictifs, en abordant le problème de manière différente à chaque itération. Nous allons détailler les différents raisonnements suivis, puis nous comparerons les résultats.
+
+\section{Premier modèle : Régression linéaire}
+
+\subsection{En R}
+
+\subsubsection{utilisation de données continues}
+
+La toute première solution envisagée était d'effectuer une régression linéaire directement sur les données du problème.
+
+\subsubsection{Séparation en 2 modèles : semaine et week-end}
+
+Le résultat était loin d'être satisfaisant : après avoir exploré les forums de discussion de Kaggle nous avons vu qu'il était possible de descendre à un score proche 0,7. Nous avons essayé d'identifier ce qui pourrait expliquer le problème de convergence de notre modèle; après étude graphique des données, nous nous sommes rendus compte qu'il fallait trouver un modèle différent pour la semaine et pour le week-end. Nous avons donc découpé le jeu de données selon la valeur de day et avons effectué une regression linéaire pour chaque ensemble.
+
+\subsubsection{Introduction de données discrètes et découpage du problème}
+
+\subsubsection{Modélisation de Poisson}
+
+\subsection{Python}
+
+
