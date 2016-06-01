@@ -132,6 +132,6 @@ Il y a trois types de paramètres sur lesquels on peut agir en utilisant XGBoost
 ### Paramètres généraux 
 
 * **booster[default=gbtree]** : Permet de choisir le modèle à utiliser.
-⋅⋅* gbtree : modèle d'abre de décision
-..* gblinear : modèle linéaire
+  * gbtree : modèle d'abre de décision
+  * gblinear : modèle linéaire
 
