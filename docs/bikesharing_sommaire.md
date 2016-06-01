@@ -6,7 +6,7 @@
 
 **Résumé du problème :** On possède les données de circulation des vélos du type des *velib* parisiens entre différentes stations ainsi que les données météo associées. On cherche à prédire dans quelles quantitée sont loués les vélos, dans le système de location de vélo de la ville de Washigton.
 
-**Données disponible :** Données sur deux ans. Les 19 premiers jours de chaque mois constituent les `training set`, il s'agit des données permettant de calibrer le classificateur. Le reste du mois correspond aux données pour tester le classificateur.
+**Données disponibles :** Données sur deux ans. Les 19 premiers jours de chaque mois constituent les `training set`, il s'agit des données permettant de calibrer le classificateur. Le reste du mois correspond aux données pour tester le classificateur.
 
 On possède une jeu de données contenant des informations différentes selon le types de données :
 
