@@ -38,13 +38,15 @@ print ('début pretraitement...')
 X_train = tab_train.drop(['hotel_cluster','date_time','srch_ci','srch_co',],1).as_matrix()
 Y_train = tab_train['hotel_cluster'].as_matrix()
 print ('fin pretraitement')
-
+print('suppresion premier tableau')
+del tab_train
 #creation du modèle avec fitting
 print('début modèle...')
-gbm = xgb.XGBClassifier(max_depth=4, n_estimators=300, learning_rate=0.05)
+gbm = xgb.XGBClassifier(max_depth=3, n_estimators=300, learning_rate=0.05)
 gbm.fit(X_train,Y_train)
 print('fin modèle...')
-
+del X_train
+del Y_train
 #sauvegarde modèle
 print('sauvegarde du modèle...')
 if not os.path.isdir('modeles'):
@@ -60,8 +62,7 @@ feature = pd.Series(gbm.booster().get_fscore()).sort_values(ascending = False)
 feature.to_csv('features/premier_feature.csv')
 print('fin sauvegarde...')
 
-print('suppresion premier tableau')
-del tab_train
+
 
 #on utilise le tableau test
 test = pd.read_csv('../test.csv' , iterator = True, chunksize = 1000000)
