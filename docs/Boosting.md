@@ -4,7 +4,15 @@
 Sommaire : 
 * [Boosting Algorithms](https://github.com/matthiasbe/projetspe/blob/master/docs/Boosting.md#boosting-algorithms) 
 * [Gradient Boosting](https://github.com/matthiasbe/projetspe/blob/master/docs/Boosting.md#gradient-boosting)
+  * [Arbres de décision](https://github.com/matthiasbe/projetspe/blob/master/docs/Boosting.md#param%C3%A8tres-sp%C3%A9cifiques-aux-arbres-de-d%C3%A9cision)
+  * [Boosting](https://github.com/matthiasbe/projetspe/blob/master/docs/Boosting.md#param%C3%A8tres-de-boosting)
+  * [Autres](https://github.com/matthiasbe/projetspe/blob/master/docs/Boosting.md#autres-param%C3%A8tres)
 * [XGBoost](https://github.com/matthiasbe/projetspe/blob/master/docs/Boosting.md#xgboost)
+  * [Avantages](https://github.com/matthiasbe/projetspe/blob/master/docs/Boosting.md#avantage)
+  * [Paramètres](https://github.com/matthiasbe/projetspe/blob/master/docs/Boosting.md#param%C3%A8tres-de-xgboost)
+    * [Généraux](https://github.com/matthiasbe/projetspe/blob/master/docs/Boosting.md#param%C3%A8tres-g%C3%A9n%C3%A9raux)
+    * [Boosting](https://github.com/matthiasbe/projetspe/blob/master/docs/Boosting.md#param%C3%A8tres-de-boosting--pour-les-arbres-de-d%C3%A9cisions)
+    * [Apprentissage](https://github.com/matthiasbe/projetspe/blob/master/docs/Boosting.md#param%C3%A8tres-dapprentissage)
 
 
 # Boosting Algorithms
