@@ -60,6 +60,9 @@ feature = pd.Series(gbm.booster().get_fscore()).sort_values(ascending = False)
 feature.to_csv('features/premier_feature.csv')
 print('fin sauvegarde...')
 
+print('suppresion premier tableau')
+del tab_train
+
 #on utilise le tableau test
 test = pd.read_csv('../test.csv' , iterator = True, chunksize = 1000000)
 tab_test = test.get_chunk()
