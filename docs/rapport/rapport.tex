@@ -1,0 +1,44 @@
+% !TEX TS-program = pdflatex
+% !TEX encoding = UTF-8 Unicode
+
+% This is a simple template for a LaTeX document using the "article" class.
+% See "book", "report", "letter" for other types of document.
+
+\documentclass[12pt,a4paper]{article} % use larger type; default would be 10pt
+
+\usepackage[utf8]{inputenc} % set input encoding (not needed with XeLaTeX)
+\usepackage{fancyhdr} %for the head 
+\pagestyle{fancy} 
+\fancyhf{}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+
+\renewcommand{\headrulewidth}{1pt}
+\fancyhead[R]{\textbf{page \thepage}} 
+\fancyhead[L]{Rapport projet spécialité}
+% \geometry{landscape} % set up the page for landscape
+%   read geometry.pdf for detailed page layout information
+
+\title{Rapport du projet de spécialité}
+\author{Baillet Valérian\\Beaupère Matthias\\Fischman Adrien\\Meuret Thibault}
+%\date{\vspace{-1ex}}
+\date{10 juin 2016} % Activate to display a given date or no date (if empty),
+         % otherwise the current date is printed 
+
+\begin{document}
+%\thispagestyle{empty}
+%\pagenumbering{gobble}
+\maketitle
+
+\newpage
+\tableofcontents
+
+\newpage
+
+\section{Résumé}
+Ce document permet de montrer le travail effectué par l'équipe kaggle n5. Il permet d'avoir des informations sur les données utilisées ainsi que les interprétations faites sur ces données. Il permet aussi de recenser les démarches empruntées et les algorithmes utilisés pour pouvoir répondre aux différents challenges kaggle.
+
+\section{Objectifs}
+Nous avons décidé de résoudre différents projets kaggle afin de comprendre le principe de prédiction sur un échantillon de données quand on possède un jeu de données d’entraînement. Cette étude s'inscrit dans le cursus de l'ENSIMAG en constituant une application concrète des cours de fouille de données et de systèmes intelligents. Ce document est composé de deux parties : une partie sur un sujet rapide pour se familiariser avec kaggle (bikesharing) et une partie sur un sujet avec un grand jeu de données (expedia hotels recommendations).
+
+\end{document}
