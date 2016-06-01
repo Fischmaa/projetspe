@@ -4,3 +4,9 @@
 expedia/destinations.csv
 expedia/test.csv
 expedia/train.csv
+
+*.aux
+*.log
+*.out
+*.toc
+*synctex.gz
