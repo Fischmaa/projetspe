@@ -15,6 +15,7 @@ d'effectuer des calculs sur l'ensemble du dataset sans traiter les données et o
 2. [Interprétation des données](expedia_intepretation_data.md)
 3. [Fonction de notation du challenge](expedia_notation.md)
 4. [Algorithmes retenus](algorithmes.md)
+5. [Méthode de Boosting](Boosting.md)
 
 
 
