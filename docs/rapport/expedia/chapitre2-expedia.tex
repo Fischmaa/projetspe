@@ -1,1 +1,120 @@
-Fichier 1 \LaTeX
+\part{Expedia hotels recommandation}
+
+Comme deuxième problème, nous avons choisi d'étudier un autre challenge kaggle, plus compliqué cette fois. Plus compliqué par son nombre de variables et par leur complexité. Plus compliqué aussi parce que la quantité de donnée est très importante, soulevant des nouvelles difficultés. En effet, il n'est pas possible de charger toutes les données en mémoire ou même d'effectuer des calculs sur l'ensemble du dataset sans traiter les données et optimiser le code.
+
+\section{Explication des données}
+
+Pour le problème Expedia, on possède beaucoup de données, on va donc ici détailler les différentes données et leur signification.
+
+\subsection{Aperçu des fichiers du challenge}
+
+Sur la page du challenge, on nous propose de télécharger quatre fichiers:
+
+\begin{itemize}[label=$\circ$]
+	\item \verb|train.csv| : Regroupe les données d'entrainement. Ce fichier fait 38 millions de lignes. Il s'agit d'un échantillon pris parmi les données d'Expedia des années 2013 et 2014. Ces données correspondent aux recherches d'hôtels et aux réservations faites par les utilisateurs.
+	\item \verb|test.csv| : Regroupe les données de test. Fichier de 2,5 millions de lignes. Ce fichier regroupe les données de 2015 concernant uniquement les réservations faites par les utilisateurs.
+	\item \verb|sample_submission.csv| : Un exemple de fichier à soumettre.
+	\item \verb|destinations.csv| : Des informations sur les hôtels traduis en float (avis sur les hôtels, données de recherche ...)
+\end{itemize}
+
+\subsection{Fichiers d'entrainement et de test}
+
+Nous étudions ici plus en détail les fichier \verb|train.csv| et \verb|test.csv|. Chaque ligne de ces fichiers correspond à une réservation ou un clic effectué par un utilisateur sur un hôtel lors de sa naviguation sur un des sites internet de Expedia. Nous sont données également les informations sur la recherche qui a conduit à cet évènement.\\
+
+Donnons tout d'abord le nombre de colonnes de chacun, ainsi que le type des évènements :
+\begin{itemize}[label=$\circ$]
+	\item \verb|train.csv| possède 25 colonnes, clic ou réservation
+	\item \verb|test.csv| possède 23 colonnes, réservation uniquement
+\end{itemize}
+
+\subsubsection{Contexte de recherche}
+
+\begin{itemize}[label=$\triangleright$]
+	\item \verb|date_time| La date du clic/de la réservation sous forme de timestamp. Attention, \verb|date_time| est relatif au \verb|site_name| 
+	\item \verb|site_name| : Identifiant du nom de domaine (i.e. Expedia.com, Expedia.co.uk, Expedia.co.jp, ...) \
+	\item \verb|posa_continent| Identifiant du continent associé au nom de domaine 
+	\item \verb|is_mobile| : Booléen concernant la plateforme d'accès au site. Vaut \verb|1| si l'utilisateur à accédé au site depuis un mobile 
+	\item \verb|channel| : Information concernant le moyen d'accès à la page expedia. Par exemple "Direct", "SEM" (via les liens payés à google), "Meta channel" (via Tripadvisor par exemple), etc.
+	\item \verb|date_time| : [Entrainement uniquement] Nombre de clic/réservations effectués pendant la même session par l'utilisateur, les sessions prennent fin après 30 minutes d'inactivité. S'il s'agit d'une session conduisant à un booking \verb|is_booking==1| alors on peut supposer que \verb|cnt==1| car le plus généralement il y a qu'une réservation pas session.
+\end{itemize}
+
+\subsubsection{Informations sur l'utilisateur}
+
+\begin{itemize}[label=$\triangleright$]
+	\item \verb|user_location_country|   :  Identifiant du pays de l'utilisateur
+	\item \verb|user_location_region|    :  Identifiant de la région de l'utilisateur
+	\item \verb|user_location_city|      :  Identifiant de la ville de l'utilisateur. Attention, des villes ont le même nom dans différents pays, il faut donc relier \verb|user_location_city| à \verb|user_location_country| systématiquement.
+	\item \verb|user_id|                 :  Identifiant de l'utilisateur
+\end{itemize}
+
+\subsubsection{Informations sur l'évènement}
+
+\begin{itemize}[label=$\triangleright$]
+	\item \verb|is_package| : `1` si le clic/la réservation a été généré avec un vol
+	\item \verb|orig_destination_distance`| : **Distance** physique entre la position de l'utilisateur et celle de l'hôtel cliqué/reservé. Attention : distance exprimée en miles.
+	\item \verb|is_booking`| : [Entrainement] `1` Si il s'agit d'une réservation, `0` si il s'agit d'un clic
+\end{itemize}
+
+\subsubsection{Informations sur la recherche conduisant au clic/à la réservation}
+
+\begin{itemize}[label=$\triangleright$]
+	\item \verb|srch_cI| : Date de début du voyage spécifié lors de la recherche qui a conduit au clic/à la réservation
+	\item \verb|srch_co| : Date de fin du voyage
+	\item \verb|srch_adult_cnt| : Nombre d'adultes faisant partie du voyage
+	\item \verb|srch_children_cnt| : Nombre d'enfants faisant partie du voyage
+	\item \verb|srch_rm_cnt| : Nombre de chambre demandé
+	\item \verb|srch_destination_id| : ID de la destination spécifiée lors de la recherche
+	\item \verb|srch_destination_type_id| : Le type de cette destination
+\end{itemize}
+
+\subsubsection{Informations sur l'hôtel}
+
+\begin{itemize}[label=$\triangleright$]
+	\item \verb|hotel_continent| : Continent sur lequel se trouve l'hôtel
+	\item \verb|hotel_country| : Pays dans lequel se trouve l'hôtel
+	\item \verb|hotel_market| : Zone géographique précise qui recouvre différentes destinations spécifiées dans \verb|srch_destination_id|
+	\item \verb|hotel_cluster| : [Entrainement seulement] Type d'hôtel, Id du cluster auquel il appartient. Les clusters sont créés en fonctions de la popularité de l'hotel, des notations (étoiles), des avis d'utilisateurs, des prix, des distances aux centre-ville, des aménagements, etc. Les hôtels peuvent appartenir à différents clusters en fonction de la saison (populaire et cher en été pour la plage mais pas cher et pas populaire en hiver par exemple).
+\end{itemize}
+
+\subsection{Fichier de destination}
+
+Le fichier \verb|destinations.csv| contient des informations sur les différentes régions recherchées par les utilisateurs. Il contient 62 mille régions différentes et 150 colonnes.
+
+\begin{itemize}[label=$\triangleright$]
+	\item La première colonne \verb|srch_destination_id| correspond à une des régions recherchées.
+	\item Les 149 autres colonnes \verb|d1| à \verb|d149| correspondent à des caractéristiques de la régions basées sur les avis donnés par utilisateurs aux hôtels qui s'y trouvent. Ces informations permettent de construire des similitudes et des différences entre les différentes régions.
+\end{itemize}
+
+Toutes les valeurs de \verb|srch_destination_id| ne peuvent être retrouvées dans destinations.csv comme nous l'avons observé en chiffre dans la section \ref{chiffres_destinations}. En effet, certaines régions ne possèdent pas d'hôtels assez récents pour construire les informations nécessaire à la complétion de la table des destinations.
+
+\subsection{En chiffres}
+\label{chiffres}
+
+Il est plus facile de se représenter les données avec quelques chiffres clés. Nous allons donc donner des données concernant les fichiers.
+
+\subsubsection{Nombre de lignes}
+
+\begin{itemize}[label=$\circ$]
+	\item \verb|train.csv| : 37 millions 670 294 lignes (3,8 Go)
+	\item \verb|test.csv| : 2 millions 528 244 lignes (263,7 Mo)
+	\item \verb|destinations.csv| : 62 107 lignes (131,8 Mo)
+\end{itemize}
+
+\subsubsection{Nombre de destinations}
+\label{chiffres_destinations}
+
+\begin{itemize}[label=$\circ$]
+	\item \verb|train.csv| : 59 455 destinations différentes (1.662 qui ne sont pas dans destinations.csv)
+	\item \verb|test.csv| : 40 718 destinations différentes (2.763 qui ne sont pas dans destinations.csv)
+	\item \verb|destinations.csv| : 62 106 destinations différentes
+\end{itemize}
+
+
+\subsubsection{Nombre de destinations}
+
+\begin{itemize}[label=$\circ$]
+	\item \verb|train.csv| : 1 million 198 786 utilisateurs
+	\item \verb|destinations.csv| : 1 million 181 577 utilisateurs
+\end{itemize}
+
+

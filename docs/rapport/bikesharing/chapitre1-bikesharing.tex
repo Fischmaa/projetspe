@@ -1,21 +1,23 @@
 \part{Bikesharing}
 
-\textbf{Objectif :} Soumission d'une solution au problème kaggle : Bike Sharing Demand
+\paragraph{Objectif}
+Soumission d'une solution au problème kaggle : Bike Sharing Demand
 \\
 
 \section{Le problème}
 
-\textbf{Résumé du problème :} On possède les données de circulation des vélos du type des velib parisiens entre différentes stations ainsi que les données météo associées. On cherche à prédire dans quelles quantitée sont loués les vélos, dans le système de location de vélo de la ville de Washigton.
+\paragraph{Résumé du problème}
+On possède les données de circulation des vélos du type des velib parisiens entre différentes stations ainsi que les données météo associées. On cherche à prédire dans quelles quantitée sont loués les vélos, dans le système de location de vélo de la ville de Washigton.
 \\
 
 \section{Étude des données}
 
-\textbf{Données disponibles :} On possède les données sur deux ans. Les 19 premiers jours de chaque mois constituent les training set, il s'agit des données permettant de calibrer le modèle. Le reste du mois correspond aux données pour valider le modèle.
+\paragraph{Données disponibles} On possède les données sur deux ans. Les 19 premiers jours de chaque mois constituent les training set, il s'agit des données permettant de calibrer le modèle. Le reste du mois correspond aux données pour valider le modèle.
 \\
 
 On possède une jeu de données contenant des informations différentes selon le types de données :\\
 
-\textbf{Données d'entrainement et de test : } (train.csv et test.csv)
+\textbf{Données d'entrainement et de test : } \verb|train.csv| et \verb|test.csv|
 
 \begin{itemize}[label=$\circ$]
 \item Jour et heure
@@ -27,7 +29,7 @@ On possède une jeu de données contenant des informations différentes selon le
 \item Vitesse du vent
 \end{itemize}
 
-\textbf{Données d'entrainement uniquement : } (train.csv)
+\textbf{Données d'entrainement uniquement : } \verb|train.csv|
 
 \begin{itemize}[label=$\circ$]
 \item Nombre de vélos loués par des inscrits
@@ -57,4 +59,56 @@ Le résultat était loin d'être satisfaisant : après avoir exploré les forums
 
 \subsection{Python}
 
+\section{Deuxième modèle : Random Forest}
 
+\subsection{Présentation du Random Forest}
+
+L'algorithme du Random Forest est très utilisé pour le challenge kaggle. Cet algorithme demande une grande puissance de calcul mais certifie une très bonne prédiction dans bon nombre de cas.\\
+
+Pour illustrer l'algorithme, nous avons représenté avec la figure \ref{arbredecision} un arbre de décision minimaliste. Dans ce cas, on observe l'impact de l'humidité sur les résultats. Pour chaque nœud de l'arbre, le chiffre supérieur correspond à la moyen des locations par heure et le pourcentage correspond à la proportion de la population considérée.
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[scale=0.5]{../images/random_forest_bikesharing}
+	\caption{Exemple d'arbre de décision en prenant la variable humidity}
+	\label{arbredecision}
+\end{figure}
+
+Ainsi le random forest correspond à la génération d'arbres de décision dont les variables utilisées sont aléatoires. On fait ensuite une commité de vote entre les différents arbres.\\
+
+\subsection{Python}
+
+Nous implémenté cet algorithme en Python. Cela nous a permit d'obtenir un score de 0,68 sur le challenge kaggle. Il est important de préciser que nous avons uniquement pu utiliser 30 arbres alors que cette technique nécessite une centaine d'arbres pour être efficace. Cette limitation est due à un manque de ressources de calcul.\\
+
+\subsubsection{Mise en forme des données}
+
+Pour pouvoir appliquer l'algorithme du random forest dans les meilleurs conditions, une mise en forme des données a été nécessaire. Il est à noter que ce conditionnement est similaire à celui employé pour les autres techniques de prédiction. Nous le redonnons ici à titre d'information.\\
+
+\begin{itemize}[label=$\circ$]
+\item Nous avons indiquer à notre algorithme de considérer les variable telles que \verb|season| ou \verb|weather| comme des variables discrètes. Ceci est fait en Python grâce à l'instruction \verb|as_type('categorie')|.
+\item Nous avons créé des nouvelles colonne d'information : la colonne \verb|date| qui contient la date de l'enregistrement au format \verb|Datetime| et qui permet de créer la colonne \verb|hour| qui contient l'heure de la journée sous forme d'un entier.
+\end{itemize}
+
+\subsubsection{Algorithme}
+
+Le programme Python est donné en annexe . Nous fournissons ici une idée de l'algorithme en pseudo-code.
+
+\begin{algorithm}[H]
+	\Begin{
+		Lecture des fichiers csv\\
+		Création de la date et de l'heure\\
+		Discrétisation des variables\\
+		Sélection des données\\
+		Entrainement du modèle\\
+		Prédiction sur le test\\
+		Mise en forme et ecriture du résultat en csv
+	}
+
+	\caption{\label{randomforestpython}Application du Random Forest}
+\end{algorithm}
+
+\subsubsection{Remarque sur le traitement des données}
+
+On a ici limité le traitement des données. Ce n'était en effet pas le but premier de cet exercice. Nous cherchions ici plutôt à prendre en main le langage et le forme de challenge kaggle plutôt qu'à optimiser au mieux les algorithme.\\
+
+Les premières étapes d'un travail plus poussé serait de déterminer de meilleurs variables définissant le systèmes. C'est ce type d'approche que l'on essaiera de développer sur le challenge suivant.
