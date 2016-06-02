@@ -53,7 +53,7 @@ test[, srch_co := NULL]
 #gc()
 
 # Création du modèle :
-classifier<-naiveBayes(as.factor(hotel_cluster)~.,data=train, laplace=0.01)
+classifier<-naiveBayes(as.factor(hotel_cluster)~.,data=train, laplace=1)
 submission$hotel_cluster<-gsub(",","",toString(rev((order(predict(classifier, test, type="raw"))-1)[96:100])))
 
 write.csv(submission, file = "submission_Naive_Bayes_essai.csv", row.names=FALSE)
