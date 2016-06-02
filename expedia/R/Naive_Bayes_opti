@@ -16,9 +16,8 @@ test <- fread('./test.csv', header = T, stringsAsFactors = F)
 # On supprime les colonnes inutiles (cnt, hotel_cluster, id ...)
 train[,is_booking := NULL]
 train[,cnt := NULL]
-train[,id := NULL]
 #submission<-data.frame(id=test$id,hotel_cluster=NA)
-submission<-data.frame(id=train$id,hotel_cluster=character(1))
+submission<-data.frame(id=test$id,hotel_cluster=character(1))
 test[, id := NULL]
 #gc()
 
@@ -57,8 +56,8 @@ test[, srch_co := NULL]
 
 # Création du modèle :
 classifier<-naiveBayes(as.factor(hotel_cluster)~.,data=train, laplace=0.01)
-prediction$res<-gsub(",","",toString(rev((order(predict(classifier, test, type="raw"))-1)[96:100])))
+submission$hotel_cluster<-gsub(",","",toString(rev((order(predict(classifier, test, type="raw"))-1)[96:100])))
 
-write.csv(submission, file = "submission_Naive_Bayes.csv", row.names=FALSE)
+write.csv(submission, file = "submission_Naive_Bayes_essai.csv", row.names=FALSE)
 
 # Copier jusqu'ici pour avoir l'exec de la dernière ligne ;)
