@@ -1,5 +1,4 @@
 # Packages
-require(xgboost)
 require(methods)
 require(data.table)
 require(magrittr)
@@ -9,14 +8,17 @@ require(stringr)
 require(lubridate)
 require(e1071)
 
+# Pseudo-aléatoire
+set.seed(42)
+
 # Lecture de données
 train <- fread('./train.csv', header = T, stringsAsFactors = F)
 test <- fread('./test.csv', header = T, stringsAsFactors = F)
+train = train[sample(1:nrow(train), 2000000, replace=FALSE)]
 
 # On supprime les colonnes inutiles (cnt, hotel_cluster, id ...)
 train[,is_booking := NULL]
 train[,cnt := NULL]
-#submission<-data.frame(id=test$id,hotel_cluster=NA)
 submission<-data.frame(id=test$id,hotel_cluster=character(1))
 test[, id := NULL]
 #gc()
@@ -27,8 +29,6 @@ train$day_action<-day(as.Date(train$date_time))
 train$month_action<-month(as.Date(train$date_time))
 train$day_ci<-day(as.Date(train$srch_ci))
 train$month_ci<-month(as.Date(train$srch_ci))
-#train$day_co<-day(as.Date(train$srch_co))
-#train$month_co<-month(as.Date(train$srch_co))
 train$trip_duration<-as.numeric(as.Date(train$srch_co)-as.Date(train$srch_ci))
 train$dayofyear_action<-round(as.numeric(difftime(strptime(as.Date(train$date_time), format = "%Y-%m-%d"),strptime("01.01.2012", format = "%d.%m.%Y"),units="day"))+1)%%365
 train$dayofyear_ci<-round(as.numeric(difftime(strptime(as.Date(train$srch_ci), format = "%Y-%m-%d"),strptime("01.01.2012", format = "%d.%m.%Y"),units="day"))+1)%%365
@@ -44,8 +44,6 @@ test$day_action<-day(as.Date(test$date_time))
 test$month_action<-month(as.Date(test$date_time))
 test$day_ci<-day(as.Date(test$srch_ci))
 test$month_ci<-month(as.Date(test$srch_ci))
-#test$day_co<-day(as.Date(test$srch_co))
-#test$month_co<-month(as.Date(test$srch_co))
 test$trip_duration<-as.numeric(as.Date(test$srch_co)-as.Date(test$srch_ci))
 test$dayofyear_action<-round(as.numeric(difftime(strptime(as.Date(test$date_time), format = "%Y-%m-%d"),strptime("01.01.2012", format = "%d.%m.%Y"),units="day"))+1)%%365
 test$dayofyear_ci<-round(as.numeric(difftime(strptime(as.Date(test$srch_ci), format = "%Y-%m-%d"),strptime("01.01.2012", format = "%d.%m.%Y"),units="day"))+1)%%365
