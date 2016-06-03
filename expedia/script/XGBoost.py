@@ -15,7 +15,7 @@ from sklearn import cross_validation, metrics   #Additional scklearn functions
 from sklearn.grid_search import GridSearchCV   #Perforing grid search
 
 import matplotlib.pylab as plt
-get_ipython().magic('matplotlib inline')
+#get_ipython().magic('matplotlib inline')
 from matplotlib.pylab import rcParams
 pd.options.mode.chained_assignment = None
 
