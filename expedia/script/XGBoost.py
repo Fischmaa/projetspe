@@ -27,7 +27,7 @@ pd.options.mode.chained_assignment = None
 tab_train = pd.read_csv('../train.csv',iterator = True, chunksize = 1000000)
 train = tab_train.get_chunk()
 print('creation premier tableau...')
-count=1
+count=0
 for chunk in tab_train :
     count += 1
     print(count * 100 /38 )
@@ -48,8 +48,8 @@ from datetime import datetime
 
 #return time duration in days
 def duration(ci,co):
-    arrival = datetime.strptime(ci,'%Y-%m-%d')
-    departure = datetime.strptime(co,'%Y-%m-%d')
+    arrival = datetime.strptime(str(ci),'%Y-%m-%d')
+    departure = datetime.strptime(str(co),'%Y-%m-%d')
     time = departure - arrival
     return time.days 
 
@@ -207,7 +207,7 @@ for i in range(len(train)):
 #return time duration in days
 def anticipation(date,co):
     arrival = date.date()
-    departure = datetime.strptime(co,'%Y-%m-%d')
+    departure = datetime.strptime(str(co),'%Y-%m-%d')
     departure = departure.date()
     time = departure - arrival
     return time.days 
