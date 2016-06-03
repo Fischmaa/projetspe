@@ -1,5 +1,7 @@
 [Retour au sommaire d'Expedia](expedia_sommaire.md)
 
+## Introduction :
+
 ![Source](http://www.analyticsvidhya.com/blog/2015/09/naive-bayes-explained/)
 
 L' algorithme de Naïve Bayes fait partie de la famille des algorithmes de classification. Il s'appuye sur les probabilités a priori des évènements pour déterminer la probabilité avec laquelle l'un d'entre eux va se réaliser; pour cela, il utilise le théorème de Bayes (cf. #Théorème-De-Bayes) et une hypothèse d'indépendance entre les variables.
