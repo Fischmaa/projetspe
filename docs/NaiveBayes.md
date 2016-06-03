@@ -27,7 +27,7 @@ L' algorithme de Naïve Bayes fait partie de la famille des algorithmes de class
 
 ## Comment ça marche :
 
-L'algorithme se décompense en plusieurs étapes :
+L'algorithme se décompose en plusieurs étapes :
 
 1. Convertir les données en une table de fréquence
 2. Faire la table de probabilité correspondante 
@@ -48,6 +48,6 @@ D'où :
 
 P (Yes|Sunny) = 0.33 * 0.64 / 0.36 = 0.60
 
-On privilégiera donc la réponse Yes quand on a Sunny à la réponse non car :
+On privilégiera donc la réponse Yes (plutôt que No) quand on a Sunny car :
 
 P(No|Sunny) = 1 - P(Yes|Sunny) = 0.40 < 0.60
