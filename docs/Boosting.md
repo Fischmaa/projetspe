@@ -1,7 +1,7 @@
 
 [Retour au sommaire d'Expedia](expedia_sommaire.md)
 
-Sommaire : 
+# Sommaire : 
 * [Boosting Algorithms](https://github.com/matthiasbe/projetspe/blob/master/docs/Boosting.md#boosting-algorithms) 
 * [Gradient Boosting](https://github.com/matthiasbe/projetspe/blob/master/docs/Boosting.md#gradient-boosting)
   * [Arbres de décision](https://github.com/matthiasbe/projetspe/blob/master/docs/Boosting.md#param%C3%A8tres-sp%C3%A9cifiques-aux-arbres-de-d%C3%A9cision)
@@ -135,7 +135,7 @@ Il y a trois types de paramètres sur lesquels on peut agir en utilisant XGBoost
  
 * **nthread[default to maximum number of threads availabe if not set]** 
 
-### Paramètres de boosting ( pour les arbres de décisions)
+### Paramètres de boosting (pour les arbres de décisions)
 Certaines analogies sont faites avec l'étude des [paramètres pour le Gradient Boosting.](https://github.com/matthiasbe/projetspe/blob/master/docs/XGBoostTunning.md#param%C3%A8tres-de-boosting)
 
 * **eta[default=0.3]** : 
