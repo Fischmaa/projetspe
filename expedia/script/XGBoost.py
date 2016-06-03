@@ -27,6 +27,7 @@ pd.options.mode.chained_assignment = None
 tab_train = pd.read_csv('../train.csv',iterator = True, chunksize = 1000000)
 train = tab_train.get_chunk()
 print('creation premier tableau...')
+count=1
 for chunk in tab_train :
     count += 1
     print(count * 100 /38 )
