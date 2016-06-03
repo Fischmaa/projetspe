@@ -34,7 +34,7 @@ for chunk in tab_train :
     train = train.append(chunk,ignore_index=True)
 print('fin premier tableau')
 
-
+train.fillna(-999.0,inplace=True)
 # ## Change predictors
 # 
 
@@ -251,7 +251,7 @@ for i in range(len(train)) :
 
 # In[158]:
 
-train.fillna(-999.0,inplace=True)
+
 
 target = 'hotel_cluster'
 IDcol = ['date_time','srch_ci','srch_co','date','date_ci','date_co']
