@@ -48,15 +48,17 @@ from datetime import datetime
 
 #return time duration in days
 def duration(ci,co):
-    arrival = datetime.strptime(str(ci),'%Y-%m-%d')
-    departure = datetime.strptime(str(co),'%Y-%m-%d')
-    time = departure - arrival
-    return time.days 
+	if(str(ci) != '-999.0' and str(co)!='-999.0'):
+	    arrival = datetime.strptime(str(ci),'%Y-%m-%d')
+	    departure = datetime.strptime(str(co),'%Y-%m-%d')
+	    time = departure - arrival
+	    return time.days 
+	return -1
 
 
 # In[ ]:
 
-#create trip_duration predictor
+print("create trip_duration predictor")
 train['trip_duration']=0
 
 for i in range(len(train)) :
@@ -64,7 +66,7 @@ for i in range(len(train)) :
 
 
 # In[ ]:
-
+print("trip_duration_type")
 train['trip_duration_type']=0
 for i in range(len(train)) :
     if(train['trip_duration'][i]==1):
@@ -79,7 +81,7 @@ for i in range(len(train)) :
 
 
 # In[23]:
-
+print("orig_destination_distance_type")
 train['orig_destination_distance_type']=0
 
 for i in range(len(train)) :
@@ -107,27 +109,30 @@ for i in range(len(train)) :
 
 
 # In[24]:
-
+print("date")
 train['date']=0
 
 for i in range(len(train)) :
     train['date'][i]=datetime.strptime(train['date_time'][i],'%Y-%m-%d %H:%M:%S')
     
+print("dayOfWeek")
 train['dayOfWeek']=0
 
 for i in range(len(train)):
     train['dayOfWeek'][i]=train['date'][i].isoweekday()
 
-    train['year']=0
+print("year")
+train['year']=0
 
 for i in range(len(train)):
     train['year'][i]=train['date'][i].year
-    
+
+print("month")    
 train['month']=0
 
 for i in range(len(train)):
     train['month'][i]=train['date'][i].month
-    
+print("day") 
 train['day']=0
 
 for i in range(len(train)):
@@ -137,59 +142,59 @@ for i in range(len(train)):
 # In[25]:
 
 #check in
-train['date_ci']=0
+# train['date_ci']=0
 
-for i in range(len(train)) :
-    train['date_ci'][i]=datetime.strptime(train['srch_ci'][i],'%Y-%m-%d')
+# for i in range(len(train)) :
+#     train['date_ci'][i]=datetime.strptime(train['srch_ci'][i],'%Y-%m-%d')
     
-train['dayOfWeek_ci']=0
+# train['dayOfWeek_ci']=0
 
-for i in range(len(train)):
-    train['dayOfWeek_ci'][i]=train['date_ci'][i].isoweekday()
+# for i in range(len(train)):
+#     train['dayOfWeek_ci'][i]=train['date_ci'][i].isoweekday()
 
-    train['year_ci']=0
+#     train['year_ci']=0
 
-for i in range(len(train)):
-    train['year_ci'][i]=train['date_ci'][i].year
+# for i in range(len(train)):
+#     train['year_ci'][i]=train['date_ci'][i].year
     
-train['month_ci']=0
+# train['month_ci']=0
 
-for i in range(len(train)):
-    train['month_ci'][i]=train['date_ci'][i].month
+# for i in range(len(train)):
+#     train['month_ci'][i]=train['date_ci'][i].month
     
-train['day_ci']=0
+# train['day_ci']=0
 
-for i in range(len(train)):
-    train['day_ci'][i]=train['date_ci'][i].day
+# for i in range(len(train)):
+#     train['day_ci'][i]=train['date_ci'][i].day
 #check out 
-train['date_co']=0
+# train['date_co']=0
 
-for i in range(len(train)) :
-    train['date_co'][i]=datetime.strptime(train['srch_co'][i],'%Y-%m-%d')
+# for i in range(len(train)) :
+#     train['date_co'][i]=datetime.strptime(train['srch_co'][i],'%Y-%m-%d')
     
-train['dayOfWeek_co']=0
+# train['dayOfWeek_co']=0
 
-for i in range(len(train)):
-    train['dayOfWeek_co'][i]=train['date_co'][i].isoweekday()
+# for i in range(len(train)):
+#     train['dayOfWeek_co'][i]=train['date_co'][i].isoweekday()
 
-    train['year_co']=0
+#     train['year_co']=0
 
-for i in range(len(train)):
-    train['year_co'][i]=train['date_co'][i].year
+# for i in range(len(train)):
+#     train['year_co'][i]=train['date_co'][i].year
     
-train['month_co']=0
+# train['month_co']=0
 
-for i in range(len(train)):
-    train['month_co'][i]=train['date_co'][i].month
+# for i in range(len(train)):
+#     train['month_co'][i]=train['date_co'][i].month
     
-train['day_co']=0
+# train['day_co']=0
 
-for i in range(len(train)):
-    train['day_co'][i]=train['date_co'][i].day
+# for i in range(len(train)):
+#     train['day_co'][i]=train['date_co'][i].day
 
 
 # In[26]:
-
+print("season")
 train['season']=0
 
 for i in range(len(train)):
@@ -206,15 +211,17 @@ for i in range(len(train)):
 
 #return time duration in days
 def anticipation(date,co):
-    arrival = date.date()
-    departure = datetime.strptime(str(co),'%Y-%m-%d')
-    departure = departure.date()
-    time = departure - arrival
-    return time.days 
+	if(str(co)!='-999.0'):
+	    arrival = date.date()
+	    departure = datetime.strptime(str(co),'%Y-%m-%d')
+	    departure = departure.date()
+	    time = departure - arrival
+	    return time.days 
+	return -1
 
 
 # In[28]:
-
+print("trip_anticipation")
 train['trip_anticipation']=0
 
 
@@ -223,7 +230,7 @@ for i in range(len(train)) :
 
 
 # In[29]:
-
+print("trip_anticipation_type")
 train['trip_anticipation_type']=0
 for i in range(len(train)) :
 
@@ -290,7 +297,7 @@ def modelfit(alg, dtrain, predictors,useTrainCV=True, cv_folds=5,early_stopping_
 
 
 # In[146]:
-
+print("start training")
 #Choose all predictors except target & IDcols
 predictors = [x for x in train.columns if (x not in target and x not in IDcol)]
 
@@ -314,7 +321,7 @@ model = modelfit(xgb1, train, predictors,useTrainCV=False)
 # ## Delete train and read test
 
 # In[ ]:
-
+print("delete train data frame")
 #Delete data frame
 cols = train.columns
 del train
@@ -325,6 +332,7 @@ del train
 #read test
 tab_test = pd.read_csv('../test.csv',iterator = True, chunksize = 1000000)
 test = tab_test.get_chunk()
+count=1
 print('read test ...')
 for chunk in tab_test :
     count += 1
@@ -339,7 +347,7 @@ test.fillna(-999.0,inplace=True)
 # ## Change predictors
 
 # In[132]:
-
+print("trip_duration")
 #create trip_duration predictor
 test['trip_duration']=0
 
@@ -348,7 +356,7 @@ for i in range(len(test)) :
 
 
 # In[133]:
-
+print("trip_duration_type")
 test['trip_duration_type']=0
 
 for i in range(len(test)) :
@@ -363,8 +371,7 @@ for i in range(len(test)) :
 
 
 # In[134]:
-
-
+print("orig_destination_distance_type")
 test['orig_destination_distance_type']=0
 
 for i in range(len(test)) :
@@ -391,27 +398,31 @@ for i in range(len(test)) :
 
 # In[135]:
 
-
+print("date")
 test['date']=0
 
 for i in range(len(test)) :
     test['date'][i]=datetime.strptime(test['date_time'][i],'%Y-%m-%d %H:%M:%S')
-    
+
+print("dayofweek")
 test['dayOfWeek']=0
 
 for i in range(len(test)):
     test['dayOfWeek'][i]=test['date'][i].isoweekday()
     
+print("year")
 test['year']=0
 
 for i in range(len(test)):
     test['year'][i]=test['date'][i].year
-    
+
+print("month")
 test['month']=0
 
 for i in range(len(test)):
     test['month'][i]=test['date'][i].month
-    
+
+print("day")
 test['day']=0
 
 for i in range(len(test)):
@@ -421,59 +432,59 @@ for i in range(len(test)):
 # In[136]:
 
 #check in
-test['date_ci']=0
+# test['date_ci']=0
 
-for i in range(len(test)) :
-    test['date_ci'][i]=datetime.strptime(test['srch_ci'][i],'%Y-%m-%d')
+# for i in range(len(test)) :
+#     test['date_ci'][i]=datetime.strptime(test['srch_ci'][i],'%Y-%m-%d')
     
-test['dayOfWeek_ci']=0
+# test['dayOfWeek_ci']=0
 
-for i in range(len(test)):
-    test['dayOfWeek_ci'][i]=test['date_ci'][i].isoweekday()
+# for i in range(len(test)):
+#     test['dayOfWeek_ci'][i]=test['date_ci'][i].isoweekday()
 
-    test['year_ci']=0
+#     test['year_ci']=0
 
-for i in range(len(test)):
-    test['year_ci'][i]=test['date_ci'][i].year
+# for i in range(len(test)):
+#     test['year_ci'][i]=test['date_ci'][i].year
     
-test['month_ci']=0
+# test['month_ci']=0
 
-for i in range(len(test)):
-    test['month_ci'][i]=test['date_ci'][i].month
+# for i in range(len(test)):
+#     test['month_ci'][i]=test['date_ci'][i].month
     
-test['day_ci']=0
+# test['day_ci']=0
 
-for i in range(len(test)):
-    test['day_ci'][i]=test['date_ci'][i].day
-#check out 
-test['date_co']=0
+# for i in range(len(test)):
+#     test['day_ci'][i]=test['date_ci'][i].day
+# #check out 
+# test['date_co']=0
 
-for i in range(len(test)) :
-    test['date_co'][i]=datetime.strptime(test['srch_co'][i],'%Y-%m-%d')
+# for i in range(len(test)) :
+#     test['date_co'][i]=datetime.strptime(test['srch_co'][i],'%Y-%m-%d')
     
-test['dayOfWeek_co']=0
+# test['dayOfWeek_co']=0
 
-for i in range(len(test)):
-    test['dayOfWeek_co'][i]=test['date_co'][i].isoweekday()
+# for i in range(len(test)):
+#     test['dayOfWeek_co'][i]=test['date_co'][i].isoweekday()
 
-    test['year_co']=0
+#     test['year_co']=0
 
-for i in range(len(test)):
-    test['year_co'][i]=test['date_co'][i].year
+# for i in range(len(test)):
+#     test['year_co'][i]=test['date_co'][i].year
     
-test['month_co']=0
+# test['month_co']=0
 
-for i in range(len(test)):
-    test['month_co'][i]=test['date_co'][i].month
+# for i in range(len(test)):
+#     test['month_co'][i]=test['date_co'][i].month
     
-test['day_co']=0
+# test['day_co']=0
 
-for i in range(len(test)):
-    test['day_co'][i]=test['date_co'][i].day
+# for i in range(len(test)):
+#     test['day_co'][i]=test['date_co'][i].day
 
 
 # In[137]:
-
+print("season")
 test['season']=0
 
 for i in range(len(test)):
@@ -488,7 +499,7 @@ for i in range(len(test)):
 
 
 # In[138]:
-
+print("trip_anticipation")
 test['trip_anticipation']=0
 
 for i in range(len(test)) :
@@ -496,7 +507,7 @@ for i in range(len(test)) :
 
 
 # In[139]:
-
+print("trip_anticipation_type")
 test['trip_anticipation_type']=0
 for i in range(len(test)) :
 
@@ -530,7 +541,7 @@ IDcol = ['id','date_time','srch_ci','srch_co','date','date_ci','date_co']
 
 
 # In[142]:
-
+print("prediction")
 predictors=[x for x in test.columns if (x not in target and x not in IDcol)]
 
 predict=model.predict_proba(test[predictors])
@@ -544,7 +555,7 @@ def concatStr(X):
 
 
 # In[144]:
-
+print("submission")
 submission = test[['id']].drop(['id'],1)
 submission['hotel_cluster']='blank'
 for i in range(len(submission)):
@@ -553,7 +564,7 @@ submission.head()
 
 
 # In[378]:
-
+print("write submission")
 #write submission 
 submission.to_csv('../XGBoost/Submission/submission.csv',header=True, index_label='id')
 
