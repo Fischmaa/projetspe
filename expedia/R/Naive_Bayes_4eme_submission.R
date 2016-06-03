@@ -43,11 +43,11 @@ test[, srch_co := NULL]
 classifier<-naiveBayes(as.factor(hotel_cluster)~.,data=train, laplace=1)
 
 
-# SOLUTION 1 - 77s :
+# SOLUTION 1 - 105s :
 tic()
 fileConn<-file("sub.csv","w+")
 writeLines("\"id\",\"hotel_cluster\"",sep="\n",con=fileConn)
-for (i in 1:3000){
+for (i in 1:5000){
 	writeLines(paste(toString(i-1),",\"",gsub(",","",toString(rev((order(predict(classifier, test[i], type="raw"))-1)[96:100]))),"\"",sep=""),sep="\n",con=fileConn)
 }
 close(fileConn)
@@ -55,15 +55,27 @@ exectime <- toc()
 #
 
 
-# SOLUTION 2 : 129s -> 2x plus long :
-#print("----")
-#tic()
-#for (i in 1:3000){
-#	res<-rev((order(predict(classifier, test[i], type="raw"))-1)[96:100])
-#	submission$hotel_cluster[i]<-paste(res[1],res[2],res[3],res[4],res[5],sep=" ")
-#}
-#exectime <- toc()
-#write.csv(submission, file = "sub_2.csv", row.names=FALSE)
-#tic()
-#exectime <- toc()
+# SOLUTION 2 - Hors Compet' ... trop long :
+print("----")
+tic()
+for (i in 1:5000){
+	res<-rev((order(predict(classifier, test[i], type="raw"))-1)[96:100])
+	submission$hotel_cluster[i]<-paste(res[1],res[2],res[3],res[4],res[5],sep=" ")
+}
+exectime <- toc()
+write.csv(submission, file = "sub_2.csv", row.names=FALSE)
+tic()
+exectime <- toc()
+#
+
+
+# SOLUTION 3 - 98.5s :
+tic()
+sink("sink_submission.csv")
+	cat("\"id\",\"hotel_cluster\"")
+	for (i in 1:5000){
+		cat((i-1),",",gsub(",","",toString(rev((order(predict(classifier, test[i], type="raw"))-1)[96:100]))),"\n",sep="")
+	}
+sink()
+exectime <- toc()
 #
