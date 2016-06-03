@@ -4,9 +4,9 @@
 
 ![Source](http://www.analyticsvidhya.com/blog/2015/09/naive-bayes-explained/)
 
-L' algorithme de Naïve Bayes fait partie de la famille des algorithmes de classification. Il s'appuye sur les probabilités a priori des évènements pour déterminer la probabilité avec laquelle l'un d'entre eux va se réaliser; pour cela, il utilise le théorème de Bayes (cf. #Théorème-De-Bayes) et une hypothèse d'indépendance entre les variables.
+L' algorithme de Naïve Bayes fait partie de la famille des algorithmes de classification. Il s'appuye sur les probabilités a priori des évènements pour déterminer la probabilité avec laquelle l'un d'entre eux va se réaliser; pour cela, il utilise le [théorème de Bayes](#théorème-de-bayes-) et une hypothèse d'indépendance entre les variables.
 
-Cet algorithme présente les avantages suivants :
+## Avantages de cet algorithme :
 
 * simplicité : les hypothèses probabilistes sont simples à vérifier et l'algorithme se comprend assez facilement
 * convergence : peu de données en entrée sont nécessaires pour fournir un modèle satisfaisant
@@ -14,7 +14,7 @@ Cet algorithme présente les avantages suivants :
 
 ## Théorème de Bayes :
 
-<img src="http://www.analyticsvidhya.com/wp-content/uploads/2015/09/Bayes_rule-300x172.png" width="300" height="200" />
+<img src="http://www.analyticsvidhya.com/wp-content/uploads/2015/09/Bayes_rule-300x172.png" width="300" height="180" />
 
 ### Ce qu'on observe :
 * P(c) : la probabilité d'avoir la classe c
@@ -28,13 +28,16 @@ Cet algorithme présente les avantages suivants :
 ## Comment ça marche :
 
 L'algorithme se décompense en plusieurs étapes :
+
 1. Convertir les données en une table de fréquence
 2. Faire la table de probabilité correspondante 
 3. Se servir de la formule de Bayes pour trouver P(c|x) à partir des observations de P(c), P(x) et P(x|c)
 
 Par exemple avec :
 
-<img src="http://www.analyticsvidhya.com/wp-content/uploads/2015/08/Bayes_41.png" width="300" height="200" />
+
+<img src="http://www.analyticsvidhya.com/wp-content/uploads/2015/08/Bayes_41.png" width="600" height="250" />
+
 
 * P(Yes|Sunny) = P(Sunny|Yes) * P(Yes) / P (Sunny)
 * P(Sunny|Yes) = 3/9 = 0.33,
