@@ -74,27 +74,27 @@ def createOrigDestinationType(train):
 	train['orig_destination_distance_type']=0
 
 	for i in range(len(train)) :
+
 		if (train['orig_destination_distance'][i]==''):
 			continue
-			
-	    if(train['orig_destination_distance'][i]>=103 and train['orig_destination_distance'][i]<=229):
-	         train['orig_destination_distance_type'][i]=1
-	    elif(train['orig_destination_distance'][i]>=230 and train['orig_destination_distance'][i]<=428):
-	         train['orig_destination_distance_type'][i]=2
-	    elif(train['orig_destination_distance'][i]>=429 and train['orig_destination_distance'][i]<=822):
-	         train['orig_destination_distance_type'][i]=3
-	    elif(train['orig_destination_distance'][i]>=823 and train['orig_destination_distance'][i]<=1177):
-	         train['orig_destination_distance_type'][i]=4
-	    elif(train['orig_destination_distance'][i]>=1178 and train['orig_destination_distance'][i]<=1641):
-	         train['orig_destination_distance_type'][i]=5
-	    elif(train['orig_destination_distance'][i]>=1642 and train['orig_destination_distance'][i]<=2253):
-	         train['orig_destination_distance_type'][i]=6
-	    elif(train['orig_destination_distance'][i]>=2254 and train['orig_destination_distance'][i]<=3609):
-	         train['orig_destination_distance_type'][i]=7
-	    elif(train['orig_destination_distance'][i]>=3610 and train['orig_destination_distance'][i]<=5439):
-	         train['orig_destination_distance_type'][i]=8
-	    elif(train['orig_destination_distance'][i]>=5440):
-	         train['orig_destination_distance_type'][i]=9
+		elif(train['orig_destination_distance'][i]>=103 and train['orig_destination_distance'][i]<=229):
+			train['orig_destination_distance_type'][i]=1
+		elif(train['orig_destination_distance'][i]>=230 and train['orig_destination_distance'][i]<=428):
+			train['orig_destination_distance_type'][i]=2
+		elif(train['orig_destination_distance'][i]>=429 and train['orig_destination_distance'][i]<=822):
+			train['orig_destination_distance_type'][i]=3
+		elif(train['orig_destination_distance'][i]>=823 and train['orig_destination_distance'][i]<=1177):
+			train['orig_destination_distance_type'][i]=4
+		elif(train['orig_destination_distance'][i]>=1178 and train['orig_destination_distance'][i]<=1641):
+			train['orig_destination_distance_type'][i]=5
+		elif(train['orig_destination_distance'][i]>=1642 and train['orig_destination_distance'][i]<=2253):
+			train['orig_destination_distance_type'][i]=6
+		elif(train['orig_destination_distance'][i]>=2254 and train['orig_destination_distance'][i]<=3609):
+			train['orig_destination_distance_type'][i]=7
+		elif(train['orig_destination_distance'][i]>=3610 and train['orig_destination_distance'][i]<=5439):
+			train['orig_destination_distance_type'][i]=8
+		elif(train['orig_destination_distance'][i]>=5440):
+			train['orig_destination_distance_type'][i]=9
 
 
    
