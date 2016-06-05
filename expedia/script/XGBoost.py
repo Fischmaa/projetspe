@@ -19,32 +19,15 @@ import matplotlib.pylab as plt
 from matplotlib.pylab import rcParams
 pd.options.mode.chained_assignment = None
 
+def changePredcitors(train):
 
-# ## Reading data
-
-# In[147]:
-
-tab_train = pd.read_csv('../train.csv',iterator = True, chunksize = 1000000)
-train = tab_train.get_chunk()
-print('creation premier tableau...')
-count=0
-for chunk in tab_train :
-    count += 1
-    print(count * 100 /38 )
-    train = train.append(chunk,ignore_index=True)
-print('fin premier tableau')
-
-train.fillna(-999.0,inplace=True)
-# ## Change predictors
-# 
-
-# In[ ]:
-
-from datetime import date
-from datetime import datetime
-
-
-# In[ ]:
+	createTripDuration(train)
+	createTripDurationType(train)
+	createOrigDestinationType(train)
+	createDateETC(train)
+	createSeason(train)
+	createTripAnticipation(train)
+	createTripAnticipationType(train)
 
 #return time duration in days
 def duration(ci,co):
@@ -57,86 +40,89 @@ def duration(ci,co):
 
 
 # In[ ]:
+def createTripDuration(train):
+	print("create trip_duration predictor")
+	train['trip_duration']=0
 
-print("create trip_duration predictor")
-train['trip_duration']=0
-
-for i in range(len(train)) :
-    train['trip_duration'][i]=duration(train['srch_ci'][i],train['srch_co'][i])
+	for i in range(len(train)) :
+	    train['trip_duration'][i]=duration(train['srch_ci'][i],train['srch_co'][i])
 
 
 # In[ ]:
-print("trip_duration_type")
-train['trip_duration_type']=0
-for i in range(len(train)) :
-    if(train['trip_duration'][i]==1):
-        train['trip_duration_type'][i]=1
-    elif(train['trip_duration'][i]==2):
-         train['trip_duration_type'][i]=2
-    elif(train['trip_duration'][i]>=3 and train['trip_duration'][i]<=6):
-         train['trip_duration_type'][i]=3
-    elif(train['trip_duration'][i]>=7):
-        train['trip_duration_type'][i]=4
+def createTripDurationType(train):
+	print("trip_duration_type")
+	train['trip_duration_type']=0
+	for i in range(len(train)) :
+	    if(train['trip_duration'][i]==1):
+	        train['trip_duration_type'][i]=1
+	    elif(train['trip_duration'][i]==2):
+	         train['trip_duration_type'][i]=2
+	    elif(train['trip_duration'][i]>=3 and train['trip_duration'][i]<=6):
+	         train['trip_duration_type'][i]=3
+	    elif(train['trip_duration'][i]>=7):
+	        train['trip_duration_type'][i]=4
         
 
 
 # In[23]:
-print("orig_destination_distance_type")
-train['orig_destination_distance_type']=0
+def createOrigDestinationType(train):
+	print("orig_destination_distance_type")
+	train['orig_destination_distance_type']=0
 
-for i in range(len(train)) :
-    if(train['orig_destination_distance'][i]>=103 and train['orig_destination_distance'][i]<=229):
-         train['orig_destination_distance_type'][i]=1
-    elif(train['orig_destination_distance'][i]>=230 and train['orig_destination_distance'][i]<=428):
-         train['orig_destination_distance_type'][i]=2
-    elif(train['orig_destination_distance'][i]>=429 and train['orig_destination_distance'][i]<=822):
-         train['orig_destination_distance_type'][i]=3
-    elif(train['orig_destination_distance'][i]>=823 and train['orig_destination_distance'][i]<=1177):
-         train['orig_destination_distance_type'][i]=4
-    elif(train['orig_destination_distance'][i]>=1178 and train['orig_destination_distance'][i]<=1641):
-         train['orig_destination_distance_type'][i]=5
-    elif(train['orig_destination_distance'][i]>=1642 and train['orig_destination_distance'][i]<=2253):
-         train['orig_destination_distance_type'][i]=6
-    elif(train['orig_destination_distance'][i]>=2254 and train['orig_destination_distance'][i]<=3609):
-         train['orig_destination_distance_type'][i]=7
-    elif(train['orig_destination_distance'][i]>=3610 and train['orig_destination_distance'][i]<=5439):
-         train['orig_destination_distance_type'][i]=8
-    elif(train['orig_destination_distance'][i]>=5440):
-         train['orig_destination_distance_type'][i]=9
+	for i in range(len(train)) :
+	    if(train['orig_destination_distance'][i]>=103 and train['orig_destination_distance'][i]<=229):
+	         train['orig_destination_distance_type'][i]=1
+	    elif(train['orig_destination_distance'][i]>=230 and train['orig_destination_distance'][i]<=428):
+	         train['orig_destination_distance_type'][i]=2
+	    elif(train['orig_destination_distance'][i]>=429 and train['orig_destination_distance'][i]<=822):
+	         train['orig_destination_distance_type'][i]=3
+	    elif(train['orig_destination_distance'][i]>=823 and train['orig_destination_distance'][i]<=1177):
+	         train['orig_destination_distance_type'][i]=4
+	    elif(train['orig_destination_distance'][i]>=1178 and train['orig_destination_distance'][i]<=1641):
+	         train['orig_destination_distance_type'][i]=5
+	    elif(train['orig_destination_distance'][i]>=1642 and train['orig_destination_distance'][i]<=2253):
+	         train['orig_destination_distance_type'][i]=6
+	    elif(train['orig_destination_distance'][i]>=2254 and train['orig_destination_distance'][i]<=3609):
+	         train['orig_destination_distance_type'][i]=7
+	    elif(train['orig_destination_distance'][i]>=3610 and train['orig_destination_distance'][i]<=5439):
+	         train['orig_destination_distance_type'][i]=8
+	    elif(train['orig_destination_distance'][i]>=5440):
+	         train['orig_destination_distance_type'][i]=9
 
 
    
 
 
 # In[24]:
-print("date")
-train['date']=0
+def createDateETC(train):
+	print("date")
+	train['date']=0
 
-for i in range(len(train)) :
-    train['date'][i]=datetime.strptime(train['date_time'][i],'%Y-%m-%d %H:%M:%S')
-    
-print("dayOfWeek")
-train['dayOfWeek']=0
+	for i in range(len(train)) :
+	    train['date'][i]=datetime.strptime(train['date_time'][i],'%Y-%m-%d %H:%M:%S')
+	    
+	print("dayOfWeek")
+	train['dayOfWeek']=0
 
-for i in range(len(train)):
-    train['dayOfWeek'][i]=train['date'][i].isoweekday()
+	for i in range(len(train)):
+	    train['dayOfWeek'][i]=train['date'][i].isoweekday()
 
-print("year")
-train['year']=0
+	print("year")
+	train['year']=0
 
-for i in range(len(train)):
-    train['year'][i]=train['date'][i].year
+	for i in range(len(train)):
+	    train['year'][i]=train['date'][i].year
 
-print("month")    
-train['month']=0
+	print("month")    
+	train['month']=0
 
-for i in range(len(train)):
-    train['month'][i]=train['date'][i].month
-print("day") 
-train['day']=0
+	for i in range(len(train)):
+	    train['month'][i]=train['date'][i].month
+	print("day") 
+	train['day']=0
 
-for i in range(len(train)):
-    train['day'][i]=train['date'][i].day
+	for i in range(len(train)):
+	    train['day'][i]=train['date'][i].day
 
 
 # In[25]:
@@ -194,20 +180,22 @@ for i in range(len(train)):
 
 
 # In[26]:
-print("season")
-train['season']=0
+def createSeason(train):
+	print("season")
+	train['season']=0
 
-for i in range(len(train)):
+	for i in range(len(train)):
 
-    if(train['month'][i]>=4 and train['month'][i]<=6):
-        train['season'][i]=1
-    elif(train['month'][i]>=7 and train['month'][i]<=9):
-        train['season'][i]=2
-    elif(train['month'][i]>=10 and train['month'][i]<=12):
-        train['season'][i]=3
+	    if(train['month'][i]>=4 and train['month'][i]<=6):
+	        train['season'][i]=1
+	    elif(train['month'][i]>=7 and train['month'][i]<=9):
+	        train['season'][i]=2
+	    elif(train['month'][i]>=10 and train['month'][i]<=12):
+	        train['season'][i]=3
 
 
 # In[27]:
+
 
 #return time duration in days
 def anticipation(date,co):
@@ -221,38 +209,66 @@ def anticipation(date,co):
 
 
 # In[28]:
-print("trip_anticipation")
-train['trip_anticipation']=0
+def createTripAnticipation(train):
+	print("trip_anticipation")
+	train['trip_anticipation']=0
 
 
-for i in range(len(train)) :
-    train['trip_anticipation'][i]=anticipation(train['date'][i],train['srch_ci'][i])
+	for i in range(len(train)) :
+	    train['trip_anticipation'][i]=anticipation(train['date'][i],train['srch_ci'][i])
 
-
+def createTripAnticipationType(train):
 # In[29]:
-print("trip_anticipation_type")
-train['trip_anticipation_type']=0
-for i in range(len(train)) :
+	print("trip_anticipation_type")
+	train['trip_anticipation_type']=0
+	for i in range(len(train)) :
 
-    if(train['trip_anticipation'][i]>=2 and train['trip_anticipation'][i]<7):
-         train['trip_anticipation_type'][i]=1
-    elif(train['trip_anticipation'][i]>=7 and train['trip_anticipation'][i]<13):
-         train['trip_anticipation_type'][i]=2
-    elif(train['trip_anticipation'][i]>=13 and train['trip_anticipation'][i]<20):
-         train['trip_anticipation_type'][i]=3
-    elif(train['trip_anticipation'][i]>=20 and train['trip_anticipation'][i]<31):
-         train['trip_anticipation_type'][i]=4
-    elif(train['trip_anticipation'][i]>=31 and train['trip_anticipation'][i]<43):
-         train['trip_anticipation_type'][i]=5
-    elif(train['trip_anticipation'][i]>=43 and train['trip_anticipation'][i]<62):
-         train['trip_anticipation_type'][i]=6
-    elif(train['trip_anticipation'][i]>=62 and train['trip_anticipation'][i]<=89):
-         train['trip_anticipation_type'][i]=7
-    elif(train['trip_anticipation'][i]>=89 and train['trip_anticipation'][i]<141):
-         train['trip_anticipation_type'][i]=8
-    elif(train['trip_anticipation'][i]>=141):
-         train['trip_anticipation_type'][i]=9
+	    if(train['trip_anticipation'][i]>=2 and train['trip_anticipation'][i]<7):
+	         train['trip_anticipation_type'][i]=1
+	    elif(train['trip_anticipation'][i]>=7 and train['trip_anticipation'][i]<13):
+	         train['trip_anticipation_type'][i]=2
+	    elif(train['trip_anticipation'][i]>=13 and train['trip_anticipation'][i]<20):
+	         train['trip_anticipation_type'][i]=3
+	    elif(train['trip_anticipation'][i]>=20 and train['trip_anticipation'][i]<31):
+	         train['trip_anticipation_type'][i]=4
+	    elif(train['trip_anticipation'][i]>=31 and train['trip_anticipation'][i]<43):
+	         train['trip_anticipation_type'][i]=5
+	    elif(train['trip_anticipation'][i]>=43 and train['trip_anticipation'][i]<62):
+	         train['trip_anticipation_type'][i]=6
+	    elif(train['trip_anticipation'][i]>=62 and train['trip_anticipation'][i]<=89):
+	         train['trip_anticipation_type'][i]=7
+	    elif(train['trip_anticipation'][i]>=89 and train['trip_anticipation'][i]<141):
+	         train['trip_anticipation_type'][i]=8
+	    elif(train['trip_anticipation'][i]>=141):
+	         train['trip_anticipation_type'][i]=9
 
+
+
+# ## Reading data
+
+# In[147]:
+
+tab_train = pd.read_csv('../train.csv',iterator = True, chunksize = 1000000)
+train = changePredcitors(tab_train.get_chunk())
+print('creation premier tableau...')
+count=0
+for chunk in tab_train :
+    count += 1
+    print(count * 100 /38 )
+    train = train.append(changePredcitors(chunk),ignore_index=True)
+print('fin premier tableau')
+
+train.fillna(-999.0,inplace=True)
+# ## Change predictors
+# 
+
+# In[ ]:
+
+from datetime import date
+from datetime import datetime
+
+
+# In[ ]:
 
 # ## Define target and columns to drop
 
@@ -331,13 +347,13 @@ del train
 
 #read test
 tab_test = pd.read_csv('../test.csv',iterator = True, chunksize = 1000000)
-test = tab_test.get_chunk()
+test = changePredcitors(tab_test.get_chunk())
 count=1
 print('read test ...')
 for chunk in tab_test :
     count += 1
     print(count * 100 /38 )
-    test = test.append(chunk,ignore_index=True)
+    test = test.append(changePredcitors(chunk),ignore_index=True)
 print('done reading test ... ')
 test.insert(19,"is_booking",1)
 test.insert(20,"cnt",1)
@@ -345,191 +361,6 @@ test.fillna(-999.0,inplace=True)
 
 
 # ## Change predictors
-
-# In[132]:
-print("trip_duration")
-#create trip_duration predictor
-test['trip_duration']=0
-
-for i in range(len(test)) :
-    test['trip_duration'][i]=duration(test['srch_ci'][i],test['srch_co'][i])
-
-
-# In[133]:
-print("trip_duration_type")
-test['trip_duration_type']=0
-
-for i in range(len(test)) :
-    if(test['trip_duration'][i]==1):
-        test['trip_duration_type'][i]=1
-    elif(test['trip_duration'][i]==2):
-         test['trip_duration_type'][i]=2
-    elif(test['trip_duration'][i]>=3 and test['trip_duration'][i]<=6):
-         test['trip_duration_type'][i]=3
-    elif(test['trip_duration'][i]>=7):
-        test['trip_duration_type'][i]=4
-
-
-# In[134]:
-print("orig_destination_distance_type")
-test['orig_destination_distance_type']=0
-
-for i in range(len(test)) :
-
-    if(test['orig_destination_distance'][i]>=75 and test['orig_destination_distance'][i]<=171):
-         test['orig_destination_distance_type'][i]=1
-    elif(test['orig_destination_distance'][i]>=172 and test['orig_destination_distance'][i]<=288):
-         test['orig_destination_distance_type'][i]=2
-    elif(test['orig_destination_distance'][i]>=289 and test['orig_destination_distance'][i]<=460):
-         test['orig_destination_distance_type'][i]=3
-    elif(test['orig_destination_distance'][i]>=461 and test['orig_destination_distance'][i]<=826):
-         test['orig_destination_distance_type'][i]=4
-    elif(test['orig_destination_distance'][i]>=827 and test['orig_destination_distance'][i]<=1216):
-         test['orig_destination_distance_type'][i]=5
-    elif(test['orig_destination_distance'][i]>=1217 and test['orig_destination_distance'][i]<=1847):
-         test['orig_destination_distance_type'][i]=6
-    elif(test['orig_destination_distance'][i]>=1848 and test['orig_destination_distance'][i]<=2574):
-         test['orig_destination_distance_type'][i]=7
-    elif(test['orig_destination_distance'][i]>=2575 and test['orig_destination_distance'][i]<=5115):
-         test['orig_destination_distance_type'][i]=8
-    elif(test['orig_destination_distance'][i]>=5116):
-         test['orig_destination_distance_type'][i]=9
-
-
-# In[135]:
-
-print("date")
-test['date']=0
-
-for i in range(len(test)) :
-    test['date'][i]=datetime.strptime(test['date_time'][i],'%Y-%m-%d %H:%M:%S')
-
-print("dayofweek")
-test['dayOfWeek']=0
-
-for i in range(len(test)):
-    test['dayOfWeek'][i]=test['date'][i].isoweekday()
-    
-print("year")
-test['year']=0
-
-for i in range(len(test)):
-    test['year'][i]=test['date'][i].year
-
-print("month")
-test['month']=0
-
-for i in range(len(test)):
-    test['month'][i]=test['date'][i].month
-
-print("day")
-test['day']=0
-
-for i in range(len(test)):
-    test['day'][i]=test['date'][i].day
-
-
-# In[136]:
-
-#check in
-# test['date_ci']=0
-
-# for i in range(len(test)) :
-#     test['date_ci'][i]=datetime.strptime(test['srch_ci'][i],'%Y-%m-%d')
-    
-# test['dayOfWeek_ci']=0
-
-# for i in range(len(test)):
-#     test['dayOfWeek_ci'][i]=test['date_ci'][i].isoweekday()
-
-#     test['year_ci']=0
-
-# for i in range(len(test)):
-#     test['year_ci'][i]=test['date_ci'][i].year
-    
-# test['month_ci']=0
-
-# for i in range(len(test)):
-#     test['month_ci'][i]=test['date_ci'][i].month
-    
-# test['day_ci']=0
-
-# for i in range(len(test)):
-#     test['day_ci'][i]=test['date_ci'][i].day
-# #check out 
-# test['date_co']=0
-
-# for i in range(len(test)) :
-#     test['date_co'][i]=datetime.strptime(test['srch_co'][i],'%Y-%m-%d')
-    
-# test['dayOfWeek_co']=0
-
-# for i in range(len(test)):
-#     test['dayOfWeek_co'][i]=test['date_co'][i].isoweekday()
-
-#     test['year_co']=0
-
-# for i in range(len(test)):
-#     test['year_co'][i]=test['date_co'][i].year
-    
-# test['month_co']=0
-
-# for i in range(len(test)):
-#     test['month_co'][i]=test['date_co'][i].month
-    
-# test['day_co']=0
-
-# for i in range(len(test)):
-#     test['day_co'][i]=test['date_co'][i].day
-
-
-# In[137]:
-print("season")
-test['season']=0
-
-for i in range(len(test)):
-    
-    if(test['month'][i]>=4 and test['month'][i]<=6):
-        test['season'][i]=1
-    elif(test['month'][i]>=7 and test['month'][i]<=9):
-        test['season'][i]=2
-    elif(test['month'][i]>=10 and test['month'][i]<=12):
-        test['season'][i]=3
- 
-
-
-# In[138]:
-print("trip_anticipation")
-test['trip_anticipation']=0
-
-for i in range(len(test)) :
-    test['trip_anticipation'][i]=anticipation(test['date'][i],test['srch_ci'][i])
-
-
-# In[139]:
-print("trip_anticipation_type")
-test['trip_anticipation_type']=0
-for i in range(len(test)) :
-
-    if(test['trip_anticipation'][i]>=1 and test['trip_anticipation'][i]<3):
-         test['trip_anticipation_type'][i]=1
-    elif(test['trip_anticipation'][i]>=3 and test['trip_anticipation'][i]<5):
-         test['trip_anticipation_type'][i]=2
-    elif(test['trip_anticipation'][i]>=5 and test['trip_anticipation'][i]<9):
-         test['trip_anticipation_type'][i]=3
-    elif(test['trip_anticipation'][i]>=9 and test['trip_anticipation'][i]<15):
-         test['trip_anticipation_type'][i]=4
-    elif(test['trip_anticipation'][i]>=15 and test['trip_anticipation'][i]<22):
-         test['trip_anticipation_type'][i]=5
-    elif(test['trip_anticipation'][i]>=22 and test['trip_anticipation'][i]<34):
-         test['trip_anticipation_type'][i]=6
-    elif(test['trip_anticipation'][i]>=34 and test['trip_anticipation'][i]<53):
-         test['trip_anticipation_type'][i]=7
-    elif(test['trip_anticipation'][i]>=53 and test['trip_anticipation'][i]<93):
-         test['trip_anticipation_type'][i]=8
-    elif(test['trip_anticipation'][i]>=93):
-         test['trip_anticipation_type'][i]=9
-            
 
 
 # ## Define target and columns to drop
