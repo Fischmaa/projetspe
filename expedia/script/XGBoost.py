@@ -49,8 +49,10 @@ def createTripDuration(train):
 	train['trip_duration']=0
 
 	for i in range(len(train)) :
-		print(i)
+
 		train['trip_duration'][i]=duration(train['srch_ci'][i],train['srch_co'][i])
+
+	print("done creating trip_duration_predicor")
 
 
 # In[ ]:
@@ -256,7 +258,7 @@ def createTripAnticipationType(train):
 
 # In[147]:
 
-tab_train = pd.read_csv('../train.csv',iterator = True, chunksize = 1000000)
+tab_train = pd.read_csv('../train.csv',iterator = True, chunksize = 100000)
 train = tab_train.get_chunk()
 train.fillna(-999.0,inplace=True)
 changePredcitors(train)
@@ -345,7 +347,7 @@ del train
 # In[131]:
 
 #read test
-tab_test = pd.read_csv('../test.csv',iterator = True, chunksize = 1000000)
+tab_test = pd.read_csv('../test.csv',iterator = True, chunksize = 100000)
 test = tab_test.get_chunk()
 test.fillna(-999.0,inplace=True)
 changePredcitors(test)
