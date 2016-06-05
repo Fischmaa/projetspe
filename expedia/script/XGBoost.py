@@ -35,7 +35,7 @@ def changePredcitors(train):
 
 #return time duration in days
 def duration(ci,co):
-	if(str(ci) != -999.0 or str(co)!=-999.0):
+	if(str(ci) != '-999.0' or str(co)!='-999.0'):
 	    arrival = datetime.strptime(str(ci),'%Y-%m-%d')
 	    departure = datetime.strptime(str(co),'%Y-%m-%d')
 	    time = departure - arrival
@@ -76,9 +76,7 @@ def createOrigDestinationType(train):
 
 	for i in range(len(train)) :
 
-		if (train['orig_destination_distance'][i]==-999.0):
-			continue
-		elif(train['orig_destination_distance'][i]>=103 and train['orig_destination_distance'][i]<=229):
+		if(train['orig_destination_distance'][i]>=103 and train['orig_destination_distance'][i]<=229):
 			train['orig_destination_distance_type'][i]=1
 		elif(train['orig_destination_distance'][i]>=230 and train['orig_destination_distance'][i]<=428):
 			train['orig_destination_distance_type'][i]=2
@@ -96,6 +94,8 @@ def createOrigDestinationType(train):
 			train['orig_destination_distance_type'][i]=8
 		elif(train['orig_destination_distance'][i]>=5440):
 			train['orig_destination_distance_type'][i]=9
+		else:
+			continue
 
 
    
