@@ -74,6 +74,9 @@ def createOrigDestinationType(train):
 	train['orig_destination_distance_type']=0
 
 	for i in range(len(train)) :
+		if (train['orig_destination_distance'][i]==''):
+			continue
+			
 	    if(train['orig_destination_distance'][i]>=103 and train['orig_destination_distance'][i]<=229):
 	         train['orig_destination_distance_type'][i]=1
 	    elif(train['orig_destination_distance'][i]>=230 and train['orig_destination_distance'][i]<=428):
