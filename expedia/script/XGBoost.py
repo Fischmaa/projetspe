@@ -49,8 +49,8 @@ def createTripDuration(train):
 	train['trip_duration']=0
 
 	for i in range(len(train)) :
-		if(train['srch_ci'][i]!='' and train['srch_co'][i]!=''):
-	    	train['trip_duration'][i]=duration(train['srch_ci'][i],train['srch_co'][i])
+
+		train['trip_duration'][i]=duration(train['srch_ci'][i],train['srch_co'][i])
 
 
 # In[ ]:
