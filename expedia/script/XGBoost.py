@@ -344,7 +344,7 @@ del train
 
 #read test
 tab_test = pd.read_csv('../test.csv',iterator = True, chunksize = 1000000)
-test = changePredcitors(tab_test.get_chunk().fillna(-999.0,inplace=True)
+test = changePredcitors(tab_test.get_chunk().fillna(-999.0,inplace=True))
 count=1
 print('read test ...')
 for chunk in tab_test :
