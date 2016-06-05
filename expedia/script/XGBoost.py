@@ -26,12 +26,12 @@ from datetime import datetime
 def changePredcitors(train):
 
 	createTripDuration(train)
-	createTripDurationType(train)
+	#createTripDurationType(train)
 	createOrigDestinationType(train)
 	createDateETC(train)
 	createSeason(train)
 	createTripAnticipation(train)
-	createTripAnticipationType(train)
+	#createTripAnticipationType(train)
 
 #return time duration in days
 def duration(ci,co):
@@ -111,11 +111,11 @@ def createDateETC(train):
 	for i in range(len(train)) :
 	    train['date'][i]=datetime.strptime(train['date_time'][i],'%Y-%m-%d %H:%M:%S')
 	    
-	print("dayOfWeek")
-	train['dayOfWeek']=0
+	# print("dayOfWeek")
+	# train['dayOfWeek']=0
 
-	for i in range(len(train)):
-	    train['dayOfWeek'][i]=train['date'][i].isoweekday()
+	# for i in range(len(train)):
+	#     train['dayOfWeek'][i]=train['date'][i].isoweekday()
 
 	print("year")
 	train['year']=0
@@ -131,8 +131,8 @@ def createDateETC(train):
 	print("day") 
 	train['day']=0
 
-	for i in range(len(train)):
-	    train['day'][i]=train['date'][i].day
+	# for i in range(len(train)):
+	#     train['day'][i]=train['date'][i].day
 
 
 # In[25]:
