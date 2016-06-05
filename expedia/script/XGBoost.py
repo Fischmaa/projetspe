@@ -257,8 +257,9 @@ def createTripAnticipationType(train):
 # In[147]:
 
 tab_train = pd.read_csv('../train.csv',iterator = True, chunksize = 1000000)
-train = changePredcitors(tab_train.get_chunk())
+train = tab_train.get_chunk()
 train.fillna(-999.0,inplace=True)
+changePredcitors(train)
 print('creation premier tableau...')
 count=0
 for chunk in tab_train :
@@ -345,8 +346,9 @@ del train
 
 #read test
 tab_test = pd.read_csv('../test.csv',iterator = True, chunksize = 1000000)
-test = changePredcitors(tab_test.get_chunk())
+test = tab_test.get_chunk()
 test.fillna(-999.0,inplace=True)
+changePredcitors(test)
 count=1
 print('read test ...')
 for chunk in tab_test :
