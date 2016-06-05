@@ -566,5 +566,5 @@ submission.head()
 # In[378]:
 print("write submission")
 #write submission 
-submission.to_csv('../XGBoost/Submission/submission.csv',header=True, index_label='id')
+submission.to_csv('../XGBoost/Submission/submissionXGBOOST.csv',header=True, index_label='id')
 
