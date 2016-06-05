@@ -76,7 +76,7 @@ def createOrigDestinationType(train):
 
 	for i in range(len(train)) :
 
-		if (train['orig_destination_distance'][i]==''):
+		if (train['orig_destination_distance'][i]==-999.0):
 			continue
 		elif(train['orig_destination_distance'][i]>=103 and train['orig_destination_distance'][i]<=229):
 			train['orig_destination_distance_type'][i]=1
@@ -257,17 +257,15 @@ def createTripAnticipationType(train):
 # In[147]:
 
 tab_train = pd.read_csv('../train.csv',iterator = True, chunksize = 1000000)
-train = changePredcitors(tab_train.get_chunk())
+train = changePredcitors(tab_train.get_chunk().fillna(-999.0,inplace=True))
 print('creation premier tableau...')
 count=0
 for chunk in tab_train :
     count += 1
     print(count * 100 /38 )
     #change predictors
-    train = train.append(changePredcitors(chunk),ignore_index=True)
+    train = train.append(changePredcitors(chunk.fillna(-999.0,inplace=True)),ignore_index=True)
 print('fin premier tableau')
-
-train.fillna(-999.0,inplace=True)
 
 # ## Define target and columns to drop
 
@@ -346,17 +344,17 @@ del train
 
 #read test
 tab_test = pd.read_csv('../test.csv',iterator = True, chunksize = 1000000)
-test = changePredcitors(tab_test.get_chunk())
+test = changePredcitors(tab_test.get_chunk().fillna(-999.0,inplace=True)
 count=1
 print('read test ...')
 for chunk in tab_test :
     count += 1
     print(count * 100 /38 )
-    test = test.append(changePredcitors(chunk),ignore_index=True)
+    test = test.append(changePredcitors(chunk.fillna(-999.0,inplace=True)),ignore_index=True)
 print('done reading test ... ')
 test.insert(19,"is_booking",1)
 test.insert(20,"cnt",1)
-test.fillna(-999.0,inplace=True)
+
 
 
 # ## Change predictors
