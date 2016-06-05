@@ -258,7 +258,7 @@ def createTripAnticipationType(train):
 
 # In[147]:
 
-tab_train = pd.read_csv('../train.csv',iterator = True, chunksize = 100000)
+tab_train = pd.read_csv('../train.csv',iterator = True, chunksize = 10000)
 train = tab_train.get_chunk()
 train.fillna(-999.0,inplace=True)
 changePredcitors(train)
@@ -350,7 +350,7 @@ del train
 # In[131]:
 
 #read test
-tab_test = pd.read_csv('../test.csv',iterator = True, chunksize = 100000)
+tab_test = pd.read_csv('../test.csv',iterator = True, chunksize = 10000)
 test = tab_test.get_chunk()
 test.fillna(-999.0,inplace=True)
 changePredcitors(test)
