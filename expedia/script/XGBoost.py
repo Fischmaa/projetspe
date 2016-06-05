@@ -19,6 +19,10 @@ import matplotlib.pylab as plt
 from matplotlib.pylab import rcParams
 pd.options.mode.chained_assignment = None
 
+
+from datetime import date
+from datetime import datetime
+
 def changePredcitors(train):
 
 	createTripDuration(train)
@@ -255,20 +259,11 @@ count=0
 for chunk in tab_train :
     count += 1
     print(count * 100 /38 )
+    #change predictors
     train = train.append(changePredcitors(chunk),ignore_index=True)
 print('fin premier tableau')
 
 train.fillna(-999.0,inplace=True)
-# ## Change predictors
-# 
-
-# In[ ]:
-
-from datetime import date
-from datetime import datetime
-
-
-# In[ ]:
 
 # ## Define target and columns to drop
 
