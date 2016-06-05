@@ -14,10 +14,10 @@ from heapq import nlargest
 from operator import itemgetter
 from collections import defaultdict
 from datetime import datetime
-
+import gzip
 # validation ###############
 validate = 1  # 1 - validation, 0 - submission
-N0 = 4        # total number of parts
+N0 = 38        # total number of parts
 N1 = 1        # number of part
 #--------------------------
 def duration(ci,co):
@@ -39,7 +39,7 @@ def duration_type(duration):
 
 def run_solution():
     print('Preparing arrays...')
-    f = open("../train.csv", "r")
+    f = gzip.open("../train.csv.gz", "r")
     f.readline()
     best_hotels_od_ulc = defaultdict(lambda: defaultdict(int))
     best_hotels_search_dest = defaultdict(lambda: defaultdict(int))
@@ -60,6 +60,7 @@ def run_solution():
             print('Read {} lines...'.format(total))
         if line == '':
             break
+        print(line)
         arr = line.split(",")
         book_year = int(arr[0][:4])
         book_month = int(arr[0][5:7])
@@ -109,11 +110,11 @@ def run_solution():
     now = datetime.now()
     if validate == 1:
         print('Validation...')
-        f = open("../train.csv", "r")
+        f = gzip.open("../train.csv.gz", "r")
         path = 'validation/' + str(now.strftime("%Y-%m-%d-%H-%M")) + '.csv'
     else:
         print('Generate submission...')
-        f = open("../test.csv", "r")
+        f = gzip.open("../test.csv.gz", "r")
         path = 'submission/' + str(now.strftime("%Y-%m-%d-%H-%M")) + '.csv'
     out = open(path, "w")
     f.readline()
@@ -152,7 +153,7 @@ def run_solution():
             id = 0
             # if user_id % N0 != N1:
             #     continue
-            if (user_id % N0 == 0 or user_id % N0 != N1):
+            if (user_id % N0 == 0 or user_id % N0 == N1 + 1):
                 continue
             if is_booking == 0:
                 continue

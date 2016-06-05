@@ -210,7 +210,7 @@ def createSeason(train):
 #return time duration in days
 def anticipation(date,co):
 	print(co)
-	if(str(co)!='-999.0' or str(co)!=''):
+	if(str(co)!='-999.0' or str(co)!='' or co<0):
 	    arrival = date.date()
 	    departure = datetime.strptime(str(co),'%Y-%m-%d')
 	    departure = departure.date()
