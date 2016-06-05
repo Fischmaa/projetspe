@@ -268,7 +268,10 @@ for chunk in tab_train :
     count += 1
     print(count * 100 /38 )
     #change predictors
-    train = train.append(changePredcitors(chunk.fillna(-999.0,inplace=True)),ignore_index=True)
+    train_part=chunk
+    train_part.fillna(-999.0,inplace=True)
+    changePredcitors(train_part)
+    train = train.append(train_part,ignore_index=True)
 print('fin premier tableau')
 
 # ## Define target and columns to drop
@@ -356,7 +359,10 @@ print('read test ...')
 for chunk in tab_test :
     count += 1
     print(count * 100 /38 )
-    test = test.append(changePredcitors(chunk.fillna(-999.0,inplace=True)),ignore_index=True)
+    test_part=chunk
+    test_part.fillna(-999.0,inplace=True)
+    changePredcitors(test_part)
+    test = test.append(test_part,ignore_index=True)
 print('done reading test ... ')
 test.insert(19,"is_booking",1)
 test.insert(20,"cnt",1)
