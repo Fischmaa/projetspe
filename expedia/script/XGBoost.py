@@ -35,7 +35,7 @@ def changePredcitors(train):
 
 #return time duration in days
 def duration(ci,co):
-	if(str(ci) != '-999.0' or str(co)!='-999.0'):
+	if(str(ci) != -999.0 or str(co)!=-999.0):
 	    arrival = datetime.strptime(str(ci),'%Y-%m-%d')
 	    departure = datetime.strptime(str(co),'%Y-%m-%d')
 	    time = departure - arrival
@@ -209,7 +209,7 @@ def createSeason(train):
 
 #return time duration in days
 def anticipation(date,co):
-	if(str(co)!='-999.0'):
+	if(str(co)!=-999.0):
 	    arrival = date.date()
 	    departure = datetime.strptime(str(co),'%Y-%m-%d')
 	    departure = departure.date()
