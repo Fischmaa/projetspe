@@ -21,11 +21,14 @@ N0 = 38        # total number of parts
 N1 = 1        # number of part
 #--------------------------
 def duration(ci,co):
-    if(ci!='' and co!=''):
+    #if(ci!='' and co!=''):
+    try : 
         arrival = datetime.strptime(ci, '%Y-%m-%d').date()
         departure = datetime.strptime(co, '%Y-%m-%d').date()
         return (departure - arrival).days
-    return 0
+    except ValueError:
+        return 0
+    #return 0
 
 def duration_type(duration):
     if (duration==0):
@@ -37,14 +40,19 @@ def duration_type(duration):
     else:
         return 3
 
-def run_solution():
+
+
+
+def run_solution(month1,month2,month3,month4,month5):
     print('Preparing arrays...')
-    f = gzip.open("../train.csv.gz", "r")
+    f = open("../train.csv", "r")
     f.readline()
     best_hotels_od_ulc = defaultdict(lambda: defaultdict(int))
+    best_hotels_od_ulc1 = defaultdict(lambda: defaultdict(int))
     best_hotels_search_dest = defaultdict(lambda: defaultdict(int))
     best_hotels_search_dest1 = defaultdict(lambda: defaultdict(int))
     best_hotels_search_dest2 = defaultdict(lambda: defaultdict(int))
+    best_hotels_search_dest3 = defaultdict(lambda: defaultdict(int))
     best_hotel_country = defaultdict(lambda: defaultdict(int))
     hits = defaultdict(int)
     tp = defaultdict(float)
@@ -60,7 +68,6 @@ def run_solution():
             print('Read {} lines...'.format(total))
         if line == '':
             break
-        print(line)
         arr = line.split(",")
         book_year = int(arr[0][:4])
         book_month = int(arr[0][5:7])
@@ -73,32 +80,54 @@ def run_solution():
         hotel_country = arr[21]
         hotel_market = arr[22]
         hotel_cluster = arr[23]
-        # ci = arr[11]
-        # co = arr[12]
-        # trip_duration = duration(ci,co)
-        # trip_duration_type = duration_type(trip_duration)
+        ci = arr[11]
+        co = arr[12]
+        trip_duration = duration(ci,co)
+        trip_duration_type = duration_type(trip_duration)
+    
 
-
-        if validate == 1 and user_id % N0 == N1:
+        # if validate == 1 and user_id % N0 == N1:
+        #     continue
+        if(validate == 1 and book_year==2014):
             continue
+
+        if(validate == 1 and total>= 4000000):
+            break
+
+        if(book_month<=4):
+            book_month=month1
+        elif(book_month<=6):
+            book_month=month2
+        elif(book_month<=9):
+            book_month=month3
+        elif(book_month<=10):
+            book_month=month4
+        elif(book_month<=12):
+            book_month=month5
+        
 
         append_0 = (book_year - 2012)*12 + book_month
         append_1 = ((book_year - 2012)*12 + book_month) * (1 + 10*is_booking)
         append_2 = ((book_year - 2012)*12 + book_month) * (1 + 5*is_booking)
-        # append_3 = ((book_year - 2012)*12 + book_month) * (1 + 15*is_booking)
 
+
+        if user_location_city != '' and orig_destination_distance != ''and trip_duration_type!=0:
+            best_hotels_od_ulc1[(user_location_city, orig_destination_distance,trip_duration_type)][hotel_cluster] += append_0
 
         if user_location_city != '' and orig_destination_distance != '':
             best_hotels_od_ulc[(user_location_city, orig_destination_distance)][hotel_cluster] += append_0
 
-        # if srch_destination_id != '' and hotel_country != '' and hotel_market != '' and book_year != '' and trip_duration_type!=0:
-        #     best_hotels_search_dest2[(srch_destination_id, hotel_country, hotel_market,is_package,trip_duration_type)][hotel_cluster] += append_3
-
         if srch_destination_id != '' and hotel_country != '' and hotel_market != '' and book_year != '':
             best_hotels_search_dest[(srch_destination_id, hotel_country, hotel_market,is_package)][hotel_cluster] += append_1
 
+        if srch_destination_id != '' and hotel_country != '' and hotel_market != '' and book_year != '' and trip_duration_type!=0 :
+            best_hotels_search_dest2[(srch_destination_id, hotel_country, hotel_market,is_package,trip_duration_type)][hotel_cluster] += append_1
+
         if srch_destination_id != '':
             best_hotels_search_dest1[srch_destination_id][hotel_cluster] += append_1
+
+        if srch_destination_id != '' and trip_duration_type!=0:
+            best_hotels_search_dest3[srch_destination_id,trip_duration_type][hotel_cluster] += append_1
 
         if hotel_country != '':
             best_hotel_country[hotel_country][hotel_cluster] += append_2
@@ -110,15 +139,14 @@ def run_solution():
     now = datetime.now()
     if validate == 1:
         print('Validation...')
-        f = gzip.open("../train.csv.gz", "r")
+        f = open("../train.csv", "r")
         path = 'validation/' + str(now.strftime("%Y-%m-%d-%H-%M")) + '.csv'
     else:
         print('Generate submission...')
-        f = gzip.open("../test.csv.gz", "r")
+        f = open("../test.csv", "r")
         path = 'submission/' + str(now.strftime("%Y-%m-%d-%H-%M")) + '.csv'
     out = open(path, "w")
     f.readline()
-    total = 0
     totalv = 0
     leak = 0
     out.write("id,hotel_cluster\n")
@@ -126,15 +154,16 @@ def run_solution():
 
     while 1:
         line = f.readline().strip()
-        total += 1
-        if total % 10000000 == 0:
-            print('Write {} lines...'.format(total))
+        totalv += 1
+        if totalv % 10000000 == 0:
+            print('Write {} lines...'.format(totalv))
 
         if line == '':
             break
 
         arr = line.split(",")
         if validate == 1:
+
             book_year = int(arr[0][:4])
             book_month = int(arr[0][5:7])
             user_location_city = arr[5]
@@ -146,17 +175,20 @@ def run_solution():
             hotel_country = arr[21]
             hotel_market = arr[22]
             hotel_cluster = arr[23]
-            # ci = arr[11]
-            # co = arr[12]
-            # trip_duration = duration(ci,co)
-            # trip_duration_type = duration_type(trip_duration)
+            ci = arr[11]
+            co = arr[12]
+            trip_duration = duration(ci,co)
+            trip_duration_type = duration_type(trip_duration)
             id = 0
+
             # if user_id % N0 != N1:
             #     continue
-            if (user_id % N0 == 0 or user_id % N0 == N1 + 1):
+            if ( book_year==2013):
                 continue
             if is_booking == 0:
                 continue
+            if (totalv >= 1000000):
+                break
         else:
             id = arr[0]
             user_location_city = arr[6]
@@ -167,18 +199,31 @@ def run_solution():
             hotel_country = arr[20]
             hotel_market = arr[21]
             is_booking = 1
-            # ci = arr[12]
-            # co = arr[13]
-            # trip_duration = duration(ci,co)
-            # trip_duration_type = duration_type(trip_duration)
+            ci = arr[12]
+            co = arr[13]
+            trip_duration = duration(ci,co)
+            trip_duration_type = duration_type(trip_duration)
 
-        totalv += 1
         out.write(str(id) + ',')
         filled = []
+        # s0 = (user_location_city,orig_destination_distance,trip_duration_type)
+
+        # if s0 in best_hotels_od_ulc1:
+        #     leak +=1
+        #     d = best_hotels_od_ulc1[s0]
+        #     topitems = nlargest(5, d.items(), key=itemgetter(1))
+        #     for i in range(len(topitems)):
+        #         if len(filled) == 5:
+        #             break
+        #         if topitems[i][0] in filled:
+        #             continue
+        #         out.write(' ' + topitems[i][0])
+        #         filled.append(topitems[i][0])
+        #         if validate == 1:
+        #             if topitems[i][0]==hotel_cluster:
+        #                 hits[len(filled)] +=1
 
         s1 = (user_location_city, orig_destination_distance)
-        # if(orig_destination_distance!=''):
-        #     s1 = (user_location_city, int(float(orig_destination_distance)))
 
         if s1 in best_hotels_od_ulc:
             leak +=1
@@ -197,7 +242,7 @@ def run_solution():
 
         # s12 = (srch_destination_id, hotel_country, hotel_market,is_package,trip_duration_type)
         # if s12 in best_hotels_search_dest2:
-        #     d = best_hotels_search_dest[s12]
+        #     d = best_hotels_search_dest2[s12]
         #     topitems = nlargest(5, d.items(), key=itemgetter(1))
         #     for i in range(len(topitems)):
         #         if len(filled) == 5:
@@ -224,6 +269,21 @@ def run_solution():
                 if validate == 1:
                     if topitems[i][0]==hotel_cluster:
                         hits[len(filled)] +=1
+
+        # s3 = (srch_destination_id, trip_duration_type)
+        # if s3 in best_hotels_search_dest3:
+        #     d = best_hotels_search_dest3[s3]
+        #     topitems = nlargest(5, d.items(), key=itemgetter(1))
+        #     for i in range(len(topitems)):
+        #         if len(filled) == 5:
+        #             break
+        #         if topitems[i][0] in filled:
+        #             continue
+        #         out.write(' ' + topitems[i][0])
+        #         filled.append(topitems[i][0])
+        #         if validate == 1:
+        #             if topitems[i][0]==hotel_cluster:
+        #                 hits[len(filled)] +=1
 
         if srch_destination_id in best_hotels_search_dest1:
             d = best_hotels_search_dest1[srch_destination_id]
@@ -270,6 +330,7 @@ def run_solution():
         out.write("\n")
     out.close()
     print('Completed!')
+    print('book_month : ', month1,'et', month2 ,'et', month3,'et',month4,'et',month5)
     # validation >>>
     scores = 0.0
     classified = 0
@@ -293,4 +354,4 @@ def run_solution():
     if validate == 0:
         print("leakage = %6.2f%%" % (leak*100.0/total))
 
-run_solution()
+run_solution(1,4,5,4,7)
