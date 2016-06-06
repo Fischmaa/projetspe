@@ -37,7 +37,7 @@ nom du champ                | description
 :--------------------------:|------------
 `user_location_country`     | ID du **pays** de l'utilisateur
 `user_location_region`      | ID de la **région** de l'utilisateur
-`user_location_city`        | ID de la **ville** de l'utilisateur. Attention, des villes ont le même nom dans différents pays, il faut dont relier user_location_city à user_location_country systématiquement.
+`user_location_city`        | ID de la **ville** de l'utilisateur.
 `user_id`                   | ID de l'utilisateur
 
 ### Informations sur l'évènement
