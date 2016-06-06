@@ -92,6 +92,6 @@ y_test.to_csv('csv/random_forest.csv')
 
 ### Pistes d' amélioration
 
-Les premières étapes d'un travail plus poussé serait de déterminer de meilleurs variables définissant le système. C'est ce type d'approche qu'on essaiera de développer sur le challenge suivant. 
+Les premières étapes d'un travail plus avancé serait de déterminer de meilleurs variables définissant le système. C'est ce type d'approche qu'on essaiera de développer sur le challenge suivant. 
 
 
