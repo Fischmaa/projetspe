@@ -28,7 +28,7 @@ nom du champ                | description
 `site_name`                 | ID du nom de domaine (i.e. Expedia.com, Expedia.co.uk, Expedia.co.jp, ...)
 `posa_continent`            | ID du continent associé au nom de domaine
 `is_mobile`                 | `1` si l'utilisateur à accédé au site depuis un **mobile**
-`channel`                   | Information concernant le moyen d'accès à la page expedia. Par exemple "Direct", "SEM" (via les liens payés à google), "Meta channel" (via Tripadvisor par exemple), etc.
+`channel`                   | Information concernant le moyen d'accès à la page expedia. Par exemple "Direct", "SEM" (via les liens payés à Google), "Meta channel" (via Tripadvisor par exemple), etc.
 `cnt`                       | [Entrainement] Nombre de clic/réservations effectués pendant la même session par l'utilisateur, les sessions prennent fin après 30 minutes d'inactivité. S'il s'agit d'une session conduisant à un booking (is_booking==1) alors on peut supposer que cnt==1 car le plus généralement il y a qu'une réservation pas session.
 
 ### Informations sur l'utilisateur :
@@ -37,7 +37,7 @@ nom du champ                | description
 :--------------------------:|------------
 `user_location_country`     | ID du **pays** de l'utilisateur
 `user_location_region`      | ID de la **région** de l'utilisateur
-`user_location_city`        | ID de la **ville** de l'utilisateur. Attention, des villes ont le même nom dans différents pays, il faut dont relier user_location_city à user_location_country systématiquement.
+`user_location_city`        | ID de la **ville** de l'utilisateur
 `user_id`                   | ID de l'utilisateur
 
 ### Informations sur l'évènement
@@ -45,7 +45,7 @@ nom du champ                | description
 nom du champ                | description
 :--------------------------:|------------
 `is_package`                | `1` si le clic/la réservation a été généré avec un **vol**
-`orig_destination_distance` | **Distance** physique entre la position de l'utilisateur et celle de l'hôtel cliqué/reservé. Attention : distance exprimée en miles.
+`orig_destination_distance` | **Distance** physique entre la position de l'utilisateur et celle de l'hôtel cliqué/réservé (en miles)
 `is_booking`                | [Entrainement] `1` Si il s'agit d'une réservation, `0` si il s'agit d'un clic
 
 ### Informations sur la recherche conduisant au clic/à la réservation
@@ -67,7 +67,7 @@ nom du champ                | description
 `hotel_continent`           | Continent sur lequel se trouve l'hôtel
 `hotel_country`             | Pays dans lequel se trouve l'hôtel
 `hotel_market`              | Zone géographique précise qui recouvre différentes destinations spécifiées dans srch_destination_id
-`hotel_cluster`             | [Entrainement] Type d'hôtel, Id du cluster auquel il appartient. Les clusters sont créés en fonctions de la popularité de l'hotel, des notations (étoiles), des avis d'utilisateurs, des prix, des distances aux centre-ville, des aménagements, etc. Les hôtels peuvent appartenir à différents clusters en fonction de la saison (populaire et cher en été pour la plage mais pas cher et pas populaire en hiver par exemple).
+`hotel_cluster`             | [Entrainement] Type d'hôtel, Id du cluster auquel il appartient. Les clusters sont créés en fonction de la popularité de l'hotel, des notations (étoiles), des avis d'utilisateurs, des prix, des distances au centre-ville, des aménagements, etc. Les hôtels peuvent appartenir à différents clusters en fonction de la saison (populaire et cher en été pour la plage mais pas cher et pas populaire en hiver par exemple).
 
 ## destinations.csv
 
@@ -76,16 +76,14 @@ Ce fichier contient des informations sur les différentes régions recherchées 
 * La première colonne **srch_destination_id** correspond à une des régions recherchées.
 * Les 149 autres colonnes **d1-149** correspondent à des caractéristiques de la régions basées sur les avis donnés par utilisateurs aux hôtels qui s'y trouvent. Ces informations permettent de construire des similitudes et des différences entre les différentes régions.
 
-Toutes les valeurs de **srch_destination_id** ne peuvent être retrouvées dans `destinations.csv`. En effet, certaines régions ne possèdent pas d'hôtels assez récents pour construire les informations nécessaire à la complétion de la table des destinations.
+Toutes les valeurs de **srch_destination_id** ne peuvent être retrouvées dans `destinations.csv`. En effet, certaines régions ne possèdent pas d'hôtels assez récents pour construire les informations nécessaires à la complétion de la table des destinations.
 
-## En chiffres
-
-Il est plus facile de se représenter les données avec quelques chiffres clés. Nous allons donc donner des données concernant les fichiers.
+## Chiffres clés
 
 ### Nombre de lignes
 
-* **train.csv :** 37 millions 670 294 lignes (3,8 Go)
-* **test.csv :** 2 millions 528 244 lignes (263,7 Mo)
+* **train.csv :** 37 670 294 lignes (3,8 Go)
+* **test.csv :** 2 528 244 lignes (263,7 Mo)
 * **destinations.csv :** 62 107 lignes (131,8 Mo)
 
 ### Nombre de destinations
@@ -96,5 +94,5 @@ Il est plus facile de se représenter les données avec quelques chiffres clés.
 
 ### Nombre d'utilisateurs
 
-* **train.csv :** 1 million 198 786 utilisateurs
-* **destinations.csv :** 1 million 181 577 utilisateurs
+* **train.csv :** 1 198 786 utilisateurs
+* **destinations.csv :** 1 181 577 utilisateurs

@@ -1,0 +1,100 @@
+############
+# Packages #
+############
+
+require(methods)
+require(data.table)
+require(magrittr)
+require(BBmisc)
+require(dplyr)
+require(stringr)
+require(lubridate)
+require(e1071)
+require(tictoc)
+
+########################################
+# Reading data and use the 3/17 ratio) #
+########################################
+
+train <- fread('./train.csv', header = T, stringsAsFactors = F)
+test <- fread('./test.csv', header = T, stringsAsFactors = F)
+train_not_booking<-train[is_booking==0]
+train_booking<-train[is_booking==1]
+train_not_booking<-train_not_booking[sample(1:nrow(train_not_booking), round(3/17*nrow(train_booking)), replace=FALSE),]
+train<-rbind(train_not_booking,train_booking)
+
+######################################
+#    Get same columns in dataframe   #
+######################################
+
+train<-BBmisc::dropNamed(train, "is_booking")
+train<-BBmisc::dropNamed(train, "cnt")
+train<-BBmisc::dropNamed(train, "user_id")
+test<-BBmisc::dropNamed(test, "id")
+
+########################
+# Drop useless columns #
+########################
+
+train<-BBmisc::dropNamed(train, "site_name")
+train<-BBmisc::dropNamed(train, "posa_continent")
+train<-BBmisc::dropNamed(train, "srch_children_cnt")
+train<-BBmisc::dropNamed(train, "hotel_continent")
+train<-BBmisc::dropNamed(train, "date_time")
+train<-BBmisc::dropNamed(train,"srch_ci")
+train<-BBmisc::dropNamed(train,"srch_co")
+train<-BBmisc::dropNamed(train,"is_mobile")
+train<-BBmisc::dropNamed(train,"user_id")
+train<-BBmisc::dropNamed(train,"is_package")
+train<-BBmisc::dropNamed(train,"channel")
+train<-BBmisc::dropNamed(train,"srch_adults_cnt")
+train<-BBmisc::dropNamed(train,"srch_rm_cnt")
+train<-BBmisc::dropNamed(train,"srch_destination_type_id")
+train<-BBmisc::dropNamed(train,"user_location_region")
+train<-BBmisc::dropNamed(train,"user_location_country")
+
+test<-BBmisc::dropNamed(test, "site_name")
+test<-BBmisc::dropNamed(test, "posa_continent")
+test<-BBmisc::dropNamed(test, "srch_children_cnt")
+test<-BBmisc::dropNamed(test, "hotel_continent")
+test<-BBmisc::dropNamed(test,"date_time")
+test<-BBmisc::dropNamed(test,"srch_ci")
+test<-BBmisc::dropNamed(test,"srch_co")
+test<-BBmisc::dropNamed(test,"is_mobile")
+test<-BBmisc::dropNamed(test,"user_id")
+test<-BBmisc::dropNamed(test,"is_package")
+test<-BBmisc::dropNamed(test,"channel")
+test<-BBmisc::dropNamed(test,"srch_adults_cnt")
+test<-BBmisc::dropNamed(test,"srch_rm_cnt")
+test<-BBmisc::dropNamed(test,"srch_destination_type_id")
+test<-BBmisc::dropNamed(test,"user_location_region")
+test<-BBmisc::dropNamed(test,"user_location_country")
+gc()
+
+###########################
+# Creating the classifier #
+###########################
+
+classifier<-naiveBayes(as.factor(hotel_cluster)~
+	as.factor(user_location_city) +
+	orig_destination_distance +
+	as.factor(srch_destination_id) +
+	as.factor(hotel_market) +
+	as.factor(hotel_country)
+	,data=train
+	,laplace=1)
+
+
+#############################
+# Preparing the submission :#
+#############################
+
+n<-nrow(test)
+tic()
+fileConn<-file("sub_04-06-2016_classifier_laplace_1.csv","w+")
+writeLines("\"id\",\"hotel_cluster\"",sep="\n",con=fileConn)
+for (i in 1:n){
+	writeLines(paste(toString(i-1),",",gsub(",","",toString(rev((order(predict(classifier, test[i], type="raw"))-1)[96:100]))),sep=""),sep="\n",con=fileConn)
+}
+close(fileConn)
+exectime <- toc()
