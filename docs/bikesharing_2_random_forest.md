@@ -1,20 +1,24 @@
 ## Random Forest
 
-L'algorithme du Random Forest est très utilisé pour le challenge kaggle. Cet algorithme demandant une grande puissance de calcul mais certifie une très bonne prédiction dans bon nombre de cas.
+### Algorithme et résultats obtenus
 
-Pour illustrer l'algorithme, nous avons représenté ci-dessous un arbre de décision minimaliste. Dans ce cas, on observe l'impact de l'humidité sur les résultats. Pour chaque neud de l'arbre, le chiffre supérieur correspond à la moyen des locations par heure et le pourcentage correspond à la proportion de la population considérée.
+L'algorithme du Random Forest est très utilisé pour le challenge Kaggle : il demande une grande puissance de calcul mais certifie, dans bon nombre de cas, une très bonne prédiction.
+
+Pour illustrer l'algorithme, nous commençons par expliquer avec la figure suivante ce qu'est un arbre de décision. Dans ce cas minimaliste, on observe l'impact de l'humidité sur les résultats : à gauche les cas qui vérifient la condition "Humidity < 61", et à droite les autres. Pour chaque nœud de l'arbre, le chiffre supérieur correspond à la moyenne des locations par heure, et le pourcentage correspond à la proportion de la population vérifiant la condition de la branche.
 
 ![Arbre de décision](images/random_forest_bikesharing.png)
 
-Ainsi le random forest correspond à la génération d'arbres de décision dont les variables utilisées sont aléatoires. On fait ensuite une commité de vote entre les différents arbres.
+Le principe majeur de l'algorithme de Random Forest est la génération d' arbres de décision où les variables sont choisies aléatoirement. Une fois la forêt d'arbre générée, l'algorithme choisi les variables les plus pertinentes ainsi que l'ordre dans lequelles elles doivent être considérées. Toutefois, les paramètres de base du Random Forest s'assure d'éviter l'overfitting en ne créant pas d'arbres trop profonds qui seraient trop proches des données d'entraînement.
 
-Nous implémenté cet algorithme en Python. Cela nous a permit d'obtenir un score de 0,68 sur le challenge kaggle. Il est important de préciser que nous avons uniquement pu utiliser 30 arbres alors que cette technique nécessite une centaine d'arbres pour être efficace. Cette limitation est dûe à un manque de ressources de calcul.
+Son implémentation en Python nous a permis d'obtenir un score de 0,68 sur le challenge Kaggle. Il est important de préciser que nous n'avons pu utiliser que 30 arbres alors que cette technique nécessite une centaine d'arbres pour être efficace. Cette limitation est dûe à un manque de ressources de calcul.
 
-Pour pouvoir appliquer l'algorithme du random forest dans les meilleurs conditions, une mise en forme des données a été nécessaire. Il est à noter que ce conditionnement est similaire à celui employé pour les autres techniques de prédiction. Nous le redonnons ici à titre d'information.
+### Travail sur les données 
+
+Pour pouvoir appliquer l'algorithme de Random Forest dans les meilleurs conditions, une mise en forme des données a été nécessaire. Il est à noter que ce conditionnement est similaire à celui employé pour les autres techniques de prédiction. Nous le redonnons ici à titre d'information.
 
 **Mise en forme des données :**
-* Nous avons indiquer à notre algorithme de considérer les variable telles que `season`, `weather` comme des variables discrètes. Ceci est fait en Python grâce à l'instruction `as_type('categorie')`.
-* Nous avons créé des nouvelles colonne d'information : la colonne `date` qui contient la date de l'enregistrement au format `Datetime` et qui permet de créer la colonne `hour` qui contient l'heure de la journée sous forme d'un entier.
+* Nous avons dit à notre algorithme de considérer les variable telles que `season`, `weather` comme des variables discrètes. Ceci est fait en Python grâce à l'instruction `as_type('categorie')`.
+* Nous avons créé des nouvelles colonnes d'information : la colonne `date` qui contient la date de l'enregistrement au format `Datetime` et qui permet de créer la colonne `hour` contenant l'heure de la journée sous forme d'un entier.
 
 ```python
 import pandas as pa
@@ -84,8 +88,10 @@ y_test.index = tabtest['datetime']
 y_test.to_csv('csv/random_forest.csv')
 ```
 
-**Remarque :** On a ici limité le traitement des données. Ce n'était en effet pas le but premier de cet exercice. Nous cherchions ici plutôt à prendre en main le langage et le forme de challenge kaggle plutôt qu'à optimiser au mieux les algorithme.
+**Remarque :** On a ici limité le traitement des données. Ce n'était en effet pas le but premier de cet exercice. Nous cherchions plutôt à prendre en main le langage et le format du challenge kaggle, plutôt qu'à optimiser au mieux les algorithmes.
 
-Les premières étapes d'un travail plus poussé serait de déterminer de meilleurs variables définissant le systèmes. C'est ce type d'approche que l'on essaiera de développer sur le challenge suivant. 
+### Pistes d' amélioration
+
+Les premières étapes d'un travail plus poussé serait de déterminer de meilleurs variables définissant le système. C'est ce type d'approche qu'on essaiera de développer sur le challenge suivant. 
 
 
