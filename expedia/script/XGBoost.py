@@ -26,20 +26,20 @@ from datetime import datetime
 def changePredcitors(train):
 
 	createTripDuration(train)
-	#createTripDurationType(train)
+	createTripDurationType(train)
 	createOrigDestinationType(train)
 	createDateETC(train)
 	createSeason(train)
 	createTripAnticipation(train)
-	#createTripAnticipationType(train)
+	createTripAnticipationType(train)
 
 #return time duration in days
 def duration(ci,co):
-	if(str(ci) != '-999.0' or str(co)!='-999.0'):
-	    arrival = datetime.strptime(str(ci),'%Y-%m-%d')
-	    departure = datetime.strptime(str(co),'%Y-%m-%d')
-	    time = departure - arrival
-	    return time.days 
+	if(type(ci) != float and type(co)!=float):
+		arrival = datetime.strptime(str(ci),'%Y-%m-%d')
+		departure = datetime.strptime(str(co),'%Y-%m-%d')
+		time = departure - arrival
+		return time.days 
 	return -1
 
 
@@ -60,15 +60,15 @@ def createTripDurationType(train):
 	print("trip_duration_type")
 	train['trip_duration_type']=0
 	for i in range(len(train)) :
-	    if(train['trip_duration'][i]==1):
-	        train['trip_duration_type'][i]=1
-	    elif(train['trip_duration'][i]==2):
-	         train['trip_duration_type'][i]=2
-	    elif(train['trip_duration'][i]>=3 and train['trip_duration'][i]<=6):
-	         train['trip_duration_type'][i]=3
-	    elif(train['trip_duration'][i]>=7):
-	        train['trip_duration_type'][i]=4
-        
+		if(train['trip_duration'][i]==1):
+			train['trip_duration_type'][i]=1
+		elif(train['trip_duration'][i]==2):
+			 train['trip_duration_type'][i]=2
+		elif(train['trip_duration'][i]>=3 and train['trip_duration'][i]<=6):
+			 train['trip_duration_type'][i]=3
+		elif(train['trip_duration'][i]>=7):
+			train['trip_duration_type'][i]=4
+		
 
 
 # In[23]:
@@ -109,8 +109,8 @@ def createDateETC(train):
 	train['date']=0
 
 	for i in range(len(train)) :
-	    train['date'][i]=datetime.strptime(train['date_time'][i],'%Y-%m-%d %H:%M:%S')
-	    
+		train['date'][i]=datetime.strptime(train['date_time'][i],'%Y-%m-%d %H:%M:%S')
+		
 	# print("dayOfWeek")
 	# train['dayOfWeek']=0
 
@@ -121,13 +121,13 @@ def createDateETC(train):
 	train['year']=0
 
 	for i in range(len(train)):
-	    train['year'][i]=train['date'][i].year
+		train['year'][i]=train['date'][i].year
 
 	print("month")    
 	train['month']=0
 
 	for i in range(len(train)):
-	    train['month'][i]=train['date'][i].month
+		train['month'][i]=train['date'][i].month
 	print("day") 
 	#train['day']=0
 
@@ -142,7 +142,7 @@ def createDateETC(train):
 
 # for i in range(len(train)) :
 #     train['date_ci'][i]=datetime.strptime(train['srch_ci'][i],'%Y-%m-%d')
-    
+	
 # train['dayOfWeek_ci']=0
 
 # for i in range(len(train)):
@@ -152,12 +152,12 @@ def createDateETC(train):
 
 # for i in range(len(train)):
 #     train['year_ci'][i]=train['date_ci'][i].year
-    
+	
 # train['month_ci']=0
 
 # for i in range(len(train)):
 #     train['month_ci'][i]=train['date_ci'][i].month
-    
+	
 # train['day_ci']=0
 
 # for i in range(len(train)):
@@ -167,7 +167,7 @@ def createDateETC(train):
 
 # for i in range(len(train)) :
 #     train['date_co'][i]=datetime.strptime(train['srch_co'][i],'%Y-%m-%d')
-    
+	
 # train['dayOfWeek_co']=0
 
 # for i in range(len(train)):
@@ -177,12 +177,12 @@ def createDateETC(train):
 
 # for i in range(len(train)):
 #     train['year_co'][i]=train['date_co'][i].year
-    
+	
 # train['month_co']=0
 
 # for i in range(len(train)):
 #     train['month_co'][i]=train['date_co'][i].month
-    
+	
 # train['day_co']=0
 
 # for i in range(len(train)):
@@ -196,12 +196,12 @@ def createSeason(train):
 
 	for i in range(len(train)):
 
-	    if(train['month'][i]>=4 and train['month'][i]<=6):
-	        train['season'][i]=1
-	    elif(train['month'][i]>=7 and train['month'][i]<=9):
-	        train['season'][i]=2
-	    elif(train['month'][i]>=10 and train['month'][i]<=12):
-	        train['season'][i]=3
+		if(train['month'][i]>=4 and train['month'][i]<=6):
+			train['season'][i]=1
+		elif(train['month'][i]>=7 and train['month'][i]<=9):
+			train['season'][i]=2
+		elif(train['month'][i]>=10 and train['month'][i]<=12):
+			train['season'][i]=3
 
 
 # In[27]:
@@ -209,13 +209,12 @@ def createSeason(train):
 
 #return time duration in days
 def anticipation(date,co):
-	print(co)
-	if(str(co)!='-999.0' or str(co)!='' or co<0):
-	    arrival = date.date()
-	    departure = datetime.strptime(str(co),'%Y-%m-%d')
-	    departure = departure.date()
-	    time = departure - arrival
-	    return time.days 
+	if(type(co)!=float):
+		arrival = date.date()
+		departure = datetime.strptime(str(co),'%Y-%m-%d')
+		departure = departure.date()
+		time = departure - arrival
+		return time.days 
 	return -1
 
 
@@ -225,7 +224,7 @@ def createTripAnticipation(train):
 	train['trip_anticipation']=0
 
 	for i in range(len(train)) :
-	    train['trip_anticipation'][i]=anticipation(train['date'][i],train['srch_ci'][i])
+		train['trip_anticipation'][i]=anticipation(train['date'][i],train['srch_ci'][i])
 
 def createTripAnticipationType(train):
 # In[29]:
@@ -233,24 +232,24 @@ def createTripAnticipationType(train):
 	train['trip_anticipation_type']=0
 	for i in range(len(train)) :
 
-	    if(train['trip_anticipation'][i]>=2 and train['trip_anticipation'][i]<7):
-	         train['trip_anticipation_type'][i]=1
-	    elif(train['trip_anticipation'][i]>=7 and train['trip_anticipation'][i]<13):
-	         train['trip_anticipation_type'][i]=2
-	    elif(train['trip_anticipation'][i]>=13 and train['trip_anticipation'][i]<20):
-	         train['trip_anticipation_type'][i]=3
-	    elif(train['trip_anticipation'][i]>=20 and train['trip_anticipation'][i]<31):
-	         train['trip_anticipation_type'][i]=4
-	    elif(train['trip_anticipation'][i]>=31 and train['trip_anticipation'][i]<43):
-	         train['trip_anticipation_type'][i]=5
-	    elif(train['trip_anticipation'][i]>=43 and train['trip_anticipation'][i]<62):
-	         train['trip_anticipation_type'][i]=6
-	    elif(train['trip_anticipation'][i]>=62 and train['trip_anticipation'][i]<=89):
-	         train['trip_anticipation_type'][i]=7
-	    elif(train['trip_anticipation'][i]>=89 and train['trip_anticipation'][i]<141):
-	         train['trip_anticipation_type'][i]=8
-	    elif(train['trip_anticipation'][i]>=141):
-	         train['trip_anticipation_type'][i]=9
+		if(train['trip_anticipation'][i]>=2 and train['trip_anticipation'][i]<7):
+			 train['trip_anticipation_type'][i]=1
+		elif(train['trip_anticipation'][i]>=7 and train['trip_anticipation'][i]<13):
+			 train['trip_anticipation_type'][i]=2
+		elif(train['trip_anticipation'][i]>=13 and train['trip_anticipation'][i]<20):
+			 train['trip_anticipation_type'][i]=3
+		elif(train['trip_anticipation'][i]>=20 and train['trip_anticipation'][i]<31):
+			 train['trip_anticipation_type'][i]=4
+		elif(train['trip_anticipation'][i]>=31 and train['trip_anticipation'][i]<43):
+			 train['trip_anticipation_type'][i]=5
+		elif(train['trip_anticipation'][i]>=43 and train['trip_anticipation'][i]<62):
+			 train['trip_anticipation_type'][i]=6
+		elif(train['trip_anticipation'][i]>=62 and train['trip_anticipation'][i]<=89):
+			 train['trip_anticipation_type'][i]=7
+		elif(train['trip_anticipation'][i]>=89 and train['trip_anticipation'][i]<141):
+			 train['trip_anticipation_type'][i]=8
+		elif(train['trip_anticipation'][i]>=141):
+			 train['trip_anticipation_type'][i]=9
 
 
 
@@ -258,21 +257,25 @@ def createTripAnticipationType(train):
 
 # In[147]:
 
-tab_train = pd.read_csv('../train.csv',iterator = True, chunksize = 10000)
+tab_train = pd.read_csv('../train.csv',iterator = True, chunksize = 100000)
 train = tab_train.get_chunk()
 train.fillna(-999.0,inplace=True)
 changePredcitors(train)
 print('creation premier tableau...')
-count=0
+count=1
 for chunk in tab_train :
-    count += 1
-    print(count * 100 /38 )
-    #change predictors
-    train_part=chunk
-    train_part.fillna(-999.0,inplace=True)
-    changePredcitors(train_part)
-    train = train.append(train_part,ignore_index=True)
-print('fin premier tableau')
+
+	# if(count==2):
+	# 	break
+
+	count += 1
+	print(count * 100 /380 )
+	#change predictors
+	train_part=chunk
+	train_part.fillna(-999.0,inplace=True)
+	changePredcitors(train_part)
+	train = train.append(train_part,ignore_index=True)
+	print('fin premier tableau')
 
 # ## Define target and columns to drop
 
@@ -289,31 +292,31 @@ IDcol = ['date_time','srch_ci','srch_co','date','date_ci','date_co']
 # In[145]:
 
 def modelfit(alg, dtrain, predictors,useTrainCV=True, cv_folds=5,early_stopping_rounds=50,missing=-999.0):
-    
-    if useTrainCV:
-        xgb_param = alg.get_xgb_params()
-        xgtrain = xgb.DMatrix(dtrain[predictors].values, label=dtrain[target].values,missing=missing)
-        cvresult = xgb.cv(xgb_param, xgtrain, num_boost_round=alg.get_params()['n_estimators'], nfold=cv_folds)
-        alg.set_params(n_estimators=cvresult.shape[0])
-    
-    #Fit the algorithm on the data
-    alg.fit(dtrain[predictors], dtrain['hotel_cluster'],eval_metric='merror')
-        
-    #Predict training set:
-    dtrain_predictions = alg.predict(dtrain[predictors])
-    dtrain_predprob = alg.predict_proba(dtrain[predictors])
-        
-    #Print model report:
-    print ("\nModel Report")
-    print ("Accuracy : %.4g" % metrics.accuracy_score(dtrain['hotel_cluster'].values, dtrain_predictions))
-    #print ("AUC Score (Train): %f" % metrics.roc_auc_score(dtrain['hotel_cluster'], dtrain_predprob))
-                    
-    feat_imp = pd.Series(alg.booster().get_fscore()).sort_values(ascending=False)
-    feat_imp.plot(kind='bar', title='Feature Importances')
-    plt.ylabel('Feature Importance Score')
-    plt.savefig('../XGBoost/Features/FeaturesImportanceScore.png')
-    
-    return alg
+	
+	if useTrainCV:
+		xgb_param = alg.get_xgb_params()
+		xgtrain = xgb.DMatrix(dtrain[predictors].values, label=dtrain[target].values,missing=missing)
+		cvresult = xgb.cv(xgb_param, xgtrain, num_boost_round=alg.get_params()['n_estimators'], nfold=cv_folds)
+		alg.set_params(n_estimators=cvresult.shape[0])
+	
+	#Fit the algorithm on the data
+	alg.fit(dtrain[predictors], dtrain['hotel_cluster'],eval_metric='merror')
+		
+	#Predict training set:
+	dtrain_predictions = alg.predict(dtrain[predictors])
+	dtrain_predprob = alg.predict_proba(dtrain[predictors])
+		
+	#Print model report:
+	print ("\nModel Report")
+	print ("Accuracy : %.4g" % metrics.accuracy_score(dtrain['hotel_cluster'].values, dtrain_predictions))
+	#print ("AUC Score (Train): %f" % metrics.roc_auc_score(dtrain['hotel_cluster'], dtrain_predprob))
+					
+	feat_imp = pd.Series(alg.booster().get_fscore()).sort_values(ascending=False)
+	feat_imp.plot(kind='bar', title='Feature Importances')
+	plt.ylabel('Feature Importance Score')
+	plt.savefig('../XGBoost/Features/FeaturesImportanceScore.png')
+	
+	return alg
 
 
 # In[146]:
@@ -323,7 +326,7 @@ predictors = [x for x in train.columns if (x not in target and x not in IDcol)]
 
 xgb1 = XGBClassifier(
  learning_rate =0.1,
- n_estimators=1000,
+ n_estimators=200,
  max_depth=5,
  min_child_weight=1,
  gamma=0,
@@ -350,19 +353,21 @@ del train
 # In[131]:
 
 #read test
-tab_test = pd.read_csv('../test.csv',iterator = True, chunksize = 10000)
+tab_test = pd.read_csv('../test.csv',iterator = True, chunksize = 100000)
 test = tab_test.get_chunk()
 test.fillna(-999.0,inplace=True)
 changePredcitors(test)
 count=1
 print('read test ...')
 for chunk in tab_test :
-    count += 1
-    print(count * 100 /38 )
-    test_part=chunk
-    test_part.fillna(-999.0,inplace=True)
-    changePredcitors(test_part)
-    test = test.append(test_part,ignore_index=True)
+	# if(count==2):
+	# 	break
+	count += 1
+	print(count * 100 /380 )
+	test_part=chunk
+	test_part.fillna(-999.0,inplace=True)
+	changePredcitors(test_part)
+	test = test.append(test_part,ignore_index=True)
 print('done reading test ... ')
 test.insert(19,"is_booking",1)
 test.insert(20,"cnt",1)
@@ -391,7 +396,7 @@ predict = np.argsort(predict[::-1][:,:5])
 # In[143]:
 
 def concatStr(X):
-    return str(X[0])+' '+str(X[1])+' '+str(X[2])+' '+str(X[3])+' '+str(X[4])
+	return str(X[0])+' '+str(X[1])+' '+str(X[2])+' '+str(X[3])+' '+str(X[4])
 
 
 # In[144]:
@@ -399,7 +404,7 @@ print("submission")
 submission = test[['id']].drop(['id'],1)
 submission['hotel_cluster']='blank'
 for i in range(len(submission)):
-    submission['hotel_cluster'][i]=concatStr(predict[i])
+	submission['hotel_cluster'][i]=concatStr(predict[i])
 submission.head()
 
 
