@@ -61,7 +61,7 @@ for dest in count:
 name='../test.csv'
 for c,row in enumerate(csv.DictReader(open(name))):
 	if True:
-		fo=open('pred_sub.csv','a')
+		fo=open('pred_sub_trip_duration.csv','a')
 		if row['srch_destination_id'] not in frequent:
 			tmp=''
 		else:
