@@ -11,12 +11,13 @@ def get_top5(hotel_count):
     return ' '.join(tmp)
 
 def duration(ci,co):
-	if(ci == '' or co == ''):
+	try:
+		arrival = datetime.strptime(ci,'%Y-%m-%d')
+		departure = datetime.strptime(co,'%Y-%m-%d')
+		time = departure - arrival
+		return time.days 
+	except:
 		return 0
-	arrival = datetime.strptime(ci,'%Y-%m-%d')
-	departure = datetime.strptime(co,'%Y-%m-%d')
-	time = departure - arrival
-	return time.days 
 
 name='../train.csv'
 count={}
